@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Anexar Exame
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="formAnexarExames">
+
+            <p:growl id="growlAnexarExames" showDetail="true"/>
+
+            <p:panel header="Anexar exame a um paciente">
+
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Paciente:* " for="paciente"/>
+                    <p:autoComplete id="paciente" required="true" requiredMessage="Preencha o campo Sexo!" value="#{beanExame.anexo.paciente}" completeMethod="#{beanPaciente.completa}" 
+                                    var="pac" itemValue="#{pac}" itemLabel="#{pac.nome}" dropdown="true" forceSelection="true" converter="pacienteConverter">
+                    </p:autoComplete>
+
+                </h:panelGrid>
+                <p:fileUpload id="upExames" fileUploadListener="#{beanExame.fileUploadAction}" auto="true" showButtons="false"
+                              label="Procurar..." update="growlAnexarExames"/>
+
+
+                <p:commandButton value="Gravar" action="#{beanExame.salvar()}" update="formAnexarExames"/>
+
+            </p:panel>
+            <br/>
+
+            <p:panel header="Arquivos Anexados">
+                <p:dataTable id="listconsultas" var="e" value="#{beanExame.anexos}" paginator="true" rows="10" widgetVar="listcons"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15,30">
+                    <f:facet name="header">
+                        Lista de Imagens
+                    </f:facet>
+
+                    <p:column headerText="PACIENTE" style="width: 300px">
+                        <h:outputText value="#{e.paciente.nome}" />
+                    </p:column>
+
+                    <p:column headerText="DATA" style="width: 100px">
+                        <h:outputText value="#{e.dataAnexo}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Nome do Arquivo" style="width: 300px">
+                        <h:outputText value="#{e.endAnexo}" />
+                    </p:column>
+
+                    <p:column headerText="OPÇÕES">
+
+                        <p:commandLink update=":formAnexarExames:msg" oncomplete="dlgImage.show()" title="Visualizar Arquivo">
+                            <h:graphicImage library="imagens" name="lupa.png" id="btDetalhes"/>
+                            <f:setPropertyActionListener value="#{e}" target="#{beanExame.anexo}" />
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+
+                <p:galleria var="e" value="#{beanExame.anexos}">  
+                    <p:graphicImage value="#{msg.local}/resources/arquivosUpados/#{e.endAnexo}" />  
+                </p:galleria> 
+
+
+
+                <p:dialog id="msg" widgetVar="dlgImage" header="Imagem" resizable="false" modal="true">
+                    <p:graphicImage value="#{msg.local}/resources/arquivosUpados/#{beanExame.anexo.endAnexo}"/>
+                </p:dialog>
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

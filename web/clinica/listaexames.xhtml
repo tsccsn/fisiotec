@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Anexar Exame
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+        <h:form id="formAnexarExames">
+            <div id="breu" class="breu" ></div>
+            <p:growl id="growlAnexarExames" showDetail="true"/>
+
+            <p:panel header="Anexar exame a um paciente">
+
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Paciente:* " for="paciente"/>
+
+                    <p:autoComplete id="paciente" required="true" requiredMessage="Determine um paciente!" value="#{beanExame.anexo.paciente}" completeMethod="#{beanPaciente.completa}" 
+                                    var="pac" itemValue="#{pac}" itemLabel="#{pac.nome}" dropdown="true" forceSelection="true" converter="pacienteConverter">
+                    </p:autoComplete>
+
+                </h:panelGrid>
+                <p:commandButton value="Buscar" image="buscar" action="#{beanExame.listaAnexosDoPaciente()}" update="formAnexarExames"/>
+
+            </p:panel>
+
+            <div style="margin: 8px;" />
+
+
+            <p:panel header="Arquivos Anexados">
+                <ui:repeat value="#{beanExame.anexos2}" var="image">  
+                    <p:commandLink  actionListener="#{boleanos.ambosTrue(0)}" oncomplete="breuOn();abreJanela0();" 
+                                    update="alterarProduto"  title="Alterar Produto"  >
+                        <f:setPropertyActionListener value="#{beanExame.anexos2.indexOf(image)}" target="#{beanExame.idImagem}" />
+                        <h:graphicImage library="arquivosUpados" name="#{image.endAnexo}" style="max-width: 200px; margin: 15px;" />
+                    </p:commandLink>
+
+                </ui:repeat> 
+            </p:panel>
+        </h:form>
+
+        <h:form id="alterarProduto" prependId="false" >
+            <p:outputPanel id="janela" rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Exibindo imagem" rendered="#{boleanos.verB(0)}" id="janela0" styleClass="janelas"  >
+                        <div style="text-align: center">
+                         <h:graphicImage library="arquivosUpados" name="#{beanExame.anexos2.get(beanExame.idImagem).endAnexo}" style="width: 100%; margin: 15px;" />
+                         <br/>
+                         </div>
+                        <p:commandButton onstart="fechaJanela0();breuOff();" image="voltar2"  action="#{boleanos.ambosFalse(0)}" update="alterarProduto" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

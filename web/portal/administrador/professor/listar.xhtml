@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Lista de professores
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="listaProfessores" prependId="false">
+            <p:panel header="Listagem de todos os professores" >
+                <p><p:accordionPanel activeIndex="-1">
+                        <p:tab title="Filtro"  >
+                            <table>
+                                <tr>
+                                    <td>Nome</td>
+                                    <td>
+                                        <p:autoComplete maxResults="5" value="#{listaDeProfessores.nomeProfessor}"
+                                                        completeMethod="#{listaDeProfessores.autoCompleta}" />
+                                    </td>
+                                    <td>Pontos</td>
+                                    <td>
+                                        <p:selectManyMenu value="#{listaDePontos.indexDosPontosSelecione}" style="height: 200px; width: 230px;" >
+                                            <f:selectItem itemValue="qualquer" itemLabel="Qualquer" />
+                                            <f:selectItems value="#{listaDePontos.pontos}" var="xPonto" itemLabel="#{xPonto.nome}" itemValue="#{utilString.longToString(xPonto.id)}" />
+                                        </p:selectManyMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p:commandButton value="Filtrar" update="listaProfessores" action="#{listaDeProfessores.filtrar(listaDePontos)}"  />
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:tab>
+                    </p:accordionPanel></p>
+                <p:dataTable var="xProfessor" value="#{listaDeProfessores.professoresManipulados}" paginator="true" rows="20" emptyMessage="Sem resultados"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,30,60" >
+                    <f:facet name="header">  
+                        Professores
+                    </f:facet>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Nome</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{utilString.trataNomeUsuarioII(xProfessor,30)}
+                        </div>
+                    </p:column>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Email</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xProfessor.emailPrincipal}
+                        </div>
+                    </p:column>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Ponto Atual</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{listaDeProfessores.pontoAtualDoProfessor(xProfessor) == null ? '-' : listaDeProfessores.pontoAtualDoProfessor(xProfessor).nome  }
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

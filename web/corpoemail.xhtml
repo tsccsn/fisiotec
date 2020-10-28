@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet library="css" name="style.css"/>
+        <link rel="shortcut icon" href="#{ender.localResources}imagens/stethoscope.png" type="image/x-icon"/>
+        <title>VR1</title>
+    </h:head>
+    <h:body id="tudo" >
+        <f:event type="javax.faces.event.PreRenderViewEvent" listener="#{applicationScopeBean.preRenderView}"/>
+        <div class="bordaExterna">
+            <div id="todoConteudo" class="todoConteudo">
+                <div class="logo">
+                </div>
+                <div style="margin-top: 7px;">
+
+                    <p:panel header="VR2">
+                        <div style="height: 100%; border-radius: 10px; padding: 40px;">
+                            <div style="width: 100%; text-align: center;font-family: Arial,sans-serif; font-size: 26px; " >
+                                VR3
+                            </div>
+                            <div style="width: 100%; text-align: center;font-family: Arial,sans-serif; font-size: 18px; " >
+                                <br/>VR4
+                                <br/>VR5
+                            </div>
+                        </div>
+                    </p:panel>
+                </div>
+                <div class="rodape">
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>

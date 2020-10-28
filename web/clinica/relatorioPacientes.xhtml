@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Relatório de Pacientes
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="formRelatorioPacientes">
+            <p:tab id="completa" title="Pesquisa Completa" closable="true">
+                <h:outputLabel value="Pesquisar por: "/>
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel value="Nome: " for="nome"/>
+                    <p:autoComplete id="nome" value="#{beanPaciente.relatorioPaciente.nome}" completeMethod="#{beanPaciente.nomes}" 
+                                    var="p" itemLabel="#{p}" itemValue="#{p}" dropdown="true" forceSelection="true"/>
+
+                    <h:outputLabel value="Sexo: " for="sexo"/>
+                    <p:autoComplete id="sexo" value="#{beanPaciente.relatorioPaciente.sexo}" completeMethod="#{beanPaciente.sexos}" 
+                                    var="p" itemLabel="#{p}" itemValue="#{p}" dropdown="true" forceSelection="true"/>
+
+                    <h:outputLabel value="Raça: " for="raca"/>
+                    <p:autoComplete id="raca" value="#{beanPaciente.relatorioPaciente.raca}" completeMethod="#{beanPaciente.racas}" 
+                                    var="p" itemLabel="#{p}" itemValue="#{p}" dropdown="true" forceSelection="true"/>
+
+                    <h:outputLabel value="Data de Nascimento: " for="dataNasc"/>
+                    <p:calendar id="dataNasc" value="#{beanPaciente.relatorioPaciente.dataNasc}" navigator="true"
+                                locale="br" pattern="dd/MM/yyyy" yearRange="1900:2030"/>
+
+                    <h:outputLabel value="Naturalidade: " for="naturalidade"/>
+                    <p:autoComplete id="naturalidade" value="#{beanPaciente.relatorioPaciente.naturalidade}" completeMethod="#{beanPaciente.naturalidades}" 
+                                    var="p" itemLabel="#{p}" itemValue="#{p}" dropdown="true" forceSelection="true"/>
+
+                    <h:outputLabel value="Bairro: " for="bairro"/>
+                    <p:autoComplete id="bairro" value="#{beanPaciente.relatorioPaciente.bairro}" completeMethod="#{beanPaciente.bairros}" 
+                                    var="p" itemLabel="#{p}" itemValue="#{p}" dropdown="true" forceSelection="true"/>
+
+                    <h:outputLabel value="Cidade: " for="cidade"/>
+                    <p:autoComplete id="cidade" value="#{beanPaciente.relatorioPaciente.cidade}" completeMethod="#{beanPaciente.cidades}" 
+                                    var="p" itemLabel="#{p}" itemValue="#{p}" dropdown="true" forceSelection="true"/>
+
+                    <h:outputLabel value="Estado: " for="estado"/>
+                    <p:autoComplete id="estado" value="#{beanPaciente.relatorioPaciente.estado}" completeMethod="#{beanPaciente.estados}" 
+                                    var="p" itemLabel="#{p}" itemValue="#{p}" dropdown="true" forceSelection="true"/>
+
+                </h:panelGrid>
+                <p:commandButton value="Pesquisar" update="formRelatorioPacientes" action="#{beanPaciente.pesquisaGeral()}"/>
+            </p:tab>
+            <p:dataTable id="pacientes" var="p" value="#{beanPaciente.pacientesPesquisa}" paginator="true" rows="10"
+                         paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,30" emptyMessage="Sem Resultados">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="ID"/>
+                    </f:facet>
+                    <h:outputText value="#{p.id}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="NOME"/>
+                    </f:facet>
+                    <h:outputText value="#{p.nome}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="NASCIMENTO"/>
+                    </f:facet>
+                    <h:outputText value="#{p.dataNasc}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="CELULAR"/>
+                    </f:facet>
+                    <h:outputText value="#{p.celfone}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="OPÇÕES"/>
+                    </f:facet>
+                    <p:commandLink update=":formRelatorioPacientes:display" oncomplete="msg.show()" title="Detalhes">
+                        <h:graphicImage library="imagens" name="list2.png" id="btDetalhes"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanPaciente.paciente}"/>
+                    </p:commandLink>
+                </p:column>
+
+            </p:dataTable>
+
+
+            <p:dialog header="Detalhes do Paciente" widgetVar="msg" resizable="false" id="dialogo" width="500" height="200" modal="true">
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+
+                    <f:facet name="header">
+                        Detalhe do Paciente
+                    </f:facet>
+                    <h:outputText value="Nome: "/>
+                    <h:outputText value="#{beanPaciente.paciente.nome}"/>
+
+                    <h:outputText value="Sexo: "/>
+                    <h:outputText value="#{beanPaciente.paciente.sexo}"/>
+
+                    <h:outputText value="Nascimento: "/>
+                    <h:outputText value="#{beanPaciente.paciente.dataNasc}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+
+                    <h:outputText value="Pai: "/>
+                    <h:outputText value="#{beanPaciente.paciente.pai}"/>
+
+                    <h:outputText value="Mãe: "/>
+                    <h:outputText value="#{beanPaciente.paciente.mae}"/>
+
+                    <h:outputText value="Naturalidade: "/>
+                    <h:outputText value="#{beanPaciente.paciente.naturalidade}"/>
+
+                    <h:outputText value="Raça: "/>
+                    <h:outputText value="#{beanPaciente.paciente.raca}"/>
+                    
+                    <h:outputText value="Renda Mensal: "/>
+                    <h:outputText value="#{beanPaciente.paciente.rendaMensal}"/>
+                    
+                    <h:outputText value="Escolaridade: "/>
+                    <h:outputText value="#{beanPaciente.paciente.escolaridade}"/>
+                    
+                    <h:outputText value="Profissão: "/>
+                    <h:outputText value="#{beanPaciente.paciente.profissao}"/>
+                    
+                    <h:outputText value="Responsável: "/>
+                    <h:outputText value="#{beanPaciente.paciente.nomeResp}"/>
+                    
+                    <h:outputText value="Telefone do Responsável: "/>
+                    <h:outputText value="#{beanPaciente.paciente.foneResp}"/>
+
+                    <h:outputText value="RG: "/>
+                    <h:outputText value="#{beanPaciente.paciente.rg}"/>
+
+                    <h:outputText value="CPF: "/>
+                    <h:outputText value="#{beanPaciente.paciente.cpf}">
+                        <f:convertNumber pattern="xxx.xxx.xxx-xx"/>
+                    </h:outputText>
+
+                    <h:outputText value="Logradouro: "/>
+                    <h:outputText value="#{beanPaciente.paciente.logradouro}"/>
+
+                    <h:outputText value="No.: "/>
+                    <h:outputText value="#{beanPaciente.paciente.num}"/>
+
+                    <h:outputText value="Bairro: "/>
+                    <h:outputText value="#{beanPaciente.paciente.bairro}"/>
+
+                    <h:outputText value="Complemento: "/>
+                    <h:outputText value="#{beanPaciente.paciente.complemento}"/>
+
+                    <h:outputText value="Cidade: "/>
+                    <h:outputText value="#{beanPaciente.paciente.cidade}"/>
+
+                    <h:outputText value="Estado: "/>
+                    <h:outputText value="#{beanPaciente.paciente.estado}"/>
+
+                    <h:outputText value="CEP: "/>
+                    <h:outputText value="#{beanPaciente.paciente.cep}"/>
+
+                    <h:outputText value="Telefone: "/>
+                    <h:outputText value="#{beanPaciente.paciente.fone}"/>
+
+                    <h:outputText value="Celular: "/>
+                    <h:outputText value="#{beanPaciente.paciente.celfone}"/>
+
+                    <h:outputText value="E-mail: "/>
+                    <h:outputText value="#{beanPaciente.paciente.email}"/>
+
+
+                </h:panelGrid>
+
+            </p:dialog>
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

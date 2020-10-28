@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Cadastrar novo ponto de estágio
+    </ui:define>
+
+    <ui:define name="imports">
+
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="listaDeTrumas" prependId="false">
+            <p:panel header="Cadastrar novo ponto de estágio" >
+                <table>
+                    <tr>
+                        <td>Nome do ponto</td>
+                        <td><p:inputText value="#{listaDePontos.pontoManipulado.nome}" required="true" requiredMessage="Ops! O ponto de estágio tem que ter nome!" />  </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><p:commandButton image="salvar" action="#{listaDePontos.salvaPonto()}" update="listaDeTrumas" /></td>
+                    </tr>
+                </table>
+            </p:panel>
+        </h:form>
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

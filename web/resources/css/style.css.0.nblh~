@@ -1,0 +1,460 @@
+/*CSS Reset*/
+.breu{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    opacity: 0;
+    z-index: 1;
+    visibility: hidden;
+}
+.janelas{
+    z-index: 2; opacity: 0; position: fixed;
+}
+body{
+    background-image: url(../resources/imagens/back4.png);
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    padding:0;
+    margin:0;
+    min-width:400px;
+    min-height:400px;
+}
+
+.bordaExterna{
+    width:926px;
+    margin: 0 auto;
+    border: #00cd27 1px solid;
+    border-radius:10px;
+    margin-top: 5px;
+}
+.deixaTransparente {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    opacity: 0;
+}
+.todoConteudo{
+    width:900px;
+    margin: 0 auto;
+    border: #089a24  3px solid;
+    border-radius:10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.logo{
+    width:100%;
+    height:150px;	
+    background-color: #FFF;
+    background-image:url(../resources/imagens/logofisiotec.png);
+    background-repeat:no-repeat;
+    background-position:center;
+    border-radius:10px;
+}
+.menu{
+    margin: 0 auto;
+    padding-top: 5px;
+}
+
+.centro{
+    margin: 0 auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+.rodape{
+    width:100%;
+    background-color:#FFF;
+    color:#FFF;
+    text-align:center;
+    padding-top:5px;
+    padding-bottom:5px;
+    border-radius:10px;
+    background-image:url(../resources/imagens/fundo.png);
+    background-position: center;
+    background-repeat:  no-repeat;
+    height: 36px;
+
+}
+.home{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/casa.png);
+}  
+.stethoscope{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/stethoscope.png);
+}
+.buscar{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/buscar.png);
+}
+.portal{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/portal.png);
+} 
+.login{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/login.png);
+} 
+.logout{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/logout.png);
+} 
+.add{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/add.png);
+} 
+.list{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/list.png);
+} 
+.registro{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/registro.png);
+} 
+.estoque{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/estoque.png);
+}
+.listasaida{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/listasaida.png);
+} 
+.listaentrada{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/listaentrada.png);
+} 
+.update{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/update16.png);
+} 
+.delete{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/delete16.png);
+}
+.chart{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/chart.png);
+}
+.regua{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/regua.png);
+}
+.up{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/up16.png);
+}
+.down{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/down16.png);
+} 
+.chart-up{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/chart-up.png);
+}
+.chart-down{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/chart-down.png);
+}
+.estoqueentrada{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/estoqueentrada.png);
+} 
+.estoquesaida{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/estoquesaida.png);
+}
+.movimentacao{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/movimentacao16.png);
+}
+.alingLeft{
+    text-align: left;
+}
+.alingRight{
+    text-align: right;
+}
+.wizard{
+    position: relative;
+    height: 46px;
+    text-align: center;
+}
+.wizardBack{
+    position: absolute;
+    left: 0px;
+}
+.wizardNext{
+    position: absolute;
+    right: 0px;
+}
+.status{
+    position: fixed;
+    width: 42px;
+    height: 42px;
+    top: 0px;
+    left: 0px;
+    background-color: #000;
+}
+.loading{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-image: url(../resources/imagens/loading.gif);
+    height: 21px;
+    width: 64px;
+    z-index: 600;
+}
+.erro2{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-image: url(../resources/imagens/erro.gif);
+    height: 42px;
+    width: 42px;
+}
+
+.ui-widget select{
+    cursor: pointer;
+}
+.ui-button-icon-primary.ui-icon.voltar{
+    background-image: url(../resources/imagens/setas/back.png);
+}  
+.ui-button-icon-primary.ui-icon.voltar2{
+    background-image: url(../resources/imagens/setas/back16.png);
+} 
+.ui-button-icon-primary.ui-icon.avancar{
+    background-image: url(../resources/imagens/setas/next.png);
+}
+.ui-button-icon-primary.ui-icon.salvar{
+    background-image: url(../resources/imagens/salvar.png);
+}
+.ui-button-icon-primary.ui-icon.gear{
+    background-image: url(../resources/imagens/gear16.png);
+}
+.ui-button-icon-primary.ui-icon.chart{
+    background-image: url(../resources/imagens/chart.png);
+}
+.ui-button-icon-primary.ui-icon.deletar{
+    background-image: url(../resources/imagens/delete16.png);
+}
+.ui-button-icon-primary.ui-icon.tabela{
+    background-image: url(../resources/imagens/tablegreen.png);
+}
+.ui-button-icon-primary.ui-icon.lock{
+    background-image: url(../resources/imagens/lock.png);
+}
+.ui-button-icon-primary.ui-icon.key{
+    background-image: url(../resources/imagens/key.png);
+}
+.ui-button-icon-primary.ui-icon.login{
+    background-image: url(../resources/imagens/login.png);
+}
+.ui-button-icon-primary.ui-icon.portal{
+    background-image: url(../resources/imagens/portal.png);
+}
+.ui-button-icon-primary.ui-icon.add{
+    background-image: url(../resources/imagens/add.png);
+}
+.ui-button-icon-primary.ui-icon.update{
+    background-image: url(../resources/imagens/update16.png);
+}
+.ui-button-icon-primary.ui-icon.clear{
+    background-image: url(../resources/imagens/clear.png);
+}
+.segundaJanelaSempreNoCentro {
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    z-index:1;
+    visibility:hidden; 
+}
+
+.deixaTransparente {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    background: #000;
+    opacity: 0;
+}
+#breu{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    opacity: 0;
+    z-index: 1;
+    visibility: hidden;
+}
+.janelaRolavel {
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height: 100%;
+
+    overflow: auto;
+}
+.janelas{
+    z-index: 2; position: absolute; opacity: 0;
+}
+.imagens{
+    border: 0;
+}
+.distanciaBotao{
+    margin-right: 10px;
+}
+.outputpanel{
+    position:absolute;
+    z-index:2;
+}
+.rowsSimples{
+    margin: 50px;
+    background-color: #00cd27;
+}
+
+/*TREEEEEETAS*/
+    /*tudo sem borda*/
+.ui-corner-all {
+    border-radius: 0px;
+    background-image: none;
+    background-color: transparent;
+}
+
+/*cabeças do wizzard*/
+.ui-wizard-step-title {
+    border-radius: 10px;
+    background-image: url(../resources/imagens/tema/treta.png);
+    background-color: #e3e3e3;
+    border-color: #dddddd;
+    color:#525151;
+}
+/*cabeças do wizzard selecionada*/
+.ui-wizard-step-title.ui-state-default.ui-state-hover.ui-corner-all{
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    border-color: #9d9d9d;
+    background-color: #1cc549;
+}
+/*menu bar*/
+.ui-menubar {
+    border-radius: 10px;
+    background-color: #f9f9f9;
+     background-image: none;
+}
+/*elementos menu bar*/
+.ui-menuitem-link.ui-corner-all{
+    background-color: #f9f9f9;
+    
+}
+.ui-menuitem-link.ui-corner-all.ui-state-hover{
+    background-color: #f9f9f9;
+    background-image: none;
+}
+/*
+<li class="ui-wizard-step-title ui-state-default ui-state-hover ui-corner-all">Consutas salvas</li>
+<li class="ui-wizard-step-title ui-state-default ui-corner-all">Data</li>
+
+
+
+<a href="javascript:void(0)" class="ui-menuitem-link ui-corner-all">
+    <span class="estoque ui-menuitem-icon"></span>
+        <span class="ui-menuitem-text">
+            Estoque
+        </span>
+    <span class="ui-icon ui-icon-triangle-1-e"></span>
+</a>
+<a href="javascript:void(0)" class="ui-menuitem-link ui-corner-all ui-state-hover">
+    <span class="estoque ui-menuitem-icon"></span>
+        <span class="ui-menuitem-text">
+            Estoque
+        </span>
+    <span class="ui-icon ui-icon-triangle-1-e"></span>
+</a>
+
+
+
+
+
+
+*/

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Produtos
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="cadastroDeProduto" prependId="false" >
+            <p:panel header="Cadastro de produtos">
+                <table border="0">
+                    <tr>
+                        <td align="right" ><h:outputText value="Nome "/></td>
+                        <td>
+                            <p:inputText required="true" requiredMessage="#{msg.campoVazio}"
+                                         id="nome" value="#{listaDeProdutos.produtoManipulado.nome}" style="width: 223px;"/>
+                            <p:tooltip for="nome" value="Nome" showEffect="fade" hideEffect="fade"  />
+                        </td>
+                    </tr>
+                    <tr>	
+                        <td align="right"><h:outputText value="Unidade "/></td>
+                        <td>
+                            <p:selectOneMenu id="menu2"  value="#{listaDeUnidades.posManipulado}" validatorMessage="#{msg.selecioneUmaOpcao}" style="width: 230px;"  >
+
+                                <f:selectItem itemLabel="Selecione" itemValue="-1" />
+
+                                <f:selectItems  value="#{listaDeUnidades.unidades}" var="uni"
+                                                itemValue="#{listaDeUnidades.unidades.indexOf(uni)}" itemLabel="#{uni.nome}">
+                                </f:selectItems>
+                                <f:validateDoubleRange minimum="0" />
+
+                            </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><h:outputText value="Medida "/></td>
+                        <td>
+                            <p:inputText id="medida" required="true" requiredMessage="#{msg.campoVazio}" validatorMessage="#{msg.numeroMenorQZero}"
+                                         value="#{listaDeProdutos.produtoManipulado.medida}" style="width: 223px;" onkeypress="return apenasNumeros('medida')" >
+                                <f:validateDoubleRange minimum="0.01" />
+                                <p:tooltip value="Nome" for="medida" showEffect="fade" hideEffect="fade"  />
+                            </p:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><h:outputText  value="Quantidade"/></td>
+                        <td>
+                            <p:inputText  id="quantidade" required="true" requiredMessage="#{msg.campoVazio}" validatorMessage="#{msg.numeroMenorQUm}"
+                                          value="#{listaDeProdutos.produtoManipulado.quantidadeEmStoque}" style="width: 223px;" 
+                                          onkeypress="return apenasNumerosInteiros('quantidade')"  >
+                                <f:validateDoubleRange minimum="1"  />
+                                <p:tooltip value="Nome" for="quantidade" showEffect="fade" hideEffect="fade"  />
+                            </p:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td><p:commandButton value="Registra"  action="#{prod.mergProduto(listaDeProdutos,listaDeUnidades)}"
+                                             update="cadastroDeProduto"  /></td>
+                                    <td><p:ajaxStatus >
+                                    <f:facet name="start">
+                                        <div class="loading"/> 
+                                    </f:facet>
+                                    <f:facet name="complete">
+                                        <div class="complete"/> 
+                                    </f:facet>
+                                    <f:facet name="error">
+                                        <div class="erro2"/>
+                                    </f:facet>
+                                </p:ajaxStatus></td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    </tr>
+                </table>
+            </p:panel>
+            <p:growl id="messages" autoUpdate="true" life="1000000000"  />
+        </h:form>
+    </ui:define>
+
+</ui:composition>

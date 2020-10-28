@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Alterar unidade
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"/>
+    </ui:define>
+
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="listaUnidades">
+            <p:panel header="Atualizar unidades">
+                <p:dataTable var="xUnidade" value="#{listaDeUnidades.unidades}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15,30">
+                    <f:facet name="header">
+                        Lista de unidades
+                    </f:facet>
+
+                    <p:column style="text-align: center" >  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Unidade
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xUnidade.nome}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center" >   
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Abreviação
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xUnidade.abreviacao}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center" >   
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Atualizar
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            <p:commandLink  actionListener="#{boleanos.ambosTrue(0)}" oncomplete="breuOn();abreJanela0();" update="alterarUnidade"   >
+                                <h:graphicImage library="imagens" name="update.png" />
+                                <f:setPropertyActionListener value="#{listaDeUnidades.unidades.indexOf(xUnidade)}" target="#{listaDeUnidades.posManipulado}"/>
+                                <f:setPropertyActionListener value="#{xUnidade}" target="#{listaDeUnidades.unidadeManipulada}"/>
+
+                            </p:commandLink>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <!--ATUALIZAR PRODUTO-->
+        <h:form id="alterarUnidade" prependId="false" >
+            <p:outputPanel id="janela" rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Atualizar Produto" rendered="#{boleanos.verB(0)}" id="janela0" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td class="alingRight" >Nome </td>
+                                <td><p:inputText value="#{listaDeUnidades.unidadeManipulada.nome}" required="true" requiredMessage="#{msg.campoVazio}" /></td>
+                            </tr>
+
+                            <tr>
+                                <td class="alingRight">Abreviação </td>
+                                <td><p:inputText value="#{listaDeUnidades.unidadeManipulada.abreviacao}" required="true" requiredMessage="#{msg.campoVazio}" /></td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight">
+                                    <p:commandButton type="reset" onclick="fechaJanela0();breuOff();" image="voltar2"  action="#{boleanos.ambosFalse(0,boleanos.timeDefault)}"/>
+                                </td>
+                                <td><p:commandButton image="update" action="#{beanAdiminEstoque.atualizaUnidade(listaDeUnidades)}" update="listaUnidades" oncomplete="atualizaUnidade(args);"  /></td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <p:growl id="messages" autoUpdate="true" />
+        <!--STATUS AJAX-->
+        <p:ajaxStatus >
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+        <script type="text/javascript" >
+            function atualizaUnidade(args){
+                if(args.fecha){
+                    fechaJanela0();breuOff();
+                } 
+            }
+        </script>
+    </ui:define>
+
+</ui:composition>

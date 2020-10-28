@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Cadastrar nova turma    
+    </ui:define>
+
+    <ui:define name="imports">
+
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="listaDeTrumas" prependId="false">
+            <p:panel header="Cadastrar nova turma" >
+                <table>
+                    <tr>
+                        <td>Código da turma</td>
+                        <td> <p:inputText value="#{listaDeTurmas.turma.codigoTurma}" />  </td>
+                    </tr>
+                    <tr>
+                        <td class="alingRight" >Inicio</td>
+                        <td><p:calendar converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" rendered="true" requiredMessage="#{msg.campoVazio}"  value="#{listaDeTurmas.turma.dataInicio}" /></td>
+                    </tr>
+                    <tr>
+                        <td class="alingRight" >Inicio</td>
+                        <td><p:calendar converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" rendered="true" requiredMessage="#{msg.campoVazio}"  value="#{listaDeTurmas.turma.dataTermino}" /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><p:commandButton image="salvar" action="#{beanAdmin.cadastraTurma(listaDeTurmas)}" update="listaDeTrumas" /></td>
+                    </tr>
+                </table>
+            </p:panel>
+        </h:form>
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

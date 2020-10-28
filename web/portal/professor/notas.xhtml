@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Inicio
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+
+        <h:form id="listaDeAlunosDoProfessor">
+            <p:panel header="Minha lisota de alunos" >
+                <p>Meu ponto atual : #{listaDeProfessores.pontoAtualDoProfessor(portalGenerico.professor) == null ? 'Sem ponto' : listaDeProfessores.pontoAtualDoProfessor(portalGenerico.professor).nome}</p>
+                <p>Meu ponto atual : #{listaDeProfessores.pontoAtualDoProfessor(portalGenerico.professor) == null ? 'Sem ponto' : listaDeProfessores.pontoAtualDoProfessor(portalGenerico.professor).nome}</p>
+                <p:dataTable var="xAlunoPonto" value="#{listaDeAlunos.alunosDeDeterminadoProfessor(portalGenerico.professor)}"
+                             paginator="true" rows="20" emptyMessage="Sem alunos" paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,30,60">
+
+                    <f:facet name="header">  
+                        Meus atuais alunos
+                    </f:facet>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Nome</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{utilString.trataNomeUsuarioII(xAlunoPonto.aluno,40)}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center" >  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Nota</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xAlunoPonto.nota == -1 ? '-' : xAlunoPonto.nota }
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center">
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Lancar Nota</div>
+                        </f:facet>
+                        <div class="espacamento" style="text-align: center" >
+                            <p:commandLink update="lancarNota,soliciatarAlteracaoDeNota" rendered="#{!beanProfessor.confereSeExisteAlgo(xAlunoPonto)}" action="#{beanProfessor.alteraNota(listaDeAlunos, boleanos)}" oncomplete="alterandoNota(args);">
+                                <h:graphicImage library="imagens" name="notas32.png" />
+                                <f:setPropertyActionListener value="#{xAlunoPonto}" target="#{listaDeAlunos.alunoPontoManipulado}" />
+                            </p:commandLink>
+                            <h:outputText rendered="#{beanProfessor.confereSeExisteAlgo(xAlunoPonto)}" value="-" />
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center" >  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Observação</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{beanProfessor.confereSeExisteAlgo(xAlunoPonto) ? '' : '-'}
+                            <p:commandLink action="#{boleanos.ambosTrue(2)}" rendered="#{beanProfessor.confereSeExistePedidoPendente(xAlunoPonto)}" oncomplete=" breuOn();abreJanela2();" update="solicitacaoPendente" >
+                                <h:graphicImage id="pendente" library="imagens"  name="alerta32.png" />
+                                <p:tooltip for="pendente" value="Solicitação pendente" />
+                                <f:setPropertyActionListener value="#{xAlunoPonto}" target="#{listaDeAlunos.alunoPontoManipulado}" />
+                            </p:commandLink>
+
+                            <p:commandLink action="#{boleanos.ambosTrue(3)}" rendered="#{beanProfessor.confereSeExistePedidoRespondido(xAlunoPonto)}" oncomplete=" breuOn();abreJanela3();" update="observacoes2" >
+                                <h:graphicImage id="respondidoPositivamente" library="imagens"  rendered="#{beanProfessor.confereSeFoiAceitoPositivamente(xAlunoPonto)}" name="ok.png" />
+                                <p:tooltip for="respondidoPositivamente" value="Solicitação aceita"  />
+
+                                <h:graphicImage id="respondidoNegativamente" library="imagens" rendered="#{!beanProfessor.confereSeFoiAceitoPositivamente(xAlunoPonto)}"  name="erro32.png" />
+                                <p:tooltip for="respondidoNegativamente" value="Solicitação negada"  />
+
+                                <f:setPropertyActionListener value="#{xAlunoPonto}" target="#{listaDeAlunos.alunoPontoManipulado}" />
+                            </p:commandLink>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>     
+
+
+        <h:form id="lancarNota" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Lançar nota" id="janela0" styleClass="janelas" >
+                        #{utilString.trataNomeUsuarioII(listaDeAlunos.alunoPontoManipulado.aluno,80)}
+                        <table>
+                            <tr>
+                                <td>Nota</td>
+                                <td><p:inputText value="#{listaDeAlunos.nota}"  id="notaASerLancada" validatorMessage="valor mt alto" onkeypress="return apenasNumeros('notaASerLancada');" >
+                                <f:validateDoubleRange minimum="0" maximum="10" />
+                            </p:inputText></td>
+                            </tr>
+                            <tr>
+                                <td><h:form><p:commandButton image="voltar2" onclick="breuOff();fechaJanela0();" actionListener="#{boleanos.ambosFalse(0, 0)}" /></h:form></td>
+                            <td><p:commandButton image="salvar" action="#{beanProfessor.lancaNota(listaDeAlunos)}" 
+                                                 oncomplete="setandoNota(args);" update="listaDeAlunosDoProfessor"  />
+                            </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <h:form id="soliciatarAlteracaoDeNota" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(1)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel1"  >
+                    <p:panel header="Solicitar mudança de nota" id="janela1" styleClass="janelas"  >
+                        <table>
+                            <tr>
+                                <td class="alingRight">Aluno</td>
+                                <td>#{utilString.trataNomeUsuarioII(listaDeAlunos.alunoPontoManipulado.aluno,40)}</td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight">Nota atual</td>
+                                <td>#{listaDeAlunos.alunoPontoManipulado.nota}</td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight">Nova nota</td>
+                                <td><p:inputText value="#{listaDeAlunos.nota}"  validatorMessage="Lembre-se! A nota há de ser entre 0 e 10" >
+                                <f:validateDoubleRange minimum="0" maximum="10" />
+                            </p:inputText></td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight">Motivo:</td>
+                                <td><p:inputTextarea value="#{beanProfessor.justificativa}" required="true" requiredMessage="O motivo não pode ficar vazio" validatorMessage="Colé! digita alguma coisa com 
+                                                 mais de 10 caracteres ai brother!" style="width: 300px" >
+                                <f:validateLength minimum="10" />
+                            </p:inputTextarea></td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <td><h:form><p:commandButton image="voltar2" action="#{boleanos.ambosFalse(1, 0)}" onstart="fechaJanela1();breuOff();"  /></h:form></td>
+                            <td><p:commandButton image="salvar" update="listaDeAlunosDoProfessor" action="#{beanProfessor.geraPedidoDeAlteracaoDeNota(listaDeAlunos, portalGenerico.professor, boleanos)}" oncomplete="geraPedidoAlteracaoNota(args)"   />  </td>
+                            </tr>
+                        </table>
+
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+
+
+        <h:form id="solicitacaoPendente" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(2)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel2"  >
+                    <p:panel header="Lançar nota" id="janela2" styleClass="janelas" >
+                        Voçe solicitou a mudança de nota do aluno<br/>
+                        "#{listaDeAlunos.alunoPontoManipulado.aluno.nomeCompleto}"<br/>
+                        de "#{beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).notaAntiga}"<br/>
+                        para "#{beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).novaNota}"<br/>
+                        com seguinte justificativa:<br/>
+                        "#{beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).justificativa}"<br/>
+                        na data de #{utilData.dataFormal2(beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).dataGerado.time)}<br/>
+                        até agora o coordenador não respondeu sua solicitação<br/>
+                        <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(2, 0)}" oncomplete="breuOff();fechaJanela2();"/>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+
+        <h:form id="observacoes2" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(3)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel3"  >
+                    <p:panel header="Lançar nota" id="janela3" styleClass="janelas" >
+                        Voçe solicitou a mudança de nota do aluno<br/>
+                        "#{listaDeAlunos.alunoPontoManipulado.aluno.nomeCompleto}"<br/>
+                        de "#{beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).notaAntiga}"<br/>
+                        para "#{beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).novaNota}"<br/>
+                        com seguinte justificativa:<br/>
+                        "#{beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).justificativa}"<br/>
+                        na data de #{utilData.dataFormal2(beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).dataGerado.time)}<br/>
+                        sua solicitação foi <span style="color:#{beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).aceito ? 'green' : 'red'}" >#{beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).aceito ? 'aceita' : 'negada'}</span><br/>
+                        na data de #{utilData.dataFormal2(beanProfessor.pedidos.get(listaDeAlunos.alunoPontoManipulado.id).dataRespondido.time)}<br/>
+                        <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(3, 0)}" oncomplete="breuOff();fechaJanela3();"/>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+
+
+        <script type="text/javascript" >
+            
+            function geraPedidoAlteracaoNota(args){
+                if(args.fecha){
+                    fechaJanela1();breuOff();
+                }
+            }
+            function setandoNota(args){
+                if(args.fecha){
+                    breuOff();fechaJanela0();
+                }
+            }
+            function alterandoNota(args){
+                if(!args.lancouNota){
+                    breuOn();abreJanela0();
+                }else{
+                    breuOn();abreJanela1();
+                }
+            }
+        </script>
+
+    </ui:define>
+</ui:composition>

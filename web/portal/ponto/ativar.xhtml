@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Ativar ponto de estágio
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="produtos" prependId="false" >
+            <p:panel header="Atualizar produto">
+                <p:dataTable var="xPonto" value="#{listaDePontos.pontosDesativados}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15,30">
+                    <f:facet name="header">
+                        Lista de pontos de estágio
+                    </f:facet>
+
+
+                    <p:column>
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Nome
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xPonto.nome}
+                        </div>
+                    </p:column>
+
+                    <p:column  style="text-align: center;">
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Ativar
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            <p:commandLink   actionListener="#{boleanos.ambosTrue(0)}" oncomplete="breuOn();abreJanela0();" 
+                                             update="alterarProduto"  title="Alterar Produto"  >
+                                <h:graphicImage library="imagens" name="ativar32.png" />
+                                <f:setPropertyActionListener value="#{xPonto}" target="#{listaDePontos.pontoManipulado}"/>
+                            </p:commandLink>
+                        </div>
+                    </p:column  >
+
+                </p:dataTable>
+            </p:panel>
+            
+            <!--STATUS AJAX-->
+            <p:ajaxStatus style="position: fixed; 
+                          top: 0px;
+                          left: 0px;
+                          height: 26px;
+                          width: 26px;" >
+                <f:facet name="start" >
+                    <div class="loading" style="background-color: #FFF;"/> 
+                </f:facet>
+                <f:facet name="complete">
+                    <div class="complete"/> 
+                </f:facet>
+                <f:facet name="error">
+                    <div class="erro2"/>
+                </f:facet>
+                <f:facet name="onsuccess">
+                </f:facet>
+                <f:facet name="onselectStart">
+                    <div class="erro2"/>
+                </f:facet>
+                <f:facet name="onselectComplete">
+                    <div class="erro2"/>
+                </f:facet>
+            </p:ajaxStatus>
+        </h:form>
+
+        <!--ATUALIZAR PRODUTO-->
+        <h:form id="alterarProduto" prependId="false" >
+            <p:outputPanel id="janela" rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Desativar Produto" rendered="#{boleanos.verB(0)}" id="janela0" styleClass="janelas" >
+                        <p>
+                            Ativar o ponto "#{listaDePontos.pontoManipulado.nome}"
+                        </p>
+
+
+                        <table>
+                            <tr>
+                                <td align="right">
+                                    <p:commandButton onstart="fechaJanela0();breuOff();" image="voltar2"  actionListener="#{boleanos.ambosFalse(0,boleanos.timeDefault)}"
+                                                     update="produtos" />
+                                </td>
+                                <td>
+                                    <p:commandButton image="nao" onstart="fechaJanela0();breuOff();" actionListener="#{boleanos.ambosFalse(0,boleanos.timeDefault)}"
+                                                     action="#{listaDePontos.ativar()}"  update="produtos" />
+                                </td>
+                            </tr>
+                        </table> 
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+<p:growl id="messages" autoUpdate="true" />
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Alterar Professor
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="listagemDePedidosDeAlteracaoDeNotas" prependId="false">
+            <p:panel header="Pedidos de alteração de nota" >
+                <p:dataTable var="xPedido" value="#{msgAdmin.pedidosPendentes}" paginator="true" rows="20" emptyMessage="Sem resultados"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,30,60">
+                    <f:facet name="header">  
+                        Pedidos
+                    </f:facet>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Professor
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{utilString.nomeFormal(xPedido.professor)}
+                        </div>
+                    </p:column>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Aluno
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{utilString.nomeFormal(xPedido.alunoPonto.aluno)}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center">  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Nota antiga
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xPedido.notaAntiga}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center">  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Nova nota
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xPedido.novaNota}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center">  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Detalhes
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            <p:commandLink action="#{boleanos.ambosTrue(0)}" update="detalhesDoPedidoDeAlteracaoDeNota" oncomplete="breuOn();abreJanela0();" >
+                                <h:graphicImage id="detalhesPedido" library="imagens" name="pdf.png"/>
+                                <p:tooltip for="detalhesPedido" value="Visualizar detalhes"/>
+                                <f:setPropertyActionListener value="#{msgAdmin.pedidosPendentes.indexOf(xPedido)}" target="#{msgAdmin.posPedidoEmQuestao}" />
+                            </p:commandLink>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+
+
+        <h:form id="detalhesDoPedidoDeAlteracaoDeNota" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Alteração de nota" id="janela0" styleClass="janelas" >
+                        O professor #{utilString.nomeFormal(msgAdmin.pedidosPendentes.get(msgAdmin.posPedidoEmQuestao).professor)} solicitou a mudança de nota do aluno<br/>
+                        #{utilString.nomeFormal(msgAdmin.pedidosPendentes.get(msgAdmin.posPedidoEmQuestao).alunoPonto.aluno)}<br/>
+                        de "#{msgAdmin.pedidosPendentes.get(msgAdmin.posPedidoEmQuestao).notaAntiga}"<br/>
+                        para "#{msgAdmin.pedidosPendentes.get(msgAdmin.posPedidoEmQuestao).novaNota}"<br/>
+                        com seguinte justificativa:<br/>
+                        "#{msgAdmin.pedidosPendentes.get(msgAdmin.posPedidoEmQuestao).justificativa}"<br/>
+                        na data de #{utilData.dataFormal2(msgAdmin.pedidosPendentes.get(msgAdmin.posPedidoEmQuestao).dataGerado.time)}<br/>
+                        Voce permite a alteracao?<br/>
+                        
+                        <table>
+                            <tr>
+                                <td><p:commandButton image="sim" value="Aceitar" actionListener="#{boleanos.mudaA(0, boleanos.timeDefault)}"
+                                                     action="#{msgAdmin.aceitarSolicitacao(msgAdmin.pedidosPendentes.get(msgAdmin.posPedidoEmQuestao))}"
+                                                     onstart="fechaJanela0();breuOff();"  update="listagemDePedidosDeAlteracaoDeNotas" /></td>
+                                <td><p:commandButton image="nao" value="Negar" actionListener="#{boleanos.mudaA(0, boleanos.timeDefault)}"
+                                                     action="#{msgAdmin.negarSolicitacao(msgAdmin.pedidosPendentes.get(msgAdmin.posPedidoEmQuestao))}"
+                                                     onstart="fechaJanela0();breuOff();" update="listagemDePedidosDeAlteracaoDeNotas"  /></td>
+                            </tr>
+                            <tr>
+                                <td><p:commandButton image="voltar2" actionListener="#{boleanos.mudaA(0, boleanos.timeDefault)}"
+                                         onstart="fechaJanela0();breuOff();"  /></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        
+                        
+                        
+                        
+                        
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Gráfico Entrada
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+
+        <h:form id="graficoIO" >
+            <div style="position: absolute; margin-left: 381px; margin-top: 7px;  " >
+
+                <p:commandLink action="#{boleanos.ambosTrue(2)}"  rendered="#{listaDeGraficosIO.confereSeABSGrafSaidaSalvoJahTahSalvo()}" oncomplete="breuOn();abreJanela2();iniciaAlinhamentoBurro();" update="graficoManipulado" >
+                    <h:graphicImage id="manipulandoGrafico"  library="imagens"  name="gear.png"/>
+                    <p:tooltip for="manipulandoGrafico" value='vc está manipulando "#{listaDeGraficosIO.absGraficoEntradaSaidaSalvo.nome}"' showEffect="fade" hideEffect="fade" />  
+                </p:commandLink>
+
+
+            </div>
+            <p:wizard step="#{graficoIO.stepWizr}" showNavBar="false" showStepStatus="true" >
+                <!--ARQUIVADOS-->
+                <p:tab title="Consutas salvas" id="arquivados"  >
+                    <p:panel header="Graficos Salvos  " >
+                        <table>
+                            <tr>
+                                <td>Nome</td>
+                                <td>
+                                    <p:autoComplete maxResults="10" value="#{listaDeGraficosIO.nome}" completeMethod="#{listaDeGraficosIO.autoComplete}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tipo</td>
+                                <td>
+                                    <p:selectOneRadio value="#{listaDeGraficosIO.exibePorTipo}" layout="pageDirection"   >  
+                                        <f:selectItem itemLabel="Pré Determinado" itemValue="1" />   
+                                        <f:selectItem itemLabel="Custom" itemValue="2" />  
+                                        <f:selectItem itemLabel="Ambos" itemValue="3" />  
+                                    </p:selectOneRadio>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <p:commandButton value="Buscar" actionListener="#{listaDeGraficosIO.filtra(true)}" update="graficoIO" />
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p:dataTable id="listaDeGraficosSalvos" paginator="true" rows="3" emptyMessage="Sem resultados"
+                                     paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="3,5,10,15,30"  var="xGrafico" value="#{listaDeGraficosIO.graficosEntradaSaidaSalvosManipulados}" >
+                            <f:facet name="header">  
+                                Gráficos salvos
+                            </f:facet>  
+                            <p:column>  
+                                <div class="espacamento">
+                                    <br></br>
+                                    <p:fieldset collapsed="true"  toggleable="true" legend=' "#{xGrafico.nome}" - #{utilData.dataFormal2(xGrafico.dataModificado.time)} - id: #{xGrafico.id} '
+                                                toggleSpeed="#{boleanos.timeDefault*2}">
+                                        <br></br>
+                                        <p:dataTable var="exibindoGrafico" value="#{utilLista.recebeObjetoRetornaLista(xGrafico)}">
+
+                                            <p:column  >
+                                                <f:facet name="header" >  
+                                                    <div class="cabecaTablea">Periodo</div>
+                                                </f:facet>
+                                                <div class="espacamento" >
+                                                    De: #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaLong(xGrafico.de.time, xGrafico.agrupamento)}
+                                                    <br> 
+                                                        Até: #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaLong(xGrafico.ate.time, xGrafico.agrupamento)}
+                                                    </br>
+                                                </div>
+                                            </p:column  >
+                                            <p:column  >
+                                                <f:facet name="header" >  
+                                                    <div class="cabecaTablea">Agrupamento</div>
+                                                </f:facet>
+                                                <div class="espacamento" >
+                                                    #{xGrafico.agrupamento}
+                                                </div>
+                                            </p:column  >
+
+
+                                            <p:column  >
+                                                <f:facet name="header" >  
+                                                    <div class="cabecaTablea">Produtos</div>
+                                                </f:facet>
+                                                <div class="espacamento" >
+                                                    <p:accordionPanel activeIndex="-1" style="width: 100%; " >
+                                                        <p:tab title="Ver produtos"  >
+                                                            <p:dataTable var="q" value="#{listaDeGraficosIO.listaProdutosDeGraficoSalvo(xGrafico)}"  style="width:100%; text-align: center" >
+                                                                <p:column style="border: 0px;" >
+                                                                    #{q.toString()}
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </p:tab>
+                                                    </p:accordionPanel>
+                                                </div>
+                                            </p:column  >
+
+
+                                        </p:dataTable>
+                                        <br></br>
+                                        <p:commandLink update="graficoIO" style="float: left; " action="#{graficoIO.carregaGrafico(listaDeGraficosIO, xGrafico)}" >
+                                            <p:tooltip for="imagemVisualizarGrafico" value="Visualizar gráfico" />
+                                            <h:graphicImage id="imagemVisualizarGrafico" library="imagens" name="chart32.png" styleClass="imagens"  />
+                                            <f:setPropertyActionListener value="#{listaDeGraficosIO.listaProdutosDeGraficoSalvo(xGrafico)}" target="#{listaDeProdutos.produtosManipulados}"/>
+                                        </p:commandLink>
+
+                                        <p:commandLink update="deletaGrafico" action="#{boleanos.ambosTrue(3)}" oncomplete="breuOn();abreJanela3();" style="float: left; margin-left: 10px;"  >
+                                            <p:tooltip for="imagemDeltarGrafico" value="Deleta gráfico" />
+                                            <h:graphicImage id="imagemDeltarGrafico" library="imagens" name="delete.png" styleClass="imagens"  />
+                                            <f:setPropertyActionListener value="#{xGrafico}" target="#{listaDeGraficosIO.absGraficoEntradaSaidaSalvoPraSerDeletado}" />
+                                        </p:commandLink>
+
+                                    </p:fieldset>
+                                    <br></br>
+                                </div>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <p:separator style="width: 100%; height: 5px;"/>
+                        <div class="wizard">
+                            <div class="wizardNext">
+                                <p:commandButton image="avancar" actionListener='#{graficoIO.navegaNoWizard("data")}' update="graficoIO" />
+                            </div>
+                        </div> 
+                    </p:panel>
+                </p:tab>
+                <!--DATA-->
+                <p:tab title="Data" id="data"  >
+                    <p:panel header="Definindo data">
+                        <p:accordionPanel activeIndex="#{graficoIO.tipoDeConsulta}" >
+                            <p:tab title="Consulta Pré-Determinada" >
+                                <table style="margin: 0 auto;"  >
+                                    <tr>
+                                        <td class="alingRight" >De</td>
+                                        <td><p:calendar  showButtonPanel="true" navigator="true" converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" value="#{listaDeGraficosIO.cpGraficoEntradaSaidaPreDeterminado.de}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="alingRight" >Até</td>
+                                        <td><p:calendar  showButtonPanel="true" navigator="true" converter="converteDataDiaMesAno" maxdate="#{utilData.hoje()}" pattern="dd/MM/yyyy" value="#{listaDeGraficosIO.cpGraficoEntradaSaidaPreDeterminado.ate}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="alingRight" >Agrupar a pesquisa por</td>
+                                        <td>
+                                            <p:selectOneMenu value="#{listaDeGraficosIO.cpGraficoEntradaSaidaPreDeterminado.agrupamento}"  style="width: 250px;"  >
+                                                <f:selectItems value="#{agrupamento.agrupamentoPredeterminado()}" var="pt" itemValue="#{pt}" itemLabel="#{pt}" />
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:tab>
+                            <p:tab title="Consulta Customizável" >
+                                <table style="margin: 0 auto;">
+                                    <tr>
+                                        <td class="alingRight" >De</td>
+                                        <td><p:calendar converter="converteDataDiaMesAno" converterMessage="tá certo essa data ai?" pattern="dd/MM/yyyy" value="#{listaDeGraficosIO.cpGraficoEntradaSaidaCustom.de}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="alingRight" >Até</td>
+                                        <td><p:calendar converter="converteDataDiaMesAno" maxdate="#{utilData.hoje()}" converterMessage="tá certo essa data ai?" pattern="dd/MM/yyyy" value="#{listaDeGraficosIO.cpGraficoEntradaSaidaCustom.ate}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="alingRight" >Agrupar a pesquisa por</td>
+                                        <td>
+                                            <p:selectOneMenu value="#{listaDeGraficosIO.cpGraficoEntradaSaidaCustom.agrupamento}"  style="width: 250px;"  >
+                                                <f:selectItems value="#{agrupamento.agrupamentoCustom()}" var="pt" itemValue="#{pt}" itemLabel="#{pt}" />
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:tab>
+                        </p:accordionPanel>
+                        <p:separator style="width: 100%; height: 5px;"/>
+                        <div class="wizard">
+                            <div class="wizardNext">
+                                <p:commandButton image="avancar" title="Avançar"  action="#{graficoIO.confereData(listaDeGraficosIO)}" update="graficoIO"  />
+                            </div>
+                            <div class="wizardBack">
+                                <p:commandButton image="voltar" title="Voltar" action='#{graficoIO.navegaNoWizard("arquivados")}'  update="graficoIO" />
+                            </div> 
+                        </div> 
+                    </p:panel>
+                </p:tab>
+                <!--Produto-->
+                <p:tab title="Produtos" id="produtos" >
+                    <p:panel header="Definindo os produtos">
+                        <table>
+                            <tr>
+                                <td>
+                                    Produto
+                                </td>
+                                <td>
+                                    <p:selectOneMenu value="#{listaDeProdutos.indexDoProduto}" style="min-width: 230px;" >
+                                        <f:selectItems value="#{listaDeProdutos.produtos}" var="p" itemLabel="#{p.toString()}" itemValue="#{listaDeProdutos.produtos.indexOf(p)}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <p:commandButton value="Adicionar" action="#{listaDeProdutos.desce()}" update="graficoIO" />
+                                </td>
+                            </tr>
+                        </table>
+                        <p:dataTable  var="p" value="#{listaDeProdutos.produtosManipulados}" paginator="true" rows="10" emptyMessage="Sem resultados"
+                                      paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                      rowsPerPageTemplate="5,10,15,30"  >
+                            <f:facet name="header" >
+                                Lista de produtos
+                            </f:facet>
+                            <p:column>  
+                                <f:facet name="header" >  
+                                    <div class="cabecaTablea">Produto</div>
+                                </f:facet>
+                                <div class="espacamento" >
+                                    #{p.toString()}
+                                </div>
+                            </p:column>
+                            <p:column>  
+                                <f:facet name="header" >  
+                                    <div class="cabecaTablea">Remover</div>
+                                </f:facet>
+                                <div class="espacamento" style="text-align: center" >
+                                    <p:commandLink action="#{boleanos.ambosTrue(0)}" oncomplete="breuOn();abreJanela0();" update="removeProduto" >
+                                        <h:graphicImage id="imagemRemoverPrdoduto" library="imagens" styleClass="imagens" name="delete.png" />
+                                        <p:tooltip for="imagemRemoverPrdoduto" value="Remover produto da lista" />
+                                        <f:setPropertyActionListener value="#{listaDeProdutos.produtosManipulados.indexOf(p)}" target="#{listaDeProdutos.indexDoProdutoManipulado}" />
+                                    </p:commandLink>
+                                </div>
+                            </p:column>
+                        </p:dataTable>
+                        <p:separator style="width: 100%; height: 5px;"/>
+                        <div class="wizard">
+                            <div class="wizardNext">
+                                <p:commandButton image="avancar" title="Avançar" action="#{graficoIO.confereProdutos(listaDeProdutos,listaDeGraficosIO)}" update="graficoIO" />
+                            </div>  
+
+                            <div class="wizardBack">
+                                <p:commandButton image="voltar" title="Voltar" action='#{graficoIO.navegaNoWizard("data")}' update="graficoIO" />
+                            </div> 
+                        </div>
+                    </p:panel>
+                </p:tab>
+                <!--Gráfico-->
+                <p:tab title="Grafico" id="grafico" >
+                    <p:panel header="Exibindo gráfico">
+
+                        <p><p:commandButton image="salvar"  action="#{boleanos.ambosTrue(1)}"  rendered="#{!listaDeGraficosIO.confereSeABSGrafSaidaSalvoJahTahSalvo()}" oncomplete="breuOn();abreJanela1();"  update="salvarGrafico" /></p>
+                        <p><p:commandButton  image="gear" action="#{boleanos.ambosTrue(2)}" rendered="#{listaDeGraficosIO.confereSeABSGrafSaidaSalvoJahTahSalvo()}" oncomplete="breuOn();abreJanela2();iniciaAlinhamentoBurro();" update="graficoManipulado"  /></p>
+
+                        <p:fieldset legend="Variação no estoque " collapsed="true" toggleable="true" toggleSpeed="#{boleanos.timeDefault*2}"  >
+                            <object type="application/x-shockwave-flash" lang="PT"  class="FusionCharts" data="aplicativo/MSLine.swf" width="100%" height="400" id="chart2c" >
+                                <param name="scaleMode" value="noScale"/>
+                                <param name="scale" value="noScale"/>
+                                <param name="wMode" value="transparent"/>
+                                <param name="allowScriptAccess" value="always"/>
+                                <param name="quality" value="best"/>
+                                <param name="flashvars" value="dataURL=xml/#{graficoIO.gerador.codigoSecreto}variacaoQuantidade.xml"/>
+                            </object>
+                            <p:fieldset legend="Dados" collapsed="true" toggleable="true" toggleSpeed="#{boleanos.timeDefault*2}"  >
+                                <h:dataTable  var="ds" value="#{graficoIO.gerador.listDataSetDiferencaIOVariacao}" width="100%" >
+                                    <p:column>
+                                        <p>
+                                            <p:fieldset legend=" #{ds.nome}" collapsed="true" toggleable="true" toggleSpeed="#{boleanos.timeDefault*2}"  >
+                                                <p:dataTable id="tabela" var="v" value="#{ds.valores}" >
+                                                    <f:facet name="header" >  
+                                                        <div class="cabecaTablea">
+                                                            #{ds.nome}
+                                                        </div>
+                                                    </f:facet>
+                                                    <p:column>  
+                                                        <f:facet name="header" class="cabecaTablea" >  
+                                                            <div class="cabecaTablea">
+                                                                Periodo
+                                                            </div>
+                                                        </f:facet>
+                                                        <div class="espacamento" >
+                                                            #{graficoIO.gerador.verData(graficoSaida.tipoDeConsulta)}
+                                                        </div>
+                                                    </p:column>
+                                                    <p:column>  
+                                                        <f:facet name="header" >  
+                                                            <div class="cabecaTablea">
+                                                                Quantidade
+                                                            </div>
+                                                        </f:facet>
+                                                        <div class="espacamento" >
+                                                            #{v}
+                                                        </div>
+                                                    </p:column>
+                                                </p:dataTable>
+                                                <p>
+                                                    <p:commandLink  update="download" actionListener="#{boleanos.ambosTrue(6)}" oncomplete="breuOn();abreJanela6();"
+                                                                    action="#{geraPDF.variacaoNoEstoqueDeUmUnicoProduto(ds, graficoIO.gerador.listDatasApresentavel)}"  >  
+                                                        <h:graphicImage library="imagens" name="pdf.png" />  
+                                                    </p:commandLink>
+                                                </p>
+                                            </p:fieldset>
+                                        </p>
+                                    </p:column>
+                                </h:dataTable>
+                                <p>
+                                    <p:commandLink  update="download" actionListener="#{boleanos.ambosTrue(6)}" oncomplete="breuOn();abreJanela6();"
+                                                    action="#{geraPDF.variacaoNoEstoqueDeTodosOsProdutos(graficoIO.gerador.listDataSetDiferencaIOVariacao, graficoIO.gerador.listDatasApresentavel)}"  >  
+                                        <h:graphicImage library="imagens" name="pdf.png" />  
+                                    </p:commandLink>
+                                </p>
+                            </p:fieldset>
+                        </p:fieldset>
+                        <br></br>
+                        <p:fieldset legend="Diferença IO" collapsed="true" toggleable="true" toggleSpeed="#{boleanos.timeDefault*2}"  >
+                            <object type="application/x-shockwave-flash" lang="PT"  class="FusionCharts" data="aplicativo/MSColumn3D.swf" width="100%" height="400" id="chart2c" >
+                                <param name="scaleMode" value="noScale"/>
+                                <param name="scale" value="noScale"/>
+                                <param name="wMode" value="transparent"/>
+                                <param name="allowScriptAccess" value="always"/>
+                                <param name="quality" value="best"/>
+                                <param name="flashvars" value="dataURL=xml/#{graficoIO.gerador.codigoSecreto}diferencaEntradaSaida.xml"/>
+                            </object>
+                            <p:fieldset legend="Dados" collapsed="true" toggleable="true" toggleSpeed="#{boleanos.timeDefault*2}"  >
+
+                                <h:dataTable  var="ds" value="#{graficoIO.gerador.listDataSetDiferencaIO}" width="100%" >  
+                                    <p:column>
+                                        <p>
+                                            <p:fieldset legend=" #{ds.nome}" collapsed="true" toggleable="true" toggleSpeed="#{boleanos.timeDefault*2}"  >
+                                                <p:dataTable id="tabela" var="v" value="#{ds.valores}" >
+                                                    <f:facet name="header" >  
+                                                        <div class="cabecaTablea">
+                                                            #{ds.nome}
+                                                        </div>
+                                                    </f:facet>
+                                                    <p:column>  
+                                                        <f:facet name="header" class="cabecaTablea" >  
+                                                            <div class="cabecaTablea">
+                                                                Periodo
+                                                            </div>
+                                                        </f:facet>
+                                                        <div class="espacamento" >
+                                                            #{graficoIO.gerador.verData(graficoSaida.tipoDeConsulta)}
+                                                        </div>
+                                                    </p:column>
+                                                    <p:column>  
+                                                        <f:facet name="header" >  
+                                                            <div class="cabecaTablea">
+                                                                Quantidade
+                                                            </div>
+                                                        </f:facet>
+                                                        <div class="espacamento" >
+                                                            #{v}
+                                                        </div>
+                                                    </p:column>
+                                                </p:dataTable>
+                                                <p>
+                                                    <p:commandLink  update="download" actionListener="#{boleanos.ambosTrue(6)}" oncomplete="breuOn();abreJanela6();"
+                                                                    action="#{geraPDF.variacaoNoEstoqueDeUmUnicoProduto(ds, graficoIO.gerador.listDatasApresentavel)}"  >  
+                                                        <h:graphicImage library="imagens" name="pdf.png" />  
+                                                    </p:commandLink>
+                                                </p>
+                                            </p:fieldset>
+                                        </p>
+                                    </p:column> 
+                                </h:dataTable>
+                                <p>
+                                    <p:commandLink  update="download" actionListener="#{boleanos.ambosTrue(6)}" oncomplete="breuOn();abreJanela6();"
+                                                    action="#{geraPDF.variacaoNoEstoqueDeTodosOsProdutos(graficoIO.gerador.listDataSetDiferencaIOVariacao, graficoIO.gerador.listDatasApresentavel)}"  >  
+                                        <h:graphicImage library="imagens" name="pdf.png" />  
+                                    </p:commandLink>
+                                </p>
+                            </p:fieldset>
+                        </p:fieldset>
+                        <br></br>
+                        <p:fieldset legend="Porcentagem consumida pelos pontos" collapsed="true" toggleable="true" toggleSpeed="#{boleanos.timeDefault*2}"  >
+                            <object type="application/x-shockwave-flash" lang="PT"  class="FusionCharts" data="aplicativo/MSStackedColumn2D.swf" width="100%" height="600" id="chart2c" style="visibility: visible; ">
+                                <param name="scaleMode" value="noScale"/>
+                                <param name="scale" value="noScale"/>
+                                <param name="wMode" value="transparent"/>
+                                <param name="allowScriptAccess" value="always"/>
+                                <param name="quality" value="best"/>
+                                <param name="flashvars" value="dataURL=xml/#{graficoIO.gerador.codigoSecreto}porcentagem.xml"/>
+                            </object>
+                            <p:fieldset legend="Dados" collapsed="true" toggleable="true" toggleSpeed="#{boleanos.timeDefault*2}"  >
+                                <h:dataTable var="xProduto" value="#{listaDeProdutos.produtosManipulados}" width="100%" >
+                                    <f:facet name="header">  
+                                        Dados tabulados
+                                    </f:facet>
+                                    <p:column  > 
+                                        <div class="espacamento"> 
+                                            <br></br>
+                                            <p:fieldset collapsed="true" toggleable="true" legend='#{xProduto.toString()}' >
+                                                <br></br>
+                                                <p:dataTable var="xData" value="#{graficoIO.gerador.listDatasApresentavel}" >
+                                                    <p:column>  
+                                                        <f:facet name="header" >  
+                                                            <div class="cabecaTablea">
+                                                                Data
+                                                            </div>
+                                                        </f:facet>
+                                                        <div class="espacamento" >
+                                                            #{xData}
+                                                        </div>
+                                                    </p:column>
+                                                    <p:column style="text-align: center">  
+                                                        <f:facet name="header" >  
+                                                            <div class="cabecaTablea">
+                                                                Total Consumido
+                                                            </div>
+                                                        </f:facet>
+                                                        <div class="espacamento" >
+                                                            #{graficoIO.gerador.mapaTotalPorData.get(utilString.key(graficoIO.gerador.listDatasApresentavel.indexOf(xData), listaDeProdutos.produtosManipulados.indexOf(xProduto)))}
+                                                        </div>
+                                                    </p:column>
+                                                    <p:column>  
+                                                        <f:facet name="header" >  
+                                                            <div class="cabecaTablea">
+                                                                Consumo
+                                                            </div>
+                                                        </f:facet>
+                                                        <div class="espacamento" >
+                                                            <p:accordionPanel activeIndex="-1" >
+                                                                <p:tab title="#{xProduto.toString()} - #{xData}" >
+                                                                    <p:dataTable var="xPonto" value="#{listaDePontos.pontos}" >
+                                                                        <p:column>  
+                                                                            <f:facet name="header" >  
+                                                                                <div class="cabecaTablea">
+                                                                                    Ponto
+                                                                                </div>
+                                                                            </f:facet>
+                                                                            <div class="espacamento" >
+                                                                                #{xPonto.nome}
+                                                                            </div>
+                                                                        </p:column>
+                                                                        <p:column style="text-align: center" >  
+                                                                            <f:facet name="header" >  
+                                                                                <div class="cabecaTablea">
+                                                                                    Consumo
+                                                                                </div>
+                                                                            </f:facet>
+                                                                            <div class="espacamento" >
+                                                                                <!--data - produto | % consumida em cada ponto-->
+                                                                                #{utilString.divisor(graficoIO.gerador.mapaTotalPorData.get(utilString.key(graficoIO.gerador.listDatasApresentavel.indexOf(xData), listaDeProdutos.produtosManipulados.indexOf(xProduto))), graficoIO.gerador.mapaIO.get(utilString.key(graficoIO.gerador.listDatasApresentavel.indexOf(xData),listaDeProdutos.produtosManipulados.indexOf(xProduto))).get(listaDePontos.pontos.indexOf(xPonto)))}
+                                                                            </div>
+                                                                        </p:column>                                
+                                                                        <p:column style="text-align: center">  
+                                                                            <f:facet name="header" >  
+                                                                                <div class="cabecaTablea">
+                                                                                    % Consumo
+                                                                                </div>
+                                                                            </f:facet>
+                                                                            <div class="espacamento" >
+                                                                                <!--data - produto | % consumida em cada ponto-->
+                                                                                #{utilString.divisor(graficoIO.gerador.mapaTotalPorData.get(utilString.key(graficoIO.gerador.listDatasApresentavel.indexOf(xData), listaDeProdutos.produtosManipulados.indexOf(xProduto))), graficoIO.gerador.mapaIO.get(utilString.key(graficoIO.gerador.listDatasApresentavel.indexOf(xData),listaDeProdutos.produtosManipulados.indexOf(xProduto))).get(listaDePontos.pontos.indexOf(xPonto))) != "0" ? graficoIO.gerador.mapaIO.get(utilString.key(graficoIO.gerador.listDatasApresentavel.indexOf(xData), listaDeProdutos.produtosManipulados.indexOf(xProduto))).get(listaDePontos.pontos.indexOf(xPonto)) : '0' }%
+                                                                            </div>
+                                                                        </p:column>                                
+                                                                    </p:dataTable>
+                                                                </p:tab>
+                                                            </p:accordionPanel>
+                                                        </div>
+                                                    </p:column>
+                                                </p:dataTable>
+                                                <p>
+                                                    <p:commandLink  update="download" actionListener="#{boleanos.ambosTrue(6)}" oncomplete="breuOn();abreJanela6();"
+                                                                    action="#{geraPDF.porcentagemConsumidaPorUmProduto(graficoIO.gerador.listDatasApresentavel, graficoIO.gerador.mapaTotalPorData,  graficoIO.gerador.mapaIO, listaDeProdutos.produtosManipulados.indexOf(xProduto), xProduto.toString(), listaDePontos.pontos)}"  >  
+                                                        <h:graphicImage library="imagens" name="pdf.png" />  
+                                                    </p:commandLink>
+                                                </p>
+                                            </p:fieldset>
+
+
+                                            <br></br>
+                                        </div>
+                                    </p:column> 
+                                </h:dataTable>
+                                <p>
+                                    <p:commandLink  update="download" actionListener="#{boleanos.ambosTrue(6)}" oncomplete="breuOn();abreJanela6();" action="#{geraPDF.porcentagemConsumidaPorMultiplosrodutos(graficoIO.gerador.listDatasApresentavel,  graficoIO.gerador.mapaTotalPorData, graficoIO.gerador.mapaIO,  listaDeProdutos.produtosManipulados, listaDePontos.pontos)}"  >  
+                                        <h:graphicImage library="imagens" name="pdf.png" />  
+                                    </p:commandLink>
+                                </p>
+                            </p:fieldset>
+                        </p:fieldset>
+
+                        <p:separator style="width: 100%; height: 5px;"/>
+                        <div class="wizard">
+                            <div class="wizardBack">
+                                <p:commandButton image="voltar" title="Voltar"  actionListener='#{graficoIO.navegaNoWizard("produtos")}'  update="graficoIO" />
+                            </div> 
+                        </div>
+                    </p:panel>
+                </p:tab>
+            </p:wizard>
+        </h:form>
+
+        <h:form id="removeProduto" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel0">
+                    <p:panel header="Remover produto" id="janela0" styleClass="janelas" >
+                        <p>Remover da lista "#{listaDeProdutos.produtoManipuladoIndexado.nome}" ?</p>
+                        <table>
+                            <tr>
+                                <td>
+                                    <p:commandButton image="voltar2" onstart="fechaJanela0();breuOff();"/>
+                                </td>
+                                <td>
+                                    <p:commandButton image="deletar" action="#{listaDeProdutos.sobeManipulado()}" 
+                                                     update="graficoIO" onstart="fechaJanela0();breuOff();"  />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <h:form id="salvarGrafico" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(1)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel1">
+                    <p:panel header="Salvar gráfico" id="janela1" styleClass="janelas" >
+                        <div id="breuJanela1" class="breu" ></div>
+                        <table>
+                            <tr>    
+                                <td class="alingRight">Nome</td>
+                                <td colspan="2" >
+                                    <p:inputText value="#{listaDeGraficosIO.absGraficoEntradaSaidaSalvo.nome}" validatorMessage="#{msg.validaTamanhoNome}" >
+                                        <f:validateLength minimum="3" />
+                                    </p:inputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p:commandButton image="voltar2" type="reset" onclick="fechaJanela1();breuOff();" />
+                                </td>
+                                <td>
+                                    <p:commandButton title="Salvar consutla como nova" 
+                                                     action="#{graficoIO.primeiroPassoSalvarConsultaComoNova(listaDeProdutos, listaDeGraficosIO, boleanos)}"
+                                                     oncomplete="salvarGrafico_SalvarGrafico(args);" update="nomeRepetido,graficoIO" image="salvar" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <h:form id="graficoManipulado" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(2)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel2">
+                    <p:panel header="Gráfico salvo" id="janela2" styleClass="janelas" >
+                        <p><p:dataTable style="text-align: center" id="tabelaConfigGrafico" var="a" value="#{utilLista.recebeObjetoRetornaLista(boleanos.meVeUmFalse())}">  
+                                <f:facet name="header">
+                                    #{listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.nome}
+                                </f:facet> 
+
+                                <p:column  >
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">Salvo</div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        <p>
+                                            De #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaDe(listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.de.time,listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.agrupamento)}<br></br>
+                                            Até #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaAte(listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.ate.time,listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.agrupamento)}<br></br>
+                                            Agrupamento #{listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.agrupamento}</p>
+                                        <p:accordionPanel activeIndex="-1" >
+                                            <p:tab title="Produtos" id="idDaTabProdutos">
+                                                <p:dataTable var="xProduto" value="#{listaDeGraficosIO.listaProdutosDeGraficoSalvo(listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado)}"> 
+                                                    <p:column>
+                                                        #{xProduto.toString()}
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                    </div>
+                                </p:column>
+                                <p:column  >
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">Atual</div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        <p>
+                                            De #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaDe(listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).de.time,listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).agrupamento)}<br></br>
+                                            Até #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaAte(listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).ate.time,listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).agrupamento)}<br></br>
+                                            Agrupamento #{listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).agrupamento}</p>
+                                        <p:accordionPanel activeIndex="-1" >
+                                            <p:tab title="Produtos" >
+                                                <p:dataTable var="xProdutoManipulado" value="#{listaDeProdutos.produtosManipulados}" emptyMessage="Sem produtos">  
+                                                    <p:column>
+                                                        #{xProdutoManipulado.toString()}
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                    </div>
+                                </p:column>
+                            </p:dataTable></p>
+                        <table>
+                            <tr>
+                                <td>Nome</td>
+                                <td colspan="2"> <p:inputText value="#{listaDeGraficosIO.absGraficoEntradaSaidaSalvo.nome}" /></td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <td>
+                                    <p:commandButton id="voltar"  image="voltar2"  onstart="fechaJanela2();breuOff();" />
+                                    <p:tooltip for="voltar" value="Voltar" />
+                                </td>
+                                <td>
+                                    <p:commandButton id="limpar" image="clear" action="#{listaDeGraficosIO.limpaSessaoGraficoSalvoManipulado()}" update="graficoIO" onstart="fechaJanela2();breuOff();" />
+                                    <p:tooltip for="limpar" value="" />
+                                </td>
+                                <td>
+                                    <p:commandButton title="Salvar como nova" image="salvar" update="graficoIO" 
+                                                     action="#{graficoIO.salvaConsultaComoNova(listaDeProdutos, listaDeGraficosIO, boleanos)}" oncomplete="salvaGraficoEmGraficoManipulado(args)" />
+                                </td>
+                                <td>
+                                    <p:commandButton title="Atualizar Consulta" image="update" update="graficoIO" onstart="fechaJanela2();breuOff();"  
+                                                     action="#{graficoIO.tentaAtualizarGraficoManipulado(listaDeGraficosIO, listaDeProdutos)}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <h:form id="deletaGrafico" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(3)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel3">
+                    <p:panel header="Deletar gráfico" id="janela3" styleClass="janelas" >
+                        <p>Removero o gráfico:<br/>
+                            #{listaDeGraficosIO.absGraficoEntradaSaidaSalvoPraSerDeletado.nome}</p>
+                        <table>
+                            <tr>
+                                <td>
+                                    <p:commandButton image="voltar2" type="reset" onclick="fechaJanela3();breuOff();" />
+                                </td>
+                                <td>
+                                    <p:commandButton image="deletar" update="graficoIO" oncomplete="fechaJanela3();breuOff();" action="#{listaDeGraficosIO.deletaGrafSaida()}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <h:form id="nomeRepetido" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(4)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel4">
+                    <p:panel header="Salvar gráfico nome repetido" id="janela4" styleClass="janelas" >
+                        <div id="breuJanela4" class="breu" ></div>
+
+                        <p>Já exsite um gráfico salvo com este nome!<br></br>#
+                            Você pode voltar e escolher um novo nome, ou atualizar o gráfico "#{listaDeGraficosIO.absGraficoEntradaSaidaSalvo.nome}" </p>
+                        Novo nome: <p:inputText value="#{listaDeGraficosIO.absGraficoEntradaSaidaSalvo.nome}" /> <br></br>
+
+                        <p:commandButton image="voltar2" onstart="fechaJanela4();breuNaJanelaOff('breuJanela1');" />
+
+                        <p:commandButton image="diferenca" title="ver diferença entre o grafico q eu desejo salvar e o grafico já salvo"
+                                         actionListener="#{boleanos.ambosTrue(5)}" oncomplete="breuOnNaJanela('breuJanela4');abreJanela5();iniciaAlinhamentoBurro();" update="diferencaEntreOsGraficos"/>
+
+                        <p:commandButton image="salvar" action="#{graficoIO.salvaConsultaComoNova(listaDeProdutos, listaDeGraficosIO, boleanos)}"  />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <h:form id="diferencaEntreOsGraficos" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(5)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel5">
+                    <p:panel header="Diferença entre os gráficos" id="janela5" styleClass="janelas" >
+                        <p><p:dataTable style="text-align: center" id="tabela" var="a" value="#{utilLista.recebeObjetoRetornaLista(boleanos.meVeUmFalse())}">  
+                                <f:facet name="header">
+                                    #{listaDeGraficosIO.absGraficoEntradaSaidaSalvo.nome}
+                                </f:facet> 
+
+                                <p:column  >
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">Salvo</div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        <p>
+                                            De #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaDe(listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.de.time,listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.agrupamento)}<br></br>
+                                            Até #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaAte(listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.ate.time,listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.agrupamento)}<br></br>
+                                            Agrupamento #{listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado.agrupamento}</p>
+                                        <p:accordionPanel activeIndex="-1" >
+                                            <p:tab title="Produtos" id="idDaTabProdutos">
+                                                <p:dataTable var="xProduto" value="#{listaDeGraficosIO.listaProdutosDeGraficoSalvo(listaDeGraficosIO.absGraficoEntradaSaidaPraSerManipulado)}"> 
+                                                    <p:column>
+                                                        #{xProduto.toString()}
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                    </div>
+                                </p:column>
+                                <p:column  >
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">Atual</div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        <p>
+                                            De #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaDe(listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).de.time,listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).agrupamento)}<br></br>
+                                            Até #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaAte(listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).ate.time,listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).agrupamento)}<br></br>
+                                            Agrupamento #{listaDeGraficosIO.graficoManipulado(graficoIO.tipoDeConsulta).agrupamento}</p>
+                                        <p:accordionPanel activeIndex="-1" >
+                                            <p:tab title="Produtos" >
+                                                <p:dataTable var="xProdutoManipulado" value="#{listaDeProdutos.produtosManipulados}" emptyMessage="Sem produtos">  
+                                                    <p:column>
+                                                        #{xProdutoManipulado.toString()}
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                    </div>
+                                </p:column>
+                            </p:dataTable></p>
+                        Novo nome: <p:inputText value="#{listaDeGraficosIO.absGraficoEntradaSaidaSalvo.nome}" validatorMessage="#{msg.validaTamanhoNome}" >
+                            <f:validateLength minimum="3"  />
+                        </p:inputText> <br/>
+                        <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(5, 0)}" oncomplete="fechaJanela5();breuNaJanelaOff('breuJanela4');" />
+                        <p:commandButton title="Salvar como nova" image="salvar" update="graficoIO" 
+                                         action="#{graficoIO.salvaConsultaComoNova(listaDeProdutos, listaDeGraficosIO, boleanos)}" oncomplete="salvandoNovoGraficoNaJanelaDeDiferenca(args)" />
+                        <p:commandButton title="Atualizar Consulta" image="update" update="graficoIO" 
+                                         action="#{graficoIO.tentaAtualizarGraficoManipulado(listaDeGraficosIO, listaDeProdutos)}"
+                                         onstart="fechaJanelasDepoisDeAtualigarGraficoPelaJanelaDeDiferenca()" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <h:form id="download" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(6)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel6">
+                    <p:panel header="Download pdf" id="janela6" styleClass="janelas" >
+                        <div style="text-align: center" >
+                            <a href="#{geraPDF.urlDownload}" title="titulo" target="_blank" >
+                                <h:graphicImage  library="imagens" name="download.png"/>
+                            </a>
+                        </div>
+                        <p:commandButton image="voltar2" onstart="fechaJanela6();breuOff();" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <script type="text/javascript" >
+            function salvarGrafico_SalvarGrafico(args){
+                if(args.nomeRepetido){
+                    breuOnNaJanela('breuJanela1');
+                    abreJanela4();
+                }else{
+                    fechaJanela1();breuOff();
+                }
+                
+            }
+            function fechaJanelas(args){
+                
+            }
+            function salvandoNovoGraficoNaJanelaDeDiferenca(args){
+                if(args.fechaJanela){
+                    fechaJanela5();breuNaJanelaOff('breuJanela4');
+                    setTimeout("fechaJanela4();breuNaJanelaOff('breuJanela1');",tempoDafault*1.2);
+                    setTimeout("fechaJanela1();breuOff();",tempoDafault*2.4);
+                }
+            }
+            function fechaJanelasDepoisDeAtualigarGraficoPelaJanelaDeDiferenca(){
+                fechaJanela5();breuNaJanelaOff('breuJanela4');
+                setTimeout("fechaJanela4();breuNaJanelaOff('breuJanela1');",tempoDafault*1.2);
+                setTimeout("fechaJanela1();breuOff();",tempoDafault*2.4);
+            }
+            function salvandoGraficoNaJanelaDeNomeRepetido(args){
+            }
+            function salvaGraficoEmGraficoManipulado(args){
+                if(args.fechaJanela){
+                    fechaJanela2();breuOff();
+                }
+            }
+            function atualizaGraficoJanelaDeNomeRepetido(){
+            }
+        </script>
+
+        <p:growl id="messages" autoUpdate="true"  />
+
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+
+    </ui:define>
+</ui:composition>

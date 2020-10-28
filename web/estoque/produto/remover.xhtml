@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="titulo">
+        Listar Produtos
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="deletar" prependId="false" >
+            <div id="breu" class="breu" ></div>
+            <p:panel header="Produtos">
+                <p:dataTable var="p" value="#{listaDeProdutos.produtos}"  paginator="true" rows="10" emptyMessage="Sem resultados"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15,30" >
+                    <f:facet name="header">
+                        Lista de produtos
+                    </f:facet>
+                    <p:column  >
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Produto
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{p.toString()}
+                        </div>
+                    </p:column>
+
+                    <p:column  >
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Quantidade em estoque
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{p.quantidadeEmStoque}
+                        </div>
+                    </p:column>
+
+
+                    <p:column style="text-align: center" >
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Deletar
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            <p:commandLink actionListener="#{boleanos.ambosTrue(0)}" oncomplete="breuOn();abreJanela0();" 
+                                           update="removerProduto"  title="Alterar Produto"  >
+                                <h:graphicImage library="imagens" name="delete.png" />
+                                <f:setPropertyActionListener value="#{p}" target="#{listaDeProdutos.produtoManipulado}"/>
+                                <f:setPropertyActionListener value="#{p.unidadeDeMedida.id}" target="#{listaDeUnidades.idUnidadeManipulado}" />
+                                <f:setPropertyActionListener  value="#{listaDeProdutos.produtos.indexOf(p)}" target="#{listaDeProdutos.indexDoProduto}" />
+                            </p:commandLink>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <p:growl id="messages" autoUpdate="true" />
+            <p:ajaxStatus>
+                <f:facet name="start">
+                    <div class="loading" />
+                </f:facet>
+                <f:facet name="complete">
+                    <div class="complete" />
+                </f:facet>
+                <f:facet name="error">
+                    <div class="erro2" />
+                </f:facet>
+                <f:facet name="onsuccess">
+                </f:facet>
+                <f:facet name="onselectStart">
+                    <div class="erro2" />
+                </f:facet>
+                <f:facet name="onselectComplete">
+                    <div class="erro2" />
+                </f:facet>
+            </p:ajaxStatus>
+        </h:form>
+
+
+        <!--REMOVER PRODUTO-->
+        <h:form id="removerProduto" prependId="false" >
+            <p:outputPanel id="janela" rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Remover Produto" rendered="#{boleanos.verB(0)}" id="janela0" styleClass="janelas" >
+                        <table border="0">
+                            <tr>
+                                <td></td>
+                                <td>
+                                    Deletar produto o "#{listaDeProdutos.produtoManipulado.toString()}"?
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <p:commandButton onstart="fechaJanela0();breuOff();" image="voltar2" 
+                                                     actionListener="#{boleanos.ambosFalse(0,boleanos.timeDefault)}"
+                                                     update="removerProduto" />
+                                </td>
+                                <td>
+                                    <p:commandButton image="deletar" onstart="fechaJanela0();breuOff();" 
+                                                     action="#{prod.deletaProduto(listaDeProdutos)}" actionListener="#{boleanos.ambosFalse(0,boleanos.timeDefault)}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

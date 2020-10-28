@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Nova Unidade
+    </ui:define>
+     <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/opacidade.js"/>
+    </ui:define>
+    <ui:define name="centro">
+        <h:form id="cadastroDeProduto" prependId="false" >
+            <p:panel header="Cadastro de produtos">
+                <table>
+                    <tr>
+                        <td class="alingRight" >Nome </td>
+                        <td><p:inputText value="#{listaDeUnidades.unidade.nome}" required="true" requiredMessage="#{msg.campoVazio}" /></td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="alingRight">Abreviação </td>
+                        <td><p:inputText value="#{listaDeUnidades.unidade.abreviacao}" required="true" requiredMessage="#{msg.campoVazio}" /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><p:commandButton value="Salvar" action="#{prod.mergeUnidade(listaDeUnidades)}" update="cadastroDeProduto" /></td>
+                    </tr>
+                </table>
+            </p:panel>
+            <p:growl id="messages" autoUpdate="true" />
+            <!--STATUS AJAX-->
+            <p:ajaxStatus >
+                <f:facet name="start">
+                    <div class="loading"/> 
+                </f:facet>
+                <f:facet name="complete">
+                    <div class="complete"/> 
+                </f:facet>
+                <f:facet name="error">
+                    <div class="erro2"/>
+                </f:facet>
+                <f:facet name="onsuccess">
+                </f:facet>
+                <f:facet name="onselectStart">
+                    <div class="erro2"/>
+                </f:facet>
+                <f:facet name="onselectComplete">
+                    <div class="erro2"/>
+                </f:facet>
+            </p:ajaxStatus>
+        </h:form>
+    </ui:define>
+</ui:composition>

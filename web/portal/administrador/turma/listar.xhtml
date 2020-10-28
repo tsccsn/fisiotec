@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Lista de Turmas
+    </ui:define>
+
+    <ui:define name="imports">
+
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="listaDeTrumas" prependId="false">
+            <p:dataTable var="xTurma" value="#{listaDeTurmas.turmas}" paginator="true" rows="20" emptyMessage="Sem resultados"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,30,60" >
+                <p:column>
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">
+                            Turmas
+                        </div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        <p><p:fieldset collapsed="true"  toggleable="true" legend=' #{xTurma.codigoTurma} - Conclusão : #{utilData.dataFormal2(xTurma.dataTermino.time)}'
+                                    toggleSpeed="#{boleanos.timeDefault*2}">
+                            
+                                <p:dataTable value="#{listaDeAlunos.alunosDaTurma(xTurma)}" var="xAlunos" >
+                                    <p:column>
+                                        <f:facet name="header">  
+                                            <div class="cabecaTablea">
+                                                Alunos
+                                            </div>
+                                        </f:facet>
+                                        <div class="espacamento" >
+                                            #{utilString.trataNomeUsuarioII(xAlunos,90)}
+                                        </div>
+                                    </p:column>  
+                                </p:dataTable>
+                        </p:fieldset></p>
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

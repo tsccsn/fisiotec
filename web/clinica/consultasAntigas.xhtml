@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Pesquisa de Consultas
+    </ui:define>
+
+
+    <ui:define name="centro">
+
+        <h:form id="formConsultasAntigas">
+            <p:tab id="completa" title="Pesquisa Completa" closable="true">
+                <h:outputLabel value="Pesquisar por: "/>
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel value="Paciente: " for="paciente"/>
+                    <p:autoComplete id="paciente" value="#{beanConsulta.pesquisaConsulta.paciente}" completeMethod="#{beanPaciente.completa}" 
+                                    var="p" itemLabel="#{p.nome}" itemValue="#{p}" dropdown="true" forceSelection="true" converter="pacienteConverter"/>
+
+                    <h:outputLabel value="Dia da Consulta: " for="diaConsulta"/>
+                    <p:calendar navigator="true" id="diaConsulta" value="#{beanConsulta.pesquisaConsulta.dia}"
+                                locale="br" pattern="dd/MM/yyyy" yearRange="1900:2030"/>
+
+                    <h:outputLabel value="Hora Inicial: " for="horaInicial"/>
+                    <p:calendar id="horaInicial" timeOnly="true" locale="br" pattern="HH:mm" timeZone="America/Sao_Paulo"
+                                minHour="8" maxHour="18" value="#{beanConsulta.pesquisaConsulta.horaInicial}"/>
+
+                    <h:outputLabel value="Hora Final: " for="horaFinal"/>
+                    <p:calendar id="horaFinal" timeOnly="true" locale="br" pattern="HH:mm" timeZone="America/Sao_Paulo"
+                                minHour="8" maxHour="18" value="#{beanConsulta.pesquisaConsulta.horaFinal}"/>
+
+                    <h:outputLabel value="Box: " for="box"/>
+                    <p:inputText id="box" value="#{beanConsulta.pesquisaConsulta.box}">
+                        <f:convertNumber integerOnly="true"/>
+                    </p:inputText>
+
+                    <h:outputLabel value="Observações: " for="obs"/>
+                    <p:inputTextarea id="obs" value="#{beanConsulta.pesquisaConsulta.obs}"/>
+
+                    <h:outputLabel value="Status: " for="status"/>
+                    <p:selectOneMenu id="status" value="#{beanConsulta.pesquisaConsulta.status}" style="width: 200px">
+                        <f:selectItem itemLabel="Selecione " itemValue=""/>
+                        <f:selectItem itemValue="Finalizado" itemLabel="Alta"/>
+                        <f:selectItem itemValue="Desistencia" itemLabel="Desistência"/>
+                        <f:selectItem itemValue="transferencia" itemLabel="Transferência"/>
+                        <f:selectItem itemValue="Faalecimento" itemLabel="Falecimento"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="De: "/>
+                    <p:calendar locale="br" value="#{beanConsulta.de}" pattern="dd/MM/yyyy" showButtonPanel="false" navigator="true"/>
+                    <h:outputLabel value="Até: "/>
+                    <p:calendar locale="br" value="#{beanConsulta.ate}" pattern="dd/MM/yyyy" showButtonPanel="false" navigator="true"/>
+
+                </h:panelGrid>
+                <p:commandButton value="Pesquisar" update="formConsultasAntigas" action="#{beanConsulta.pesquisaGeral()}"/>
+                <p:commandButton value="Visualizar Todos" update="formConsultasAntigas" action="#{beanConsulta.listarAntigas()}"/>
+            </p:tab>
+            <p:dataTable id="tableConsultasAntigas" value="#{beanConsulta.consultasAntigas}" var="c" paginator="true" rows="10" widgetVar="listcons"
+                         paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,30" emptyMessage="Sem Resultados">
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="PACIENTE"/>
+                    </f:facet>
+                    <h:outputText value="#{c.paciente.nome}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="DATA"/>
+                    </f:facet>
+                    <h:outputText value="#{c.dia}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="DE"/>
+                    </f:facet>
+                    <h:outputText value="#{c.horaInicial}">
+                        <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="ATÉ"/>
+                    </f:facet>
+                    <h:outputText value="#{c.horaFinal}">
+                        <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="BOX"/>
+                    </f:facet>
+                    <h:outputText value="#{c.box}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="OPÇÕES"/>
+                    </f:facet>
+                    <p:commandLink update=":formConsultasAntigas:display" oncomplete="msg.show()" title="Detalhes">
+                        <h:graphicImage library="imagens" name="list2.png" id="btDetalhes"/>
+                        <f:setPropertyActionListener value="#{c}" target="#{beanConsulta.consulta}" />
+                    </p:commandLink>
+
+                </p:column>
+
+                <f:facet name="footer">
+                    Foram encontrados #{beanConsulta.qtdList} resultados.
+                </f:facet>
+            </p:dataTable>
+
+
+            <p:dialog header="Detalhes da Consulta" widgetVar="msg" resizable="false" id="dlg" width="500" modal="true">
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+
+                    <f:facet name="header">
+                        Detalhe da Consulta
+                    </f:facet>
+
+                    <h:outputText value="Paciente:"/>
+                    <h:outputText value="#{beanConsulta.consulta.paciente.nome}"/>
+
+
+                    <h:outputText value="Telefone:"/>
+                    <h:outputText value="#{beanConsulta.consulta.paciente.fone}"/>
+
+                    <h:outputText value="Celular: "/>
+                    <h:outputText value="#{beanConsulta.consulta.paciente.celfone}"/>
+
+                    <h:outputText value="Data: " />
+                    <h:outputText value="#{beanConsulta.consulta.dia}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+
+                    <h:outputText value="De: " />
+                    <h:outputText value="#{beanConsulta.consulta.horaInicial}">
+                        <f:convertDateTime pattern="HH:mm"/>
+                    </h:outputText>
+
+                    <h:outputText value="Até: " />
+                    <h:outputText value="#{beanConsulta.consulta.horaFinal}">
+                        <f:convertDateTime pattern="HH:mm"/>
+                    </h:outputText>
+
+                    <h:outputText value="Box: " />
+                    <h:outputText value="#{beanConsulta.consulta.box}"/>
+
+                    <h:outputText value="Obs.: " />
+                    <h:outputText value="#{beanConsulta.consulta.obs}"/>
+
+                    <h:outputText value="Status: " />
+                    <h:outputText value="#{beanConsulta.consulta.status}"/>
+
+                </h:panelGrid>
+
+            </p:dialog>
+
+
+        </h:form>
+
+
+
+    </ui:define>
+
+</ui:composition>

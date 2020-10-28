@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Adiministrador
+    </ui:define>
+
+    <ui:define name="centro">
+        #{portalGenerico.mensagemBobagem()}
+        <div style="height: 100%; border-radius: 10px; border: 1px solid #dddddd;padding: 40px;">
+            #{msgAdmin.exibeMensagens()}
+            <div style="width: 100%; text-align: center;font-family: Arial,sans-serif; font-size: 26px; " >
+                Bem vindo administrador(a) #{utilString.nomeFormal(portalGenerico.administrador)}
+            </div>
+            <div style="width: 100%; text-align: center;font-family: Arial,sans-serif; font-size: 18px; " >
+                <br/>Sinta-se em casa
+            </div>
+        </div>
+
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages"  />
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+
+    </ui:define>
+
+</ui:composition>

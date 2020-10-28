@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Alterar Professor
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="professores" prependId="false">
+            <p:panel header="Listagem de todos os alunos" >
+                <p><p:accordionPanel activeIndex="-1">
+                        <p:tab title="Filtro"  >
+                            <table>
+                                <tr>
+                                    <td>Nome</td>
+                                    <td>
+                                        <p:autoComplete maxResults="5" value="#{listaDeProfessores.nomeProfessor}"
+                                                        completeMethod="#{listaDeProfessores.autoCompleta}" />
+                                    </td>
+                                    <td>Pontos</td>
+                                    <td>
+                                        <p:selectManyMenu value="#{listaDePontos.indexDosPontosSelecione}" style="height: 200px; width: 230px;" >
+                                            <f:selectItem itemValue="qualquer" itemLabel="Qualquer" />
+                                            <f:selectItems value="#{listaDePontos.pontos}" var="xPonto" itemLabel="#{xPonto.nome}" itemValue="#{utilString.longToString(xPonto.id)}" />
+                                        </p:selectManyMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p:commandButton value="Filtrar" update="professores" action="#{listaDeProfessores.filtrar(listaDePontos)}"  />
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:tab>
+                    </p:accordionPanel></p>
+                <p:dataTable var="xProfessor" value="#{listaDeProfessores.professoresManipulados}" paginator="true" rows="20" emptyMessage="Sem resultados"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,30,60">
+                    <f:facet name="header">  
+                        Professores
+                    </f:facet>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Nome</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{utilString.trataNomeUsuarioII(xProfessor,30)}
+                        </div>
+                    </p:column>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Ponto Atual</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{listaDeProfessores.pontoAtualDoProfessor(xProfessor) == null ? '-' : listaDeProfessores.pontoAtualDoProfessor(xProfessor).nome  }
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center;">  
+                        <f:facet name="header"   >  
+                            <div class="cabecaTablea">Alterar</div>
+                        </f:facet>
+                        <div class="espacamento" style="text-align: center" >
+                            <p:commandLink action="#{boleanos.ambosTrue(0)}"  update="alterarProfessor" oncomplete="setTimeout('breuOn();abreJanela0();', 100);">
+                                <h:graphicImage library="imagens" name="update.png" />
+                                <f:setPropertyActionListener value="#{xProfessor}" target="#{listaDePontos.pontoAtualDoProfessor}"/>
+                                <f:setPropertyActionListener value="#{xProfessor}" target="#{listaDeProfessores.professorManipulado}"/>
+                            </p:commandLink>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+
+
+        <h:form id="alterarProfessor" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Altera professor" id="janela0" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td>Professor</td>
+                                <td><p:inputText value="#{listaDeProfessores.professorManipulado.nomeCompleto}" style="width: 100%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td><p:inputText value="#{listaDeProfessores.professorManipulado.emailPrincipal}" style="width: 100%;"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Ponto Atual</td>
+                                <td>
+                                    <p:selectOneMenu value="#{listaDePontos.indexDoPontoSelecione}" style="width: 100%;">
+                                        <f:selectItem itemValue="-1" itemLabel="Sem Ponto"/>
+                                        <f:selectItems var="xPonto" value="#{listaDePontos.pontos}" itemValue="#{listaDePontos.pontos.indexOf(xPonto)}" itemLabel='#{xPonto.nome}'/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                        </table>
+                        <p:commandButton image="voltar2" style="margin-right: 10px;" actionListener="#{boleanos.mudaA(0, boleanos.timeDefault)}"
+                                         onstart="fechaJanela0();breuOff();"  />
+                        <p:commandButton image="update" update="professores" action="#{beanAdmin.atualizaProfessor(listaDeProfessores, listaDePontos)}" onstart="fechaJanela0();breuOff();" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

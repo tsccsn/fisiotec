@@ -1,0 +1,2945 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Imprimir Ficha
+    </ui:define>
+
+
+    <ui:define name="centro">
+        <h:form id="imprimirficha">
+
+            <p:growl showDetail="true"/>
+
+            <p:panel id="printFichas" header="Imprimir Ficha">
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel value="Paciente:* " for="paciente"/>
+                    <p:autoComplete id="paciente" value="#{beanPaciente.paciente}" completeMethod="#{beanPaciente.completa}" 
+                                    var="pac" itemValue="#{pac}" itemLabel="#{pac.nome}" dropdown="true" forceSelection="true" converter="pacienteConverter"/>
+
+                    <h:outputText value="Tipo de Ficha:* "/>
+                    <p:selectOneMenu value="#{beanPaciente.tipoFicha}" style="width: 400px" required="true" requiredMessage="Preencha o campo Tipo de Ficha!">
+                        <f:selectItem itemLabel="Selecione "/>
+                        <f:selectItem itemValue="fichaOrtopedia" itemLabel="Ficha - Ortopedia"/>
+                        <f:selectItem itemValue="fichaNeurologiaAdulto" itemLabel="Ficha - Neurologia Adulto"/>
+                        <f:selectItem itemValue="fichaParalisiaFacial" itemLabel="Ficha - Paralisia Facial"/>
+                        <f:selectItem itemValue="fichaLesaoMedular" itemLabel="Ficha - Lesão Medular"/>
+                        <f:selectItem itemValue="fichaRespiratoria" itemLabel="Ficha - Respiratória"/>
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="Visualizar" update="imprimirficha"/>
+
+                </h:panelGrid>
+
+            </p:panel>
+
+            <p:panel id="fichaOrtopedia" rendered="#{beanPaciente.tipoFicha eq 'fichaOrtopedia'}">
+
+                <h:commandLink type="button" title="Imprimir">
+                    <p:graphicImage id="printImage" value="/resources/imagens/print32.png"/>
+                    <p:printer target="panelfichaOrtopedia" />
+                </h:commandLink>
+
+                <p:panel id="panelfichaOrtopedia">
+
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td class="cabecalhoFichasLogo">
+                                <p:graphicImage id="logoUninorteOrto" value="/resources/imagens/uninorte.jpg" />
+                            </td>
+
+                            <td class="cabecalhoFichas">
+                                ESTÁGIO SUPERVISIONADO DE FISIOTERAPIA <br/> FICHA DE AVALIAÇÃO - ORTOPEDIA
+                            </td>
+
+                            <td class="cabecalhoFichasNum">
+                                Prontuário nº:<br/><br/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="fichasClinica">
+                        <tr>
+                            <td colspan="2">Paciente: #{beanPaciente.paciente.nome}</td>
+                            <td>Sexo: #{beanPaciente.paciente.sexo}</td>
+                            <td>Raça: #{beanPaciente.paciente.raca}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Pai: #{beanPaciente.paciente.pai}</td>
+                            <td colspan="2">Mãe: #{beanPaciente.paciente.mae}</td>
+                        </tr>
+                        <tr>
+                            <td>Data de Nasc.: <h:outputText value="#{beanPaciente.paciente.dataNasc}"> <f:convertDateTime pattern="dd/MM/yyyy"/> </h:outputText></td>
+                            <td>Natural: #{beanPaciente.paciente.naturalidade}</td>
+                            <td>RG: #{beanPaciente.paciente.rg}</td>
+                            <td>CPF: #{beanPaciente.paciente.cpf}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Endereço: #{beanPaciente.paciente.logradouro}</td>
+                            <td>Numero: #{beanPaciente.paciente.num}</td>
+                            <td>Complemento: #{beanPaciente.paciente.complemento}</td>
+                        </tr>
+                        <tr>
+                            <td>Bairro: #{beanPaciente.paciente.bairro}</td>
+                            <td>cep: #{beanPaciente.paciente.cep}</td>
+                            <td>Cidade: #{beanPaciente.paciente.cidade}</td>
+                            <td>Estado: #{beanPaciente.paciente.estado}</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td>Início do Tratamento: ___/___/_____ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Término do Tratamento: ___/___/_____
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tipo de Afastamento: ( &nbsp; )alta &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )desistência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )transferência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )falecimento
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Diagnóstico Clínico: _______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Exames subsidiários:_______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Q.P.:__________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Inspeção:_______________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><center><b>ANAMNESE</b></center></td>
+                        </tr>
+                        <tr>
+                            <td>HMA:___________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>HMP:___________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>HM:____________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>HS:____________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>HF:____________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><center><b>EXAME FÍSICO</b></center></td>
+                        </tr>
+                        <tr>
+                            <td>SINAIS VITAIS: PA:___________mmHg &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Temperatura:_____°C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FR:_______ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FC:______</td>
+                        </tr>
+                        <tr>
+                            <td>PALPAÇÃO:_______________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>MOBILIDADE: ( &nbsp; )Ativa &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )Passiva &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )Ativo-assistida</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <center><b>GONIOMETRIA/TESTE DE FORÇA MUSCULAR</b></center>
+                        <tr>
+                            <td rowspan="2" width="95"><center><b>OMBRO</b></center></td>
+                            <td colspan="6" width="330"><center>DIREITO</center></td>
+                            <td colspan="6" width="330"><center>ESQUERDO</center></td>
+                        </tr>
+                        <tr>
+                            <td width="55"><center>FLEX.</center></td>
+                            <td width="55"><center>EXT.</center></td>
+                            <td width="55"><center>ABD.</center></td>
+                            <td width="55"><center>AD.</center></td>
+                            <td width="55"><center>R. I.</center></td>
+                            <td width="55"><center>R. E.</center></td>
+                            <td width="55"><center>FLEX.</center></td>
+                            <td width="55"><center>EXT.</center></td>
+                            <td width="55"><center>ABD.</center></td>
+                            <td width="55"><center>AD.</center></td>
+                            <td width="55"><center>R. I.</center></td>
+                            <td width="55"><center>R. E.</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>Normal</center></td>
+                            <td><center>180</center></td>
+                            <td><center>50</center></td>
+                            <td><center>180</center></td>
+                            <td><center>50</center></td>
+                            <td><center>90</center></td>
+                            <td><center>90</center></td>
+                            <td><center>180</center></td>
+                            <td><center>50</center></td>
+                            <td><center>180</center></td>
+                            <td><center>50</center></td>
+                            <td><center>90</center></td>
+                            <td><center>90</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>Acometido</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><center>Força Muscular<br/>0-5</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table><br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td rowspan="2" width="95"><center><b>COTOVELO</b></center></td>
+                            <td colspan="4" width="330"><center>DIREITO</center></td>
+                            <td colspan="4" width="330"><center>ESQUERDO</center></td>
+                        </tr>
+                        <tr>
+                            <td width="82,5"><center>FLEX.</center></td>
+                            <td width="82,5"><center>EXT.</center></td>
+                            <td width="82,5"><center>PRON.</center></td>
+                            <td width="82,5"><center>SUP.</center></td>
+                            <td width="82,5"><center>FLEX.</center></td>
+                            <td width="82,5"><center>EXT.</center></td>
+                            <td width="82,5"><center>PRON.</center></td>
+                            <td width="82,5"><center>SUP.</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>Normal</center></td>
+                            <td><center>150</center></td>
+                            <td><center>0</center></td>
+                            <td><center>90</center></td>
+                            <td><center>90</center></td>
+                            <td><center>150</center></td>
+                            <td><center>0</center></td>
+                            <td><center>90</center></td>
+                            <td><center>90</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>Acometido</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><center>Força Muscular<br/>0-5</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td rowspan="2" width="95"><center><b>PUNHO</b></center></td>
+                            <td colspan="4" width="330"><center>DIREITO</center></td>
+                            <td colspan="4" width="330"><center>ESQUERDO</center></td>
+                        </tr>
+                        <tr>
+                            <td width="82,5"><center>FLEX.</center></td>
+                            <td width="82,5"><center>EXT.</center></td>
+                            <td width="82,5"><center>DESV. RAD.</center></td>
+                            <td width="82,5"><center>DESV. ULNAR.</center></td>
+                            <td width="82,5"><center>FLEX.</center></td>
+                            <td width="82,5"><center>EXT.</center></td>
+                            <td width="82,5"><center>DESV. RAD.</center></td>
+                            <td width="82,5"><center>DESV. ULNAR.</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>Normal</center></td>
+                            <td><center>70</center></td>
+                            <td><center>70</center></td>
+                            <td><center>20</center></td>
+                            <td><center>30</center></td>
+                            <td><center>70</center></td>
+                            <td><center>70</center></td>
+                            <td><center>20</center></td>
+                            <td><center>30</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>Acometido</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><center>Força Muscular<br/>0-5</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td rowspan="2" width="95"><center><b>POLEGAR</b></center></td>
+                            <td colspan="5" width="330"><center>DIREITO</center></td>
+                            <td colspan="5" width="330"><center>ESQUERDO</center></td>
+                        </tr>
+                        <tr>
+                            <td width="66"><center>FLEX.</center></td>
+                            <td width="66"><center>EXT.</center></td>
+                            <td width="66"><center>ABD.</center></td>
+                            <td width="66"><center>AD.</center></td>
+                            <td width="66"><center>OPON.</center></td>
+
+                            <td width="66"><center>FLEX.</center></td>
+                            <td width="66"><center>EXT.</center></td>
+                            <td width="66"><center>ABD.</center></td>
+                            <td width="66"><center>AD.</center></td>
+                            <td width="66"><center>OPON.</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>Acometido</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td rowspan="2" width="95"><center><b>DEDOS</b></center></td>
+                            <td colspan="4" width="330"><center>DIREITO</center></td>
+                            <td colspan="4" width="330"><center>ESQUERDO</center></td>
+                        </tr>
+                        <tr>
+                            <td width="82,5"><center>FLEX.</center></td>
+                            <td width="82,5"><center>EXT.</center></td>
+                            <td width="82,5"><center>ABD.</center></td>
+                            <td width="82,5"><center>AD.</center></td>
+
+                            <td width="82,5"><center>FLEX.</center></td>
+                            <td width="82,5"><center>EXT.</center></td>
+                            <td width="82,5"><center>ABD.</center></td>
+                            <td width="82,5"><center>AD.</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>Acometido</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td width="125"><center><b>FORÇA DA MÃO</b></center></td>
+                            <td width="315"><center>DIREITA</center></td>
+                            <td width="315"><center>ESQUERDA</center></td>
+                        </tr>
+                        <tr>
+                            <td width="95"><center>0-5</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="95"><center>Dinamômetro</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td width="96" rowspan="2"><div align="center"><b>QUADRIL</b></div></td>
+                            <td colspan="6"><div align="center">DIREITO</div></td>
+                            <td colspan="6"><div align="center">ESQUERDO</div></td>
+                        </tr>
+                        <tr>
+                            <td width="60"><div align="center">FLEX.</div></td>
+                            <td width="60"><div align="center">EXT.</div></td>
+                            <td width="60"><div align="center">ABD.</div></td>
+                            <td width="60"><div align="center">AD.</div></td>
+                            <td width="60"><div align="center">R.I.</div></td>
+                            <td width="60"><div align="center">R.E.</div></td>
+                            <td width="60"><div align="center">FLEX.</div></td>
+                            <td width="60"><div align="center">EXT.</div></td>
+                            <td width="60"><div align="center">ABD.</div></td>
+                            <td width="60"><div align="center">AD.</div></td>
+                            <td width="60"><div align="center">R.I.</div></td>
+                            <td width="60"><div align="center">R.E.</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">Normal</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">Acometido</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                        <tr>
+                            <td><p align="center">Força Muscular 0-5 </p></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td width="96" rowspan="2"><div align="center"><b>JOELHO</b></div></td>
+                            <td colspan="4"><div align="center">DIREITO</div></td>
+                            <td colspan="4"><div align="center">ESQUERDO</div></td>
+                        </tr>
+                        <tr>
+                            <td width="90"><div align="center">FLEX.</div></td>
+                            <td width="90"><div align="center">EXT.</div></td>
+                            <td width="90"><div align="center">R.I.</div></td>
+                            <td width="90"><div align="center">R.E.</div></td>
+                            <td width="90"><div align="center">FLEX.</div></td>
+                            <td width="90"><div align="center">EXT.</div></td>
+                            <td width="90"><div align="center">R.I.</div></td>
+                            <td width="90"><div align="center">R.E.</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">Normal</div></td>
+                            <td><div align="center">135</div></td>
+                            <td><div align="center">0</div></td>
+                            <td><div align="center">10</div></td>
+                            <td><div align="center">10</div></td>
+                            <td><div align="center">135</div></td>
+                            <td><div align="center">0</div></td>
+                            <td><div align="center">10</div></td>
+                            <td><div align="center">10</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">Acometido</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                        <tr>
+                            <td><p align="center">Força Muscular 0-5 </p>    </td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td width="96" rowspan="2"><div align="center"><b>TORNOZELO</b></div></td>
+                            <td colspan="4"><div align="center">DIREITO</div></td>
+                            <td colspan="4"><div align="center">ESQUERDO</div></td>
+                        </tr>
+                        <tr>
+                            <td width="90"><div align="center">FLEX.PLAN.</div></td>
+                            <td width="90"><div align="center">FLES.DORS.</div></td>
+                            <td width="90"><div align="center">INVERSÃO</div></td>
+                            <td width="90"><div align="center">EVERSÃO</div></td>
+                            <td width="90"><div align="center">FLEX.PLAN.</div></td>
+                            <td width="90"><div align="center">FLES.DORS.</div></td>
+                            <td width="90"><div align="center">INVERSÃO</div></td>
+                            <td width="90"><div align="center">EVERSÃO</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">Normal</div></td>
+                            <td><div align="center">50</div></td>
+                            <td><div align="center">20</div></td>
+                            <td><div align="center">5</div></td>
+                            <td><div align="center">5</div></td>
+                            <td><div align="center">50</div></td>
+                            <td><div align="center">20</div></td>
+                            <td><div align="center">5</div></td>
+                            <td><div align="center">5</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">Acometido</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                        <tr>
+                            <td><p align="center">Força Muscular 0-5 </p>    </td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td width="96"><div align="center" rowspan="2"><b>DEDOS DOS PÉS</b></div></td>
+                            <td colspan="2"><div align="center">DIREITO</div></td>
+                            <td colspan="2"><div align="center">ESQUERDO</div></td>
+                        </tr>
+                        <tr>
+                            <td width="90"><div align="center">FLEXÃO</div></td>
+                            <td width="90"><div align="center">EXTENSÃO</div></td>
+                            <td width="90"><div align="center">FLEXÃO</div></td>
+                            <td width="90"><div align="center">EXTENSÃO</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">Acometido</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        PERIMETRIA
+                        <tr>
+                            <td width="179"><div align="center">MEMBRO</div></td>
+                            <td width="179"><div align="center">DATA</div></td>
+                            <td width="182"><div align="center">PONTO DE REFERÊNCIA</div></td>
+                            <td width="179"><div align="center">DIREITO</div></td>
+                            <td width="179"><div align="center">ESQUERDO</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                            <td><div align="center">&nbsp;</div></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td width="298"><center><b>DISCREPANCIA DE MMII</b></center></td>
+                            <td width="300"><center>REAL</center></td>
+                            <td width="300"><center>APARENTE</center></td>
+                        </tr>
+                        <tr>
+                            <td><center>( &nbsp; ) CIPRIANO</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><center>( &nbsp; ) HOPPENFELD</center></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="tabFichasClinica">
+                        <b>TESTES ESPECIAIS:</b>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <br/>
+                        <b>AVALIAÇAO DO EQUILÍBRIO</b>
+                        <tr>
+                            <td><b>ESTÁTICO:</b>______________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>DINÂMICO:</b>_____________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>MARCHA:</b>______________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td colspan="3"><div align="center"><strong>AVALIACAO POSTURAL </strong></div></td>
+                        </tr>
+                        <tr>
+                            <td width="398">Lateralidade:</td>
+                            <td width="239">Altura:</td>
+                            <td width="239">Peso:</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><strong>VISTA ANTERIOR </strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Cabe&ccedil;a:&nbsp; &nbsp;(&nbsp;&nbsp; )  alinhada&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Inclinada &agrave; D.&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Inclinada &agrave; E.&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Rodada &agrave; D.&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Rodada &agrave; E.</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Altura dos Ombros:&nbsp;  (&nbsp;&nbsp; ) Sim&eacute;tricos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Direito + alto&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;  ) Esquerdo + alto</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Altura das M&atilde;os:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Sim&eacute;tricos&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;  ) Direito + alto&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Esquerdo + alto</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Rota&ccedil;&atilde;o de tronco:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) &agrave; direita&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;(&nbsp;&nbsp; ) &agrave;  esquerda&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  ausente</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">&Acirc;ngulo de Tales:&nbsp;&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Sim&eacute;trico&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) &gt; &agrave; E.&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  &gt; &agrave; D.</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Cicatriz umbilical:&nbsp;  (&nbsp;&nbsp; ) Alinhada&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; ) Desvio &agrave; D.&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Desvio &agrave; E.</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Altura das cristas il&iacute;acas:&nbsp; (&nbsp;&nbsp; )  Sim&eacute;tricos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Direito + alto&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Esquerdo + alto</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Joelhos:&nbsp;&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Valgo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Varo&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  normal</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Tornozelos:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Valgo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Varo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) normal</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">P&eacute;s:&nbsp;&nbsp; (&nbsp;&nbsp; ) Planos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; ) Cavos&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp; )  Normal</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><strong>VISTA POSTERIOR </strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Altura das esc&aacute;pulas: (&nbsp;&nbsp; ) Sim&eacute;tricos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Direito + alto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Esquerdo + alto</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Esc&aacute;pula alada:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) &agrave; direita&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) &agrave; esquerda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) ausente</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td>Gibosidade tor&aacute;cica:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) &agrave; direita&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) &agrave; esquerda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) ausente</td>
+                        </tr>
+                        <tr>
+                            <td>Pregas gl&uacute;teas:&nbsp;&nbsp;  (&nbsp;&nbsp; ) Sim&eacute;tricos&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Direito + alto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Esquerdo + alto&nbsp;&nbsp; (&nbsp;&nbsp; )  + profunda &agrave; D.&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) + profunda &agrave; E.</td>
+                        </tr>
+                        <tr>
+                            <td>Pregas popl&iacute;teas:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Sim&eacute;tricos&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Direito + alto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Esquerdo + alto&nbsp;&nbsp; (&nbsp;&nbsp; )  + profunda &agrave; D.&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) + profunda &agrave; E.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>VISTA LATERAL ESQUERDA </strong></td>
+                        </tr>
+                        <tr>
+                            <td>CABE&Ccedil;A: (&nbsp;&nbsp; )  Alinhada&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Protrusao&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Retra&ccedil;&atilde;o</td>
+                        </tr>
+                        <tr>
+                            <td>Coluna cervical:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Hiperlordose&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; )  Retificada&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Ombros:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Direito protra&iacute;do&nbsp;&nbsp; (&nbsp;&nbsp; )  Esquerdo protra&iacute;do&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Direito retra&iacute;do&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; )  Esquerdo retra&iacute;do</td>
+                        </tr>
+                        <tr>
+                            <td>Abdomem:&nbsp;&nbsp;  (&nbsp;&nbsp; ) distendido&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; )  contra&iacute;do</td>
+                        </tr>
+                        <tr>
+                            <td>Coluna lombar:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Hiperlordose&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Retificada&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Pelve:&nbsp;&nbsp; (&nbsp;&nbsp; ) Antevertida&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Retrovertida&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Quadril:&nbsp;&nbsp;  (&nbsp;&nbsp; ) Fletido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Extendido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Joelhos: (&nbsp;&nbsp; )  Fletido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Extendido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Tornozelos:&nbsp;  (&nbsp;&nbsp; ) Valgo&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; )  Varo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>VISTA LATERAL DIREITA </strong></td>
+                        </tr>
+                        <tr>
+                            <td>CABE&Ccedil;A: (&nbsp;&nbsp; )  Alinhada&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Protrusao&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Retra&ccedil;&atilde;o</td>
+                        </tr>
+                        <tr>
+                            <td>Coluna cervical:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Hiperlordose&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; )  Retificada&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Ombros:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Direito protra&iacute;do&nbsp;&nbsp; (&nbsp;&nbsp; )  Esquerdo protra&iacute;do&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Direito retra&iacute;do&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; )  Esquerdo retra&iacute;do</td>
+                        </tr>
+                        <tr>
+                            <td>Abdomem:&nbsp;&nbsp;  (&nbsp;&nbsp; ) distendido&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; )  contra&iacute;do</td>
+                        </tr>
+                        <tr>
+                            <td>Coluna lombar:&nbsp;&nbsp;&nbsp;  (&nbsp;&nbsp; ) Hiperlordose&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Retificada&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Pelve:&nbsp;&nbsp; (&nbsp;&nbsp; ) Antevertida&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Retrovertida&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Quadril:&nbsp;&nbsp;  (&nbsp;&nbsp; ) Fletido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Extendido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Joelhos: (&nbsp;&nbsp; )  Fletido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Extendido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;  ) Normal</td>
+                        </tr>
+                        <tr>
+                            <td>Tornozelos:&nbsp;  (&nbsp;&nbsp; ) Valgo&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; )  Varo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp; ) Normal</td>
+                        </tr>
+
+                        <tr>
+                            <td>OBSERVAÇÕES:</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td><b>DIAGNÓSTICO FISIOTERÁPICO:</b>_________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>OBJETIVO DO TRATAMENTO:</b>__________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>PLANO DE TRATAMENTO:</b>________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>AVALIADOR(ES):________________________________________________________________ DATA:___/___/_____</td>
+                        </tr>
+                        <tr>
+                            <td>VISTO DO SUPERVISOR:___________________________________________________________ DATA:___/___/_____</td>
+                        </tr>
+                    </table>
+                </p:panel>
+            </p:panel>
+
+            <p:panel id="fichaNeurologiaAdulto" rendered="#{beanPaciente.tipoFicha eq 'fichaNeurologiaAdulto'}">
+
+                <h:commandLink type="button" title="Imprimir">
+                    <p:graphicImage id="printImage2" value="/resources/imagens/print32.png"/>
+                    <p:printer target="panelfichaNeurologiaAdulto" />
+                </h:commandLink>
+
+                <p:panel id="panelfichaNeurologiaAdulto">
+
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td class="cabecalhoFichasLogo">
+                                <p:graphicImage id="logoUninorteNeuro" value="/resources/imagens/uninorte.jpg" />
+                            </td>
+
+                            <td class="cabecalhoFichas">
+                                ESTÁGIO SUPERVISIONADO DE FISIOTERAPIA <br/> FICHA DE AVALIAÇÃO - NEUROLOGIA ADULTO
+                            </td>
+
+                            <td class="cabecalhoFichasNum">
+                                Prontuário nº: <br/><br/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="fichasClinica">
+                        <tr>
+                            <td colspan="2">Paciente: #{beanPaciente.paciente.nome}</td>
+                            <td>Sexo: #{beanPaciente.paciente.sexo}</td>
+                            <td>Raça: #{beanPaciente.paciente.raca}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Pai: #{beanPaciente.paciente.pai}</td>
+                            <td colspan="2">Mãe: #{beanPaciente.paciente.mae}</td>
+                        </tr>
+                        <tr>
+                            <td>Data de Nasc.: <h:outputText value="#{beanPaciente.paciente.dataNasc}"> <f:convertDateTime pattern="dd/MM/yyyy"/> </h:outputText></td>
+                            <td>Natural: #{beanPaciente.paciente.naturalidade}</td>
+                            <td>RG: #{beanPaciente.paciente.rg}</td>
+                            <td>CPF: #{beanPaciente.paciente.cpf}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Endereço: #{beanPaciente.paciente.logradouro}</td>
+                            <td>Numero: #{beanPaciente.paciente.num}</td>
+                            <td>Complemento: #{beanPaciente.paciente.complemento}</td>
+                        </tr>
+                        <tr>
+                            <td>Bairro: #{beanPaciente.paciente.bairro}</td>
+                            <td>cep: #{beanPaciente.paciente.cep}</td>
+                            <td>Cidade: #{beanPaciente.paciente.cidade}</td>
+                            <td>Estado: #{beanPaciente.paciente.estado}</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td>Início do Tratamento: ___/___/_____ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Término do Tratamento: ___/___/_____
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tipo de Afastamento: ( &nbsp; )alta &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )desistência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )transferência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )falecimento
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Diagnóstico Clínico: _______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Diagnóstico Fisioterapêutico:_______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Exames Complementares:__________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Medicamentos:_______________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><center><b>ANAMNESE</b></center></td>
+                        </tr>
+                        <tr>
+                            <td>Q.P.:__________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>HMP.A:___________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>ANTECEDENTES PESSOAIS:___________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><center><b>EXAME FÍSICO</b></center></td>
+                        </tr>
+                        <tr>
+                            <td>SINAIS VITAIS: PA:___________mmHg &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Temperatura:_____°C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FR:_______ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FC:______</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td width="196"><strong>Observa&ccedil;&otilde;es Gerais: </strong></td>
+                            <td colspan="2">Vis&atilde;o:</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Fala:  Normal [&nbsp;&nbsp; ] &nbsp;&nbsp;&nbsp;&nbsp;Disartria  [&nbsp;&nbsp; ]&nbsp;&nbsp;&nbsp;&nbsp;  Afasia Wernicke [&nbsp;&nbsp; ] &nbsp;&nbsp;&nbsp;&nbsp;Afasia  de Broca [ &nbsp;&nbsp;] &nbsp;&nbsp;&nbsp;&nbsp;Afasia  mista ou total [ &nbsp;&nbsp;]&nbsp;&nbsp; &nbsp;&nbsp;Disfasia [&nbsp;&nbsp;  ]</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Audi&ccedil;&atilde;o:</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exame Respirat&oacute;rio: </strong></td>
+                            <td colspan="2">Ausculta Pulmonar: </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Percuss&atilde;o do T&oacute;rax: </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Expansibilidade:</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Mobilidade:</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Padr&atilde;o Respirat&oacute;rio: </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><strong>INSPE&Ccedil;&Atilde;O</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Lateralidade: Destro  [ &nbsp;&nbsp;&nbsp;&nbsp;] &nbsp;&nbsp;Canhoto [ &nbsp;&nbsp;&nbsp;&nbsp;]</td>
+                            <td width="438">Consci&ecirc;ncia: Alerta  [ &nbsp;&nbsp;&nbsp;] &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;Estupor  [&nbsp; &nbsp;&nbsp;]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Coma [&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Estado  afetivo: Inquieto  [&nbsp;&nbsp; ]&nbsp;&nbsp;&nbsp;  Ap&aacute;tico [&nbsp;&nbsp; ] &nbsp;&nbsp;Deprimido [ &nbsp;&nbsp;] &nbsp;&nbsp;Exaltado [&nbsp;&nbsp;  ]&nbsp; &nbsp;Agressivo [&nbsp;&nbsp;  ] &nbsp;&nbsp;Inst&aacute;vel [&nbsp;&nbsp; ] &nbsp;&nbsp;Normal  [&nbsp;&nbsp; &nbsp;]</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Mental: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp; ] Orientado &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ] Desorientado</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Deformidades:</strong></td>
+                            <td colspan="2">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Perimetria:</strong></td>
+                            <td colspan="2">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Trofismo Muscular: </strong></td>
+                            <td colspan="2">&nbsp; [&nbsp;&nbsp;&nbsp; ]  R&iacute;gido &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp; ] Hipertrofia&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;[&nbsp;&nbsp; ]  Hipotrofia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ] Atrofia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;[&nbsp;&nbsp;&nbsp; ]  Pseudo-hipertrofia</td>
+                        </tr>
+                        <tr>
+                            <td><strong>T&ocirc;nus Muscular: </strong></td>
+                            <td colspan="2">&nbsp; [&nbsp;&nbsp;&nbsp; ] Hipot&ocirc;nico&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;[&nbsp;&nbsp; ]  Hipert&ocirc;nico &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ] Normot&ocirc;nico </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Espasticidade:</strong></td>
+                            <td colspan="2"> &nbsp;&nbsp;MSD_____________MSE______________MID________________MIE__________________</td>
+                        </tr>
+                        <tr>
+                            <td><strong>T&ocirc;nus Flutuande </strong></td>
+                            <td colspan="2">&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]  Ataxia&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ] Atetose&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ] Cor&eacute;ia&nbsp;&nbsp;&nbsp;&nbsp; [ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;] Hemibalismo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Palpa&ccedil;&atilde;o:</strong></td>
+                            <td colspan="2">&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ] Edema&nbsp;&nbsp;&nbsp;&nbsp;  [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ] Cicatrizes&nbsp;&nbsp; &nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]Ader&ecirc;ncias&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]Dor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ]Escaras</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Obs.:</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Sensibilidade superficial: </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><p>T&aacute;til: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp; ] Presente [&nbsp;  ] Ausente &aacute; [&nbsp; ] D [&nbsp; ] E</p></td>
+                            <td><p>Dolorosa: &nbsp;&nbsp;&nbsp;[&nbsp; ] Presente [&nbsp;&nbsp;  ] Ausente &aacute; [&nbsp; ] D [&nbsp;&nbsp; ] E</p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">T&eacute;rmica:  [&nbsp; ] Presente [&nbsp; ] Ausente &aacute; [&nbsp;  ] D [&nbsp; ] E</td>
+                            <td>Toque  leve: &nbsp;[&nbsp;  ] Presente [ &nbsp;&nbsp;] Ausente &aacute; [&nbsp;  ] D [&nbsp; ] E</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Derm&aacute;tomos:</strong></td>
+                            <td colspan="2">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sensibilidade Profunda</strong>:</td>
+                            <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Grafestesia: [ &nbsp;&nbsp;] Presente [ &nbsp;&nbsp;] Ausente &aacute; [&nbsp;  ] D [&nbsp; ] E</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Cinest&eacute;sica: &nbsp;[ &nbsp;] Presente &nbsp;&nbsp;&nbsp;[ &nbsp;]  Ausente &aacute; [&nbsp; ] D [&nbsp; ] E &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td><p>Barognosia: &nbsp;&nbsp;[ &nbsp;] Presente &nbsp;&nbsp;&nbsp;&nbsp;[ &nbsp;]  Ausente &aacute; [&nbsp; ] D [&nbsp; ] E</p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Estereognosia: &nbsp;&nbsp;[ &nbsp;] Presente &nbsp;&nbsp;&nbsp;[ &nbsp;]  Ausente &aacute; [&nbsp; ] D [&nbsp; ] E&nbsp; </td>
+                            <td>Vibrat&oacute;ria: &nbsp;&nbsp;[ &nbsp;] Presente&nbsp;&nbsp;&nbsp;  &nbsp;[ &nbsp;] Ausente &aacute; [&nbsp;  ] D [&nbsp; ] E</td>
+                        </tr>
+                        <tr>
+                            <td>Obs.:</td>
+                            <td width="242">&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td colspan="15"><strong>FOR&Ccedil;A MUSCULAR</strong></td>
+                        </tr>
+                        <tr>
+                            <td width="122"><strong>MMSS</strong></td>
+                            <td width="42"><div align="center"><strong>FL</strong></div></td>
+                            <td width="42"><div align="center"><strong>EXT</strong></div></td>
+                            <td width="42"><div align="center"><strong>ABD</strong></div></td>
+                            <td width="42"><div align="center"><strong>ADU</strong></div></td>
+                            <td width="42"><div align="center"><strong>RI</strong></div></td>
+                            <td width="42"><div align="center"><strong>RE</strong></div></td>
+                            <td width="89">&nbsp;</td>
+                            <td width="42"><div align="center"><strong>FL</strong></div></td>
+                            <td width="42"><div align="center"><strong>EXT</strong></div></td>
+                            <td width="42"><div align="center"><strong>PRO</strong></div></td>
+                            <td width="42"><div align="center"><strong>SUP</strong></div></td>
+                            <td width="89">&nbsp;</td>
+                            <td width="42"><div align="center"><strong>FL</strong></div></td>
+                            <td width="42"><div align="center"><strong>EX</strong></div></td>
+                        </tr>
+                        <tr>
+                            <td><strong>OMBRO D</strong></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>COT.D</strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>PUN D </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OMBRO E</strong></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>COT.E</strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>PUN E </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MMII</strong></td>
+                            <td><div align="center"><strong>FL</strong></div></td>
+                            <td><div align="center"><strong>EXT</strong></div></td>
+                            <td><div align="center"><strong>ABD</strong></div></td>
+                            <td><div align="center"><strong>ADU</strong></div></td>
+                            <td><div align="center"><strong>RI</strong></div></td>
+                            <td><div align="center"><strong>RE</strong></div></td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>PLA</strong></div></td>
+                            <td><div align="center">DOR</div></td>
+                            <td><div align="center"><strong>INV</strong></div></td>
+                            <td><div align="center"><strong>EVE</strong></div></td>
+                            <td><div align="center"></div></td>
+                            <td><div align="center"><strong>INV</strong></div></td>
+                            <td><div align="center"><strong>EVE</strong></div></td>
+                        </tr>
+                        <tr>
+                            <td><strong>QUADRIL D</strong></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>TOR D </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>JOEL D </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>QUADRIL E</strong></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>TOR E </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>JOEL E </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>MANOBRAS DEFICIT&Aacute;RIAS: </strong></td>
+                            <td colspan="14">Manobra  do bra&ccedil;o Estendido&nbsp;&nbsp; &nbsp;[ &nbsp;&nbsp;]&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;Manobra  de Raimiste&nbsp;&nbsp; [&nbsp;&nbsp; ] </td>
+                        </tr>
+                        <tr>
+                            <td colspan="14">Manobra  de Mingazzini&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;  ]&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;Wartenberg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp; ]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Barr&eacute; &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td colspan="15"><div align="center"><strong>GONIOMETRIA</strong></div></td>
+                        </tr>
+                        <tr>
+                            <td><strong>MMSS</strong></td>
+                            <td><div align="center"><strong>FL</strong></div></td>
+                            <td><div align="center"><strong>EXT</strong></div></td>
+                            <td><div align="center"><strong>ABD</strong></div></td>
+                            <td><div align="center"><strong>ADU</strong></div></td>
+                            <td><div align="center"><strong>RI</strong></div></td>
+                            <td><div align="center"><strong>RE</strong></div></td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>FL</strong></div></td>
+                            <td><div align="center"><strong>EXT</strong></div></td>
+                            <td><div align="center"><strong>PRO</strong></div></td>
+                            <td><div align="center"><strong>SUP</strong></div></td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>FL</strong></div></td>
+                            <td><div align="center"><strong>EX</strong></div></td>
+                        </tr>
+                        <tr>
+                            <td><strong>OMBRO D</strong></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>COT. D </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>PUN D </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OMBRO E </strong></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>COT. E</strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>PUN E </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MMII</strong></td>
+                            <td><div align="center"><strong>FL</strong></div></td>
+                            <td><div align="center"><strong>EXT</strong></div></td>
+                            <td><div align="center"><strong>ABD</strong></div></td>
+                            <td><div align="center"><strong>ADU</strong></div></td>
+                            <td><div align="center"><strong>RI</strong></div></td>
+                            <td><div align="center"><strong>RE</strong></div></td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>PLA</strong></div></td>
+                            <td><div align="center">DOR</div></td>
+                            <td><div align="center"><strong>INV</strong></div></td>
+                            <td><div align="center"><strong>EVE</strong></div></td>
+                            <td><div align="center"></div></td>
+                            <td><div align="center"><strong>INV</strong></div></td>
+                            <td><div align="center"><strong>EVE</strong></div></td>
+                        </tr>
+                        <tr>
+                            <td><strong>QUADRIL D</strong></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>TOR D </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>JOEL D </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>QUADRIL E</strong></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>TOR E </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div align="center"><strong>JOEL E </strong></div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><td colspan="15"><strong>GONIOMETRIA</strong></td></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td colspan="2"><strong>REFLEXOS TEND&Iacute;NEOS</strong></td>
+                        </tr>
+                        <tr>
+                            <td width="441">PATELAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                            <td width="441">AQUILEU&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;  ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  [&nbsp;&nbsp;&nbsp; ]E</td>
+                        </tr>
+                        <tr>
+                            <td>BICIPITAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                            <td>TRICIPITAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;  ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  [&nbsp;&nbsp;&nbsp; ]E</td>
+                        </tr>
+                        <tr>
+                            <td>ESTILO  RADIAL&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                            <td>ESTILO  ULNAR&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;  ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                        </tr>
+                        <tr>
+                            <td>BICIPITAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                            <td>TRICIPITAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;  ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  [&nbsp;&nbsp;&nbsp; ]E</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>REFLEXOS</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Cut&acirc;neo  plantar [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                            <td>Cut.  Abdominal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                        </tr>
+                        <tr>
+                            <td>Babinsk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                            <td>Chaddock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                        </tr>
+                        <tr>
+                            <td>Schafer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                            <td>Oppenheim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                        </tr>
+                        <tr>
+                            <td>Cl&ocirc;nus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MS[&nbsp;&nbsp;&nbsp; ] D&nbsp;  [&nbsp;&nbsp;&nbsp; ]E&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MI [&nbsp;&nbsp; ] D&nbsp;&nbsp;  [&nbsp;&nbsp;&nbsp; ] E</td>
+                            <td>Gordon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]E</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>COORDENA&Ccedil;&Atilde;O</strong></td>
+                        </tr>
+                        <tr>
+                            <td>&Iacute;ndex  &ndash; &iacute;ndex</td>
+                            <td>&Iacute;ndex  - Terapeuta</td>
+                        </tr>
+                        <tr>
+                            <td>&Iacute;ndex  &ndash; nariz</td>
+                            <td>Calcanhar  joelho</td>
+                        </tr>
+                        <tr>
+                            <td>Movimentos  alternados</td>
+                            <td>Movimentos  involunt&aacute;rios </td>
+                        </tr>
+                        <tr>
+                            <td>Batida  do p&eacute;</td>
+                            <td>Prono-supino</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>MOTRICIDADE FINA</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Manipula&ccedil;&atilde;o  em Pin&ccedil;a:&nbsp; [&nbsp;&nbsp;&nbsp; ] D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  [&nbsp;&nbsp;&nbsp;&nbsp; ]E</td>
+                            <td>Opon&ecirc;ncia  &iacute;ndex-&iacute;ndex: [&nbsp;&nbsp; ]D&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp;&nbsp;  ]E</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>EQUIL&Iacute;BRIO Est&aacute;tico</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Romberg:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Base estreita [&nbsp;&nbsp; &nbsp;&nbsp;] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Base aberta [ &nbsp;&nbsp;&nbsp;&nbsp;]</td>
+                            <td>Olhos fechados:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Normal [ &nbsp;&nbsp;&nbsp;&nbsp;]&nbsp;&nbsp;  Patol&oacute;gico [&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>EQUIL&Iacute;BRIO Din&acirc;mico</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Marcha  de olhos abertos: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ] Normal [&nbsp;&nbsp;  ] Patol&oacute;gico</td>
+                            <td>Marcha  de olhos fechados: [ &nbsp;&nbsp;] Normal [ &nbsp;&nbsp;] Patol&oacute;gico</td>
+                        </tr>
+                        <tr>
+                            <td>Ponta  dos p&eacute;s : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ] Normal [&nbsp;&nbsp;  ] Patol&oacute;gico</td>
+                            <td>Apoiar  Calcanhares: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;  ] Normal &nbsp;[&nbsp;&nbsp; ] Patol&oacute;gico</td>
+                        </tr>
+                        <tr>
+                            <td>Linha  reta: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ] Normal [&nbsp;&nbsp;  ] Patol&oacute;gico</td>
+                            <td>Andar  para tr&aacute;s: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ] Normal [&nbsp;&nbsp;  ] Patol&oacute;gico</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td colspan="4"><strong>ATIVIDADE FUNCIONAL</strong></td>
+                        </tr>
+                        <tr>
+                            <td width="82" rowspan="2"><strong>Supino</strong>:</td>
+                            <td width="217">Controle  cervical&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;[&nbsp;&nbsp;&nbsp; ] </td>
+                            <td width="233">Alcan&ccedil;a  a linha m&eacute;dia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp; ]</td>
+                            <td width="338">Passa  para sentado &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp; &nbsp;] &nbsp;&nbsp;Tr&iacute;plice flex&atilde;o [ &nbsp;&nbsp;] </td>
+                        </tr>
+                        <tr>
+                            <td>Dissocia&ccedil;&atilde;o  de ombro &nbsp;[&nbsp;&nbsp;&nbsp; ]</td>
+                            <td>Manipula&ccedil;&atilde;o  de objetos&nbsp; [&nbsp; ]</td>
+                            <td>Rolamento  dissociado [&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Prono:</strong></td>
+                            <td>Controle  cervical&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;[&nbsp; &nbsp;]</td>
+                            <td>Apoio  nas m&atilde;os &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;  ]</td>
+                            <td>Volta  para supino &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td>Apoio  em antebra&ccedil;o &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ]</td>
+                            <td>Passa  para gato &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;  ]</td>
+                            <td>Apoio  em uma m&atilde;o &nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gato</strong>:</td>
+                            <td>Permanece na posi&ccedil;&atilde;o &nbsp;[ &nbsp;&nbsp;]</td>
+                            <td>Tr&ecirc;s pontos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ]</td>
+                            <td>Dois  pontos [&nbsp;&nbsp;&nbsp; ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Passa para o joelho [&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Ajoelhado</strong>:</td>
+                            <td>Permanece  na posi&ccedil;&atilde;o &nbsp;[&nbsp;&nbsp; ]</td>
+                            <td>Passa p/ semi-ajoelhado [&nbsp;&nbsp;&nbsp; ]</td>
+                            <td>Senta  sobre os calcanhares &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td>Rea&ccedil;&otilde;es  de prote&ccedil;&atilde;o &nbsp;&nbsp;&nbsp;&nbsp;[ &nbsp;&nbsp;]</td>
+                            <td>&nbsp;</td>
+                            <td>Passa  para sentado &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Sentado:</strong></td>
+                            <td>Permanece  sem apoio &nbsp;&nbsp;[&nbsp;&nbsp; ]</td>
+                            <td>Permanece com apoio &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ]</td>
+                            <td>Rea&ccedil;&atilde;o  de prote&ccedil;&atilde;o para tr&aacute;s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ] </td>
+                        </tr>
+                        <tr>
+                            <td>Passa  para de p&eacute; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ]</td>
+                            <td>&nbsp;</td>
+                            <td>Rea&ccedil;&atilde;o  de prote&ccedil;&atilde;o para os lados &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Em p&eacute;:</strong></td>
+                            <td>Apoio bipodal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp; ]</td>
+                            <td>Apoio unipodal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]</td>
+                            <td>Uso de dispositivo auxiliar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Padr&otilde;es anormais:</strong></td>
+                            <td colspan="3">&nbsp;&nbsp; Decortica&ccedil;&atilde;o  [&nbsp;&nbsp; ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Descerebra&ccedil;&atilde;o  [&nbsp;&nbsp;&nbsp; ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTCA  [&nbsp;&nbsp; ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Opist&oacute;tono  [&nbsp;&nbsp;&nbsp;&nbsp; ]&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;RTL[&nbsp;&nbsp; ]&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;Retifica&ccedil;&atilde;o[&nbsp;&nbsp;&nbsp;  ] </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><strong>OBS.:</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><strong>DEAMBULA&Ccedil;&Atilde;O</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td><strong>AVALIA&Ccedil;&Atilde;O POSTURAL</strong></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CONCLUS&Atilde;O GERAL</strong></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OBJETIVOS DE TRATAMENTO</strong></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PROTOCOLO DE TRATAMENTO</strong></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EVOLU&Ccedil;&Atilde;O CL&Iacute;NICA GERAL</strong></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table>
+                        <tr>
+                            <td>VISTO DO SUPERVISOR:___________________________________________________________ DATA:___/___/_____</td>
+                        </tr>
+                    </table>
+                </p:panel>
+            </p:panel>
+
+            <p:panel id="fichaParalisiaFacial" rendered="#{beanPaciente.tipoFicha eq 'fichaParalisiaFacial'}">
+
+                <h:commandLink type="button" title="Imprimir">
+                    <p:graphicImage id="printImage5" value="/resources/imagens/print32.png"/>
+                    <p:printer target="panelfichaParalisiaFacial" />
+                </h:commandLink>
+
+                <p:panel id="panelfichaParalisiaFacial">
+
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td class="cabecalhoFichasLogo">
+                                <p:graphicImage id="logoUninorteParal" value="/resources/imagens/uninorte.jpg" />
+                            </td>
+
+                            <td class="cabecalhoFichas">
+                                ESTÁGIO SUPERVISIONADO DE FISIOTERAPIA <br/> FICHA DE AVALIAÇÃO - PARALISIA FACIAL
+                            </td>
+
+                            <td class="cabecalhoFichasNum">
+                                Prontuário nº: <br/><br/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="fichasClinica">
+                        <tr>
+                            <td colspan="2">Paciente: #{beanPaciente.paciente.nome}</td>
+                            <td>Sexo: #{beanPaciente.paciente.sexo}</td>
+                            <td>Raça: #{beanPaciente.paciente.raca}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Pai: #{beanPaciente.paciente.pai}</td>
+                            <td colspan="2">Mãe: #{beanPaciente.paciente.mae}</td>
+                        </tr>
+                        <tr>
+                            <td>Data de Nasc.: <h:outputText value="#{beanPaciente.paciente.dataNasc}"> <f:convertDateTime pattern="dd/MM/yyyy"/> </h:outputText></td>
+                            <td>Natural: #{beanPaciente.paciente.naturalidade}</td>
+                            <td>RG: #{beanPaciente.paciente.rg}</td>
+                            <td>CPF: #{beanPaciente.paciente.cpf}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Endereço: #{beanPaciente.paciente.logradouro}</td>
+                            <td>Numero: #{beanPaciente.paciente.num}</td>
+                            <td>Complemento: #{beanPaciente.paciente.complemento}</td>
+                        </tr>
+                        <tr>
+                            <td>Bairro: #{beanPaciente.paciente.bairro}</td>
+                            <td>cep: #{beanPaciente.paciente.cep}</td>
+                            <td>Cidade: #{beanPaciente.paciente.cidade}</td>
+                            <td>Estado: #{beanPaciente.paciente.estado}</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td>Diagnóstico Clínico: _______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Diagnóstico Fisioterapêutico:_______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Data de Instalação do quadro: ___/___/_____ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data Início do Tratamento: ___/___/_____
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Data da Avaliação: ___/___/_____ 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tipo de Afastamento: ( &nbsp; )alta &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )desistência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )transferência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )falecimento
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1. Anamnese</td>
+                        </tr>
+                        <tr>
+                            <td>Queixa Principal:_______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>HMA:___________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Hábitos e Vícios:______________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Medicamentos em Uso:_______________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>2.Exame Físico/Inspeção:___________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>SINAIS VITAIS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PA:________/_____mmHg &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FR:_______rpm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FC:______bpm</td>
+                        </tr>
+                        <tr>
+                            <td>3. Palpação (tônus Muscular):</td>
+                        </tr>
+                    </table>
+                    <table border="1" class="tabFichasClinica">
+                        <tr>
+                            <td>Frontal:</td>
+                            <td>Zigomático:</td>
+                        </tr>
+                        <tr>
+                            <td>Orbicular Boca:</td>
+                            <td>Platisma:</td>
+                        </tr>
+                        <tr>
+                            <td>Risório:</td>
+                            <td>Masseter:</td>
+                        </tr>
+                        <tr>
+                            <td>Temporal:</td>
+                            <td>Prócero:</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td>4. <b>Sinais Associados</b></td>
+                        </tr>
+                        <tr>
+                            <td>Sinal de Bell (fecha os olhos com força, o globo ocular vai pra cima):_______________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Sinal de Nigro (olha pra cima, um globo ocular vai mais pra cima que o outro):______________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Disartria (dificuldade em pronunciar "B, P, M" e dento labial "V"):__________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Migazzini (facilita a abertura da pálpebra):_________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Lagoftalmo (fecha o olho com força, e o lado acometido não consegue fechar):_________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>5.Encurtamento ou contratura</b>(posição de encurtamento)</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>6.Alterações tróficas</b>(0 - sem vestígio de c)</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>9.Força Muscular</b></td>
+                        </tr>
+                        <tr>
+                            <td>(0 - sem vestígio de contração; 1 - vestígio de contração; 2 - contração diminuída; 3 - normal)</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td width="441">M. Frontal (enrugar a testa)</td>
+                            <td width="441">Levantados do l&aacute;bio superior:</td>
+                        </tr>
+                        <tr>
+                            <td>Orbicular da boca (fazer bico):</td>
+                            <td>Levantador do &acirc;ngulo da boca:</td>
+                        </tr>
+                        <tr>
+                            <td>Pr&oacute;cero (express&atilde;o de mau cheiro):</td>
+                            <td>Depressor do l&aacute;bio inferior e platisma:</td>
+                        </tr>
+                        <tr>
+                            <td>Zigom&aacute;tico maior e riz&oacute;rio ( sorrir):</td>
+                            <td>Mentoniano (elevar o l&aacute;bio inferior):</td>
+                        </tr>
+                        <tr>
+                            <td>Bucinador (deprimir as bochechas)</td>
+                            <td>Depressor do &acirc;ngulo da boca:</td>
+                        </tr>
+                        <tr>
+                            <td>Corrugador (aproximar as sobrancelhas):</td>
+                            <td>Pterig&oacute;ideo medial e lateral (mostrar os dentes de baixo):&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>Nasal (alargar as aberuras das narinas):</td>
+                            <td>Temporal e masseter (morder firmemente e l&aacute;bios abertos):</td>
+                        </tr>
+                        <tr>
+                            <td>Reto medial e lateral (olhar dentro e fora):</td>
+                            <td>Levantador da p&aacute;lpebra superior (abrir os olhos):</td>
+                        </tr>
+                        <tr>
+                            <td>Orbicular da boca (bico):</td>
+                            <td>Reto superior e obliquo inferior (olhar direto para cima no sentido do  superc&iacute;lio):</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Reto inferior e obliquo superior (olhar direto  para baixo no sentido da boca):</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td><b>7. Reflexos</b></td>
+                        </tr>
+                        <tr>
+                            <td>- Corneano (aproxima dedos ou algodão próximo aos olhos, se piscar é negativo): _____________________</td>
+                        </tr>
+                        <tr>
+                            <td>- Glabelar (percutir com os dedos entre as sobrancelhas): ________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>- Orbicular da boca (percurtir em cima do lábio superior, resposta esperada é fazer bico) _______________</td>
+                        </tr>
+                        <tr>
+                            <td>- Lacrimejamento excessivo com alimentos condimentados: ______________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>8. Sensibilidade gustativa</b></td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td width="441">Doce (açúcar):</td>
+                            <td width="441">Azedo (vinagre):</td>
+                        </tr>
+                        <tr>
+                            <td>Salgado (sal):</td>
+                            <td>Amargo (café):</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td><b>OBSERVAÇÕES:</b>__________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>EXAMES COMPLEMENTARES:</b>_________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>OBJETIVOS DE TRATAMENTO:</b></td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>PROTOCOLO DE TRATAMENTO:</b></td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                    </table>
+                    <b/>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td>Estagiária (o): _____________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Supervisora: _____________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Levantador  da pálpebra superior (abrir os olhos):_______________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Reto inferior e obliquo superior (olhar direito para baixo no sentido da boca):_________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Reto superior e obliquo inferior (olhar direito para cima no sentido do supercílio)</td>
+                        </tr>
+                        <tr>
+                            <td>Orbicular da boca (bico):_________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>10. Reflexos</td>
+                        </tr>
+                        <tr>
+                            <td>10.1. Corneano ( aproxima dedos ou algodão próximo aos olhos, se piscar é negativo):_________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>10.2. Glabelar ( percurtir com os dedos entre as sobrancelhas):_________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>10.3. Orbicular da boca ( percurtir em cima do lábio superior, resposta esperada é fazer bico ):</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>11. Sincinesia</td>
+                        </tr>
+                        <tr>
+                            <td>11.1. Abalo dos musculos labiais quando pisca:_________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>11.2. Lacrimejamento excessivo com alimentos condimentados:_________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                    </table>
+                </p:panel>
+            </p:panel>
+
+            <p:panel id="fichaLesaoMedular" rendered="#{beanPaciente.tipoFicha eq 'fichaLesaoMedular'}">
+
+                <h:commandLink type="button" title="Imprimir">
+                    <p:graphicImage id="printImage3" value="/resources/imagens/print32.png"/>
+                    <p:printer target="panelfichaLesaoMedular" />
+                </h:commandLink>
+
+                <p:panel id="panelfichaLesaoMedular">
+
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td class="cabecalhoFichasLogo">
+                                <p:graphicImage id="logoUninorteLMedular" value="/resources/imagens/uninorte.jpg" />
+                            </td>
+
+                            <td class="cabecalhoFichas">
+                                ESTÁGIO SUPERVISIONADO DE FISIOTERAPIA <br/> FICHA DE AVALIAÇÃO - NEUROLOGIA ADULTO
+                            </td>
+
+                            <td class="cabecalhoFichasNum">
+                                Prontuário nº: <br/><br/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="fichasClinica">
+                        <tr>
+                            <td colspan="2">Paciente: #{beanPaciente.paciente.nome}</td>
+                            <td>Sexo: #{beanPaciente.paciente.sexo}</td>
+                            <td>Raça: #{beanPaciente.paciente.raca}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Pai: #{beanPaciente.paciente.pai}</td>
+                            <td colspan="2">Mãe: #{beanPaciente.paciente.mae}</td>
+                        </tr>
+                        <tr>
+                            <td>Data de Nasc.: <h:outputText value="#{beanPaciente.paciente.dataNasc}"> <f:convertDateTime pattern="dd/MM/yyyy"/> </h:outputText></td>
+                            <td>Natural: #{beanPaciente.paciente.naturalidade}</td>
+                            <td>RG: #{beanPaciente.paciente.rg}</td>
+                            <td>CPF: #{beanPaciente.paciente.cpf}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Endereço: #{beanPaciente.paciente.logradouro}</td>
+                            <td>Numero: #{beanPaciente.paciente.num}</td>
+                            <td>Complemento: #{beanPaciente.paciente.complemento}</td>
+                        </tr>
+                        <tr>
+                            <td>Bairro: #{beanPaciente.paciente.bairro}</td>
+                            <td>cep: #{beanPaciente.paciente.cep}</td>
+                            <td>Cidade: #{beanPaciente.paciente.cidade}</td>
+                            <td>Estado: #{beanPaciente.paciente.estado}</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td>Início do Tratamento: ___/___/_____ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Término do Tratamento: ___/___/_____
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tipo de Afastamento: ( &nbsp; )alta &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )desistência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )transferência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )falecimento
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Estagiário(s): _______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medico Responsável:_______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Diagnóstico Clínico: _______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Diagnóstico Fisioterapêutico:_______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Exames Complementares:__________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><center><b>ANAMNESE</b></center></td>
+                        </tr>
+                        <tr>
+                            <td>Q.P.:__________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>HMP.A:___________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                    </table>
+                    <table border="1" cellspacing="0" cellpadding="0" class="tabFichasClinica">
+                        <tr>
+                            <td colspan="4" valign="top"><p><strong>Inspe&ccedil;&atilde;o:</strong><strong> </strong></p></td>
+                        </tr>
+                        <tr>
+                            <td width="99" valign="top"><p><strong>Deformidades:</strong></p></td>
+                            <td colspan="3" valign="top"><p>&nbsp;</p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" valign="top"><p><strong>Trofismo    Muscular</strong>: </p></td>
+                            <td width="796" valign="top"><p>&nbsp; [&nbsp;&nbsp;&nbsp;    ] R&iacute;gido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;[&nbsp; ]    Hipertrofia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp; ] Hipotrofia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp;    ] Atrofia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] Pseudo-hipertrofia </p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" valign="top"><p align="center"><strong>T&ocirc;nus muscular</strong>:</p></td>
+                            <td width="796" valign="top"><p>&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] Hipot&ocirc;nico&nbsp; [&nbsp;&nbsp; ]    Hipert&ocirc;nico&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ] Normot&ocirc;nico </p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" valign="top"><p align="center"><strong>Espasticidade:</strong> </p></td>
+                            <td width="796" valign="top"><p align="center">MSD_____________MSE______________MID________________MIE________________</p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" valign="top"><p align="center"><strong>T&ocirc;nus flutuante</strong>:</p></td>
+                            <td width="796" valign="top"><p align="center">&nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ] Atetose [&nbsp;&nbsp;&nbsp;&nbsp; ] Cor&eacute;ia [&nbsp;&nbsp;&nbsp;&nbsp; ] Hemibalismo</p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" valign="top"><p align="center"><strong>Palpa&ccedil;&atilde;o:</strong></p></td>
+                            <td colspan="2" valign="top"><p align="center">[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ] Edema&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp;    ] Cicatrizes&nbsp; [&nbsp;&nbsp;&nbsp; ]Ader&ecirc;ncias&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp;    ]Dor&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; ]Escaras&nbsp;&nbsp; </p></td>
+                        </tr>
+                    </table>
+                    <table border="1" cellspacing="0" cellpadding="0" class="tabFichasClinica">
+                        <tr>
+                            <td colspan="6" valign="top"><p>OBS.</p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" valign="top"><p>EXAME MOTOR &ndash; solicitar que o paciente    realize ativamente o movimento de acordo com o m&uacute;sculo chave.</p></td>
+                        </tr>
+                        <tr>
+                            <td width="200" valign="top"><p>N&Iacute;VEL</p></td>
+                            <td width="120" valign="top"><p>DIREITO</p></td>
+                            <td width="120" valign="top"><p>ESQUERDO</p></td>
+                            <td width="204" valign="top"><p>&nbsp;</p></td>
+                            <td width="120" valign="top"><p>DIREITO </p></td>
+                            <td width="120" valign="top"><p>ESQUERDO</p></td>
+                        </tr>
+                        <tr>
+                            <td width="200" valign="top"><p>C5 - Flex&atilde;o do cotovelo</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="204" valign="top"><p>L2 &ndash; Flexores do quadril</p></td>
+                            <td valign="top"><p>&nbsp;</p></td>
+                            <td valign="top">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="200" valign="top"><p>C6 - extensor do punho</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="204" valign="top"><p>L3 &ndash; extensores do joelho</p></td>
+                            <td valign="top"><p>&nbsp;</p></td>
+                            <td valign="top">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="200" valign="top"><p>C7 - extensor do cotovelo</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="204" valign="top"><p>L4 &ndash; Dorsiflex&atilde;o </p></td>
+                            <td valign="top"><p>&nbsp;</p></td>
+                            <td valign="top">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="200" valign="top"><p>C8 - fle. dos dedos</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="204" valign="top"><p>L5 &ndash; extensores longos dedos</p></td>
+                            <td valign="top"><p>&nbsp;</p></td>
+                            <td valign="top">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="200" valign="top"><p>T1 - abdutores dos dedos</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="120" valign="top"><p>&nbsp;</p></td>
+                            <td width="204" valign="top"><p>S1 &ndash; flexores plantares.</p></td>
+                            <td valign="top"><p>&nbsp;</p></td>
+                            <td valign="top">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" valign="top">0. Paralisia total</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" valign="top">1. Contra&ccedil;&atilde;o    vis&iacute;vel ou palp&aacute;vel</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" valign="top">2. Movimento ativo    sem oposi&ccedil;&atilde;o da gravidade</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" valign="top">3. Movimento ativo    contra a gravidade</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" valign="top">4. Movimento ativo    contra alguma resist&ecirc;ncia</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" valign="top">5. Movimento ativo    contra grande resist&ecirc;ncia</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" valign="top"><p>NT - n&atilde;o test&aacute;vel</p></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="tabFichasClinica" border="1">
+                        <tr>
+                            <td width="36">&nbsp;</td>
+                            <td colspan="2"><div align="center">Toque leve </div></td>
+                            <td colspan="2"><div align="center">Agulha</div></td>
+                            <td width="342" rowspan="30"><p:graphicImage id="imgSensibilidadeFrente" value="/resources/imagens/LMfrente.png" /></td>
+                            <td width="342" rowspan="30"><p:graphicImage id="imgSensibilidadeCosta" value="/resources/imagens/LMcosta.png" /></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">N&iacute;vel</div></td>
+                            <td width="33"><div align="center">D</div></td>
+                            <td width="33"><div align="center">E</div></td>
+                            <td width="33"><div align="center">D</div></td>
+                            <td width="33"><div align="center">E</div></td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">C2</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">C3</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">C4</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">C5</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">C6</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">C7</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">C8</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T1</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T2</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T3</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T4</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T5</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T6</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T7</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T8</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T9</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T10</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T11</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">T12</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">L1</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">L2</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">L3</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">L4</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">L5</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">S1</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">S2</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">S3</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">S4,5</div></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">Quadro de Sensibilidade<br/> 0 - Ausente; 1 - Comprometida; 2 - Normal; NT - Não Testável</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td>OBJETIVO GERAL:______________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>PROTOCOLO:________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <br/>
+                        <tr>
+                            <td>ACADÊMICO _________________________________SUPERVISOR (A):_________________________________DATA:_____________</td>
+                        </tr>
+                    </table>
+                </p:panel>
+            </p:panel>
+            
+            <p:panel id="fichaRespiratoria" rendered="#{beanPaciente.tipoFicha eq 'fichaRespiratoria'}">
+
+                <h:commandLink type="button" title="Imprimir">
+                    <p:graphicImage id="printImage4" value="/resources/imagens/print32.png"/>
+                    <p:printer target="panelfichaRespiratoria" />
+                </h:commandLink>
+
+                <p:panel id="panelfichaRespiratoria">
+
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td class="cabecalhoFichasLogo">
+                                <p:graphicImage id="logoUninorteResp" value="/resources/imagens/uninorte.jpg" />
+                            </td>
+
+                            <td class="cabecalhoFichas">
+                                ESTÁGIO SUPERVISIONADO DE FISIOTERAPIA <br/> FICHA DE AVALIAÇÃO - RESPIRATÓRIA
+                            </td>
+
+                            <td class="cabecalhoFichasNum">
+                                Prontuário nº:<br/><br/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="fichasClinica">
+                        <tr>
+                            <td colspan="2">Paciente: #{beanPaciente.paciente.nome}</td>
+                            <td>Sexo: #{beanPaciente.paciente.sexo}</td>
+                            <td>Raça: #{beanPaciente.paciente.raca}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Pai: #{beanPaciente.paciente.pai}</td>
+                            <td colspan="2">Mãe: #{beanPaciente.paciente.mae}</td>
+                        </tr>
+                        <tr>
+                            <td>Data de Nasc.: <h:outputText value="#{beanPaciente.paciente.dataNasc}"> <f:convertDateTime pattern="dd/MM/yyyy"/> </h:outputText></td>
+                            <td>Natural: #{beanPaciente.paciente.naturalidade}</td>
+                            <td>RG: #{beanPaciente.paciente.rg}</td>
+                            <td>CPF: #{beanPaciente.paciente.cpf}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Endereço: #{beanPaciente.paciente.logradouro}</td>
+                            <td>Numero: #{beanPaciente.paciente.num}</td>
+                            <td>Complemento: #{beanPaciente.paciente.complemento}</td>
+                        </tr>
+                        <tr>
+                            <td>Bairro: #{beanPaciente.paciente.bairro}</td>
+                            <td>cep: #{beanPaciente.paciente.cep}</td>
+                            <td>Cidade: #{beanPaciente.paciente.cidade}</td>
+                            <td>Estado: #{beanPaciente.paciente.estado}</td>
+                        </tr>
+                    </table>
+                    <table class="tabFichasClinica">
+                        <tr>
+                            <td>Início do Tratamento: ___/___/_____ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Término do Tratamento: ___/___/_____
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tipo de Afastamento: ( &nbsp; )alta &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )desistência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )transferência &nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; )falecimento
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Diagnóstico Clínico: _______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Exames subsidiários:_______________________________________________________________________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Q.P.:__________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>História:_______________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td><b>Exame Respiratório:</b></td>
+                        </tr>
+                        <tr>
+                            <td>Ausculta Pulmonar:______________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Percussão do tórax:______________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Expansibilidade:______________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Mobilidade:______________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Padrão Respiratório:______________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Conclusão:______________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Objetivo do Tratamento:________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>Plano de Tratamento:________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td>_______________________________________________________________________________________________</td>
+                        </tr>
+                        <br/>
+                        <tr>
+                            <td>Estagiário:_______________________________________Supervisor:_____________________________________________</td>
+                        </tr>
+                    </table>
+                </p:panel>
+            </p:panel>
+            
+        </h:form>
+    </ui:define>
+
+</ui:composition>

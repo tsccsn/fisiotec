@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Alterar de alunos
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="listaDeAlunos" prependId="false">
+            <p:panel header="Listagem de todos os alunos" >
+                <p><p:accordionPanel activeIndex="-1">
+                        <p:tab title="Filtro"  >
+                            <table>
+                                <tr>
+                                    <td>Nome</td>
+                                    <td>
+                                        <p:autoComplete maxResults="5" value="#{listaDeAlunos.nomeAluno}"
+                                                        completeMethod="#{listaDeAlunos.autoCompleta}" />
+                                    </td>
+                                    <td>Turmas</td>
+                                    <td>
+                                        <p:selectManyMenu value="#{listaDeTurmas.indexTurmasSelecionadas}" style="height: 200px; width: 230px;" >
+                                            <f:selectItem itemValue="qualquer" itemLabel="Qualquer" />
+                                            <f:selectItems value="#{listaDeTurmas.turmas}" var="xTurma" itemLabel="#{xTurma.codigoTurma}" itemValue="#{utilString.longToString(xTurma.id)}" />
+                                        </p:selectManyMenu>
+                                    </td>
+                                    <td>Pontos</td>
+                                    <td>
+                                        <p:selectManyMenu value="#{listaDePontos.indexDosPontosSelecione}" style="height: 200px; width: 230px;" >
+                                            <f:selectItem itemValue="qualquer" itemLabel="Qualquer" />
+                                            <f:selectItems value="#{listaDePontos.pontos}" var="xPonto" itemLabel="#{xPonto.nome}" itemValue="#{utilString.longToString(xPonto.id)}" />
+                                        </p:selectManyMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p:commandButton value="Filtrar" update="listaDeAlunos" action="#{listaDeAlunos.filtraAlunos(listaDePontos, listaDeTurmas)}"  />
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:tab>
+                    </p:accordionPanel></p>
+                
+                <p:dataTable var="xAluno" value="#{listaDeAlunos.alunosManipulados}"
+                             paginator="true" rows="20" emptyMessage="Sem resultados"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,30,60" >
+                    <f:facet name="header">  
+                        Alunos
+                    </f:facet>
+                    <p:column>  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Nome</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{utilString.trataNomeUsuarioII(xAluno,30)}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center">  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">PontoAtual</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{listaDeAlunos.pontoAtualDoAluno(xAluno) == null ? '-' : listaDeAlunos.pontoAtualDoAluno(xAluno).nome}
+                        </div>
+                    </p:column >
+                    <p:column style="text-align: center">  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Turma Atual</div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{listaDeAlunos.turmaAtualDoAluno(xAluno)  == null ? '-' : listaDeAlunos.turmaAtualDoAluno(xAluno).codigoTurma}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center">  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">Alterar</div>
+                        </f:facet>
+                        <div class="espacamento" style="text-align: center" >
+                            <p:commandLink action="#{boleanos.ambosTrue(0)}"  update="alteraAluno" oncomplete="breuOn();abreJanela0();">
+                                <h:graphicImage library="imagens" name="update.png" />
+                                <f:setPropertyActionListener value="#{xAluno}" target="#{listaDeAlunos.alunoManipulado}"/>
+                                <f:setPropertyActionListener value="#{xAluno}" target="#{listaDeTurmas.turmaByAluno}"/>
+                                <f:setPropertyActionListener value="#{xAluno}" target="#{listaDePontos.pontoAtualDoAluno}"/>
+                                <f:setPropertyActionListener value="#{listaDeAlunos.alunos.indexOf(xAluno)}" target="#{listaDeAlunos.indexManipulado}"/>
+                            </p:commandLink>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        
+
+        <h:form id="alteraAluno" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Altera aluno" id="janela0" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td>Aluno</td>
+                                <td><p:inputText value="#{listaDeAlunos.alunoManipulado.nomeCompleto}" style="width: 100%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Turma Atual</td>
+                                <td>
+                                    <p:selectOneMenu value="#{listaDeTurmas.indexTurmaSelecionada}" style="width: 100%;">
+                                        <f:selectItem itemValue="-1" itemLabel="Sem Turma"/>
+                                        <f:selectItems var="xTurma" value="#{listaDeTurmas.turmas}" itemValue="#{listaDeTurmas.turmas.indexOf(xTurma)}" itemLabel='#{xTurma.codigoTurma} - #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminada(xTurma.dataTermino, "Semestre")}'/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ponto Atual</td>
+                                <td>
+                                    <p:selectOneMenu value="#{listaDePontos.indexDoPontoSelecione}" style="width: 100%;">
+                                        <f:selectItem itemValue="-1" itemLabel="Sem Ponto"/>
+                                        <f:selectItems var="xPonto" value="#{listaDePontos.pontos}" itemValue="#{listaDePontos.pontos.indexOf(xPonto)}" itemLabel='#{xPonto.nome}'/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                        </table>
+                        <p:commandButton image="voltar2" style="margin-right: 10px;" actionListener="#{boleanos.mudaA(0, boleanos.timeDefault)}"
+                                         onstart="fechaJanela0();breuOff();"  />
+                        <p:commandButton image="update" update="listaDeAlunos" action="#{beanAdmin.atualizaAluno(listaDeAlunos, listaDePontos, listaDeTurmas)}" onstart="fechaJanela0();breuOff();" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

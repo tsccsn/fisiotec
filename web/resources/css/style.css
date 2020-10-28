@@ -1,0 +1,896 @@
+/*CSS Reset*/
+/*TEMPLATE*/
+.breu{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    opacity: 0;
+    z-index: 1;
+    visibility: hidden;
+}
+.janelas{
+    z-index: 2; opacity: 0; position: fixed;
+}
+body{
+    background-image: url(../resources/imagens/back4.png);
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    padding:0;
+    margin:0;
+    min-width:400px;
+    min-height:400px;
+}
+.bordaExterna{
+    /*        width:926px;*/
+    width: 90%;
+    margin: 0 auto;
+    border: #dddddd  1px solid;
+    border-radius:10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #F3F3F3;
+    min-width: 926px;
+
+}
+.deixaTransparente {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    opacity: 0;
+}
+.todoConteudo{
+
+    margin: 0 auto;
+    border: #9d9d9d  3px solid;
+    border-radius:10px;
+    padding: 5px;
+    margin: 5px;
+    background-color: #f9f9f9;
+}
+.logo{
+    height:150px;	
+    background-color: #f9f9f9;
+    background-image:url(../resources/imagens/logofisiotec.png);
+    background-repeat:no-repeat;
+    background-position:center;
+    border-radius:10px;
+    border: #dddddd  1px solid;
+
+}
+.menu{
+    margin: 0 auto;
+    padding-top: 5px;
+}
+.centro{
+    margin: 0 auto;
+    padding-top: 50px;
+    padding-bottom: 5px;
+
+}
+.rodape{
+    background-color:#f9f9f9;
+    color:#FFF;
+    text-align:center;
+    padding-top:5px;
+    padding-bottom:5px;
+    border-radius:10px;
+    background-image:url(../resources/imagens/fundo.png);
+    background-position: center;
+    background-repeat:  no-repeat;
+    height: 36px;
+    border-radius:10px;
+    border: #dddddd  1px solid;
+    margin-top: 8px;
+
+}
+/* FIM TEMPLATE*/
+
+/* ICONES DE MENU BAR*/
+.ui-menuitem-icon.ui-icon.home{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/casa.png);
+}
+.ui-menuitem-icon.ui-icon.alunos{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/alunos.png);
+}
+.ui-menuitem-icon.ui-icon.avisos{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/alerta16.png);
+}
+.ui-menuitem-icon.ui-icon.stethoscope{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/stethoscope.png);
+}
+.ui-menuitem-icon.ui-icon.buscar{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/buscar.png);
+}
+.ui-menuitem-icon.ui-icon.portal{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/portal.png);
+}
+.ui-menuitem-icon.ui-icon.login{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/login.png);
+}
+.ui-menuitem-icon.ui-icon.notas{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/notas.png);
+}
+.ui-menuitem-icon.ui-icon.livro{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/livro.png);
+}
+.ui-menuitem-icon.ui-icon.estudante{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/estudante.png);
+}
+.ui-menuitem-icon.ui-icon.usuario{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/usuario.png);
+}
+.ui-menuitem-icon.ui-icon.professor{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/professor.png);
+}
+.ui-menuitem-icon.ui-icon.minhaconta{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/minhaconta.png);
+}
+.ui-menuitem-icon.ui-icon.logout{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/logout.png);
+}
+.ui-menuitem-icon.ui-icon.add{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/add.png);
+}
+.ui-menuitem-icon.ui-icon.list{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/list.png);
+}
+.ui-menuitem-icon.ui-icon.registro{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/registro.png);
+}
+.ui-menuitem-icon.ui-icon.estoque{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/estoque.png);
+}
+.ui-menuitem-icon.ui-icon.injection{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/injection.png);
+}
+.ui-menuitem-icon.ui-icon.listasaida{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/listasaida.png);
+}
+.ui-menuitem-icon.ui-icon.listaentrada{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/listaentrada.png);
+}
+.ui-menuitem-icon.ui-icon.update{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/update16.png);
+}
+.ui-menuitem-icon.ui-icon.delete{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/delete16.png);
+}
+.ui-menuitem-icon.ui-icon.chart{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/chart.png);
+}
+.ui-menuitem-icon.ui-icon.hospital{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/hospital.png);
+}
+.ui-menuitem-icon.ui-icon.paciente{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/paciente.png);
+}
+.ui-menuitem-icon.ui-icon.pill{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/pill.png);
+}
+.ui-menuitem-icon.ui-icon.enfermeira{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/enfermeira.png);
+}
+.ui-menuitem-icon.ui-icon.print{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/print.png);
+}
+.ui-menuitem-icon.ui-icon.clip{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/clip.png);
+}
+.ui-menuitem-icon.ui-icon.regua{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/regua.png);
+}
+.ui-menuitem-icon.ui-icon.up{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/up16.png);
+}
+.ui-menuitem-icon.ui-icon.down{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/down16.png);
+}
+.ui-menuitem-icon.ui-icon.nao{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/x.png);
+}
+.ui-menuitem-icon.ui-icon.chart-up{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/chart-up.png);
+}
+.ui-menuitem-icon.ui-icon.ativar{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/ativar.png);
+}
+.ui-menuitem-icon.ui-icon.gear{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/gear16.png);
+}
+.ui-menuitem-icon.ui-icon.chart-down{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/chart-down.png);
+}
+.ui-menuitem-icon.ui-icon.chart-line{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/chartline.png);
+}
+.ui-menuitem-icon.ui-icon.raiox{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/raiox.png);
+}
+.ui-menuitem-icon.ui-icon.estoqueentrada{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/estoqueentrada.png);
+}
+.ui-menuitem-icon.ui-icon.estoquesaida{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/estoquesaida.png);
+}
+.ui-menuitem-icon.ui-icon.movimentacao{
+    width:16px;
+    height:16px;
+    padding-right:5px;
+    background-repeat:no-repeat;
+    background-image:url(../resources/imagens/movimentacao16.png);
+}
+/* FIM ICONES DE MENU BAR*/
+
+
+/*MENU BAR*/
+.ui-menu.ui-menubar{
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    background-image: none;
+    border-color: #dddddd;
+    margin-bottom: 7px;
+}
+.ui-menuitem-link.ui-corner-all{
+    background-image: none;
+    background-color: #f9f9f9;/*BRANCO*/
+    color: #525151;
+    margin: 3px;
+}
+.ui-menuitem-link.ui-state-hover{
+    background-color: #59bc4d;
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    border-radius: 10px;
+    color: #f9f9f9;
+    margin:  3px;
+}
+.ui-menuitem-link.ui-corner-all.ui-state-hover {
+    border: 0px;
+    box-shadow: 1px 2px 3px 1px #065500;
+    color: #f9f9f9;
+    margin:  4px;
+}
+.ui-menu-child{
+    background-color: #f9f9f9;
+    background-image: none;
+    border-radius: 10px;
+}
+/*caixa submenu*/
+.ui-widget-content.ui-menu-list.ui-corner-all.ui-helper-clearfix.ui-menu-child{
+    padding-right: 10px;
+}
+.ui-widget-content.ui-menu-list.ui-corner-all.ui-helper-clearfix.ui-menu-child{
+    box-shadow: 3px 5px 10px 1px #065500;
+    width: 170px;
+}
+/*FIM MENU BAR*/
+
+/*PANEL*/
+.ui-panel.ui-widget.ui-widget-content.ui-corner-all{
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border-color: #dddddd;  
+}
+.ui-panel-titlebar.ui-widget-header.ui-corner-all{
+    background-color: #f9f9f9;
+    background-image: url(../resources/imagens/tema/treta.png);
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+    margin: 2px;
+    text-shadow: none;
+}
+/*FIM PANEL*/
+
+
+/*INPUT TEXT*/
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all{
+    box-shadow: none;
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+    text-shadow: none;
+}
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all.ui-state-hover{
+    border: 1px solid #9d9d9d;
+    border-radius: 10px;
+}
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all.ui-state-focus{
+    box-shadow: 0px 1px 2px 2px #b4b4b4;
+    border-radius: 10px;
+}
+/*ERRO*/
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all.ui-state-error{
+    box-shadow: none;
+    border-radius: 10px;
+    border: 1px solid #ffa3a3;
+}
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all.ui-state-error.ui-state-hover{
+    border: 1px solid #ff7b7b;
+    border-radius: 10px;
+}
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all.ui-state-error.ui-state-focus{
+    box-shadow: 0px 1px 2px 2px #b4b4b4;
+    border-radius: 10px;
+}
+/*FIM ERRO*/
+/*FIM INPUT TEXT*/
+
+/*BOTÃO ONYL ICO*/
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only{
+    background-color: #f9f9f9;
+    background-image: url(../resources/imagens/tema/treta.png);
+    color: #525151;
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+}
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-state-hover{
+    background-color: #4aad3e;
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    color: #f9f9f9!important;
+    border-radius: 10px;
+    border: 1px solid #9d9d9d;
+    box-shadow: 0px 1px 2px 2px #b4b4b4;
+}
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only:focus{
+    background-color: #4aad3e;
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    color: #f9f9f9!important;
+    border-radius: 10px;
+    border: 1px solid #9d9d9d;
+    box-shadow: 0px 1px 2px 2px #b4b4b4;
+    outline: none;
+}
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-state-active{
+    background-color: #f9f9f9;
+    background-image: url(../resources/imagens/tema/botaoativo.png);
+    color: #f9f9f9; 
+    border: 1px solid #9d9d9d;
+    border-radius: 10px;
+}
+/*FIM BOTÃO ONYL ICO */
+
+/*BOTÃO ICO E TEXTO*/
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left{
+    background-color: #f9f9f9;
+    background-image: url(../resources/imagens/tema/treta.png);
+    color: #525151;
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+    text-shadow: none;
+}
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-state-hover{
+    background-color: #4aad3e;
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    color: #f9f9f9!important;
+    border-radius: 10px;
+    border: 1px solid #9d9d9d;
+    box-shadow: 0px 1px 2px 2px #b4b4b4;
+}
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left:focus{
+    background-color: #4aad3e;
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    color: #f9f9f9!important;
+    border-radius: 10px;
+    border: 1px solid #9d9d9d;
+    box-shadow: 0px 1px 2px 2px #b4b4b4;
+    outline: none;
+}
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-state-active{
+    background-color: #f9f9f9;
+    background-image: url(../resources/imagens/tema/botaoativo.png);
+    color: #f9f9f9; 
+    border: 1px solid #9d9d9d;
+    border-radius: 10px;
+}
+/*FIM BOTÃO ONYL E TEXTO */
+
+/*ACORDIAO*/
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-corner-all{
+    border-radius: 10px;
+    color: #525151;
+    border: 1px solid #dddddd;
+    background-image: url(../resources/imagens/tema/treta.png);
+    text-shadow: none;
+
+}
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-corner-all a{
+    color: #525151;
+}
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-corner-all.ui-state-hover{
+    background-color: #4aad3e;
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    border: 1px solid #9d9d9d;
+    color: #f9f9f9;
+    text-shadow: none;
+    box-shadow: none;
+}
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-corner-all.ui-state-hover a{
+    color: #f9f9f9;
+}
+/*ativo*/
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-state-active.ui-corner-top{
+    background-color: #4aad3e;
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    border: 1px solid #9d9d9d;
+    border-radius: 10px 10px 0px 0px;
+    text-shadow: none;
+    box-shadow: none;
+}
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-state-active.ui-corner-top a{
+    color: #f9f9f9;
+}
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-state-active.ui-corner-top.ui-state-hover{
+    background-color: #4aad3e;
+    background-image: url(../resources/imagens/tema/botaoativo.png);
+    border: 1px solid #9d9d9d;
+    color: #f9f9f9;
+    border-radius: 10px 10px 0px 0px;
+    text-shadow: none;
+    box-shadow: none;
+}
+.ui-state-default a:visited {
+    color: #525151;
+    text-shadow: none;
+}
+.ui-state-default a:hover {
+    color: #f9f9f9;
+    text-shadow: none;
+}
+.ui-state-default a:active{
+    color: #f9f9f9;
+    text-shadow: none;
+}
+.ui-state-default a:focus{
+    color: #f9f9f9;
+    text-shadow: none;
+}
+/*
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-state-hover{
+    background-color: #4aad3e;
+    background-image: url(../resources/imagens/tema/tretaverde.png);
+    color: #f9f9f9!important;
+    border: 1px solid #dddddd;
+}
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-state-active.ui-corner-top{
+    background-color: #f9f9f9;
+    background-image: url(../resources/imagens/tema/botaoativo.png);
+    color: #FFF!important;
+    border: 1px solid #9d9d9d;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.ui-accordion-content.ui-helper-reset.ui-widget-content{
+    background-color:  transparent;
+    background-image: none;
+    border: 1px solid #dddddd;
+    border-radius: 0px 0px 10px 10px ;
+}*/
+/*FIM ACORDIAO*/
+
+/*WIZARD*/
+.wizard{
+    position: relative;
+    height: 46px;
+    text-align: center;
+}
+.wizardBack{
+    position: absolute;
+    left: 0px;
+}
+.wizardNext{
+    position: absolute;
+    right: 0px;
+}
+/*AJAX STATUS*/
+.status{
+    position: fixed;
+    width: 42px;
+    height: 42px;
+    top: 0px;
+    left: 0px;
+    background-color: #000;
+}
+.loading{
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-image: url(../resources/imagens/carregando.gif);
+    height: 71px;
+    width: 73px;
+    z-index: 600;
+}
+.erro2{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-image: url(../resources/imagens/erro.gif);
+    height: 42px;
+    width: 42px;
+}
+
+.ui-widget select{
+    cursor: pointer;
+}
+.ui-icon {
+    border-radius: 0px;
+}
+.ui-button-icon-left.ui-icon.voltar{
+    background-image: url(../resources/imagens/setas/back.png);
+}  
+.ui-button-icon-left.ui-icon.voltar2{
+    background-image: url(../resources/imagens/setas/back16.png);
+} 
+.ui-button-icon-left.ui-icon.avancar{
+    background-image: url(../resources/imagens/setas/next.png);
+}
+.ui-button-icon-left.ui-icon.salvar{
+    background-image: url(../resources/imagens/salvar.png);
+}
+.ui-button-icon-left.ui-icon.salvarnovo{
+    background-image: url(../resources/imagens/salvarnovo.png);
+}
+.ui-button-icon-left.ui-icon.gear{
+    background-image: url(../resources/imagens/gear16.png);
+}
+.ui-button-icon-left.ui-icon.chart{
+    background-image: url(../resources/imagens/chart.png);
+}
+.ui-button-icon-left.ui-icon.deletar{
+    background-image: url(../resources/imagens/delete16.png);
+}
+.ui-button-icon-left.ui-icon.tabela{
+    background-image: url(../resources/imagens/tablegreen.png);
+}
+.ui-button-icon-left.ui-icon.lock{
+    background-image: url(../resources/imagens/lock.png);
+}
+.ui-button-icon-left.ui-icon.key{
+    background-image: url(../resources/imagens/key.png);
+}
+.ui-button-icon-left.ui-icon.login{
+    background-image: url(../resources/imagens/login.png);
+}
+.ui-button-icon-left.ui-icon.portal{
+    background-image: url(../resources/imagens/portal.png);
+}
+.ui-button-icon-left.ui-icon.add{
+    background-image: url(../resources/imagens/add.png);
+}
+.ui-button-icon-left.ui-icon.update{
+    background-image: url(../resources/imagens/update16.png);
+}
+.ui-button-icon-left.ui-icon.bug{
+    background-image: url(../resources/imagens/bug.png);
+}
+.ui-button-icon-left.ui-icon.clear{
+    background-image: url(../resources/imagens/clear.png);
+}
+.ui-button-icon-left.ui-icon.diferenca{
+    background-image: url(../resources/imagens/diferenca.png);
+}
+.ui-button-icon-left.ui-icon.sim{
+    background-image: url(../resources/imagens/ok16.png);
+}
+.ui-button-icon-left.ui-icon.nao{
+    background-image: url(../resources/imagens/x.png);
+}
+.ui-button-icon-left.ui-icon.buscar{
+    background-image: url(../resources/imagens/buscar.png);
+}
+.segundaJanelaSempreNoCentro {
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    z-index:1;
+    visibility:hidden; 
+}
+.deixaTransparente {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    background: #000;
+    opacity: 0;
+}
+#breu{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    opacity: 0;
+    z-index: 1;
+    visibility: hidden;
+}
+.janelaRolavel {
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height: 100%;
+
+    overflow: auto;
+}
+.janelas{
+    z-index: 2; position: absolute; opacity: 0;
+}
+.imagens{
+    border: 0;
+}
+.distanciaBotao{
+    margin-right: 10px;
+}
+.outputpanel{
+    position:absolute;
+    z-index:2;
+}
+.rowsSimples{
+    margin: 50px;
+    background-color: #00cd27;
+}
+/*CSS GERAIS*/
+.alingLeft{
+    text-align: left;
+}
+.alingRight{
+    text-align: right;
+}
+/*TREEEEEETAS*/
+/*tudo sem borda*/ /*
+#f9f9f9; BRANCO
+#525151; PRETO
+#4aad3e; VERDE;   
+#ffa3a3; VERMELHO;   
+#ff7b7b; VERMELHO;  + 
+#9d9d9d; borda escura
+                   #dddddd; borda clara
+*/
+
+.fichasClinica{
+    border: #000 1px solid;
+    width: 900px;
+    font-size: 16px;
+    background-color: #FFFFFF;
+}
+.tabFichasClinica{
+    width: 898px;
+    font-size: 16px;
+    background-color: #FFFFFF;
+}
+.cabecalhoFichasLogo{
+    text-align: center;
+    width: 150px;
+    height: 100px;
+    font-size: 16px;
+    background-color: #FFFFFF;
+}
+.cabecalhoFichas{
+    text-align: center;
+    border: #000 1px solid;
+    width: 600px;
+    height: 100px;
+    font-size: 16px;
+    background-color: #FFFFFF;
+}
+.cabecalhoFichasNum{
+    text-align: center;
+    border: #000 1px solid;
+    width: 150px;
+    height: 100px;
+    font-size: 12px;
+    background-color: #FFFFFF;
+}
+.iconPaciente{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/paciente16.png);
+}
+.iconClinica{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/clinica.png);
+}
+.iconImprimir{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/print.png);
+}
+.iconExam{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/plusExam.png);
+}
+.iconReport{
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../resources/imagens/chartline.png);
+}
+

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../Template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="titulo">
+        Login Usuário
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        #{portalGenerico.mensagemBobagem()}
+        <div id="breu" class="breu" ></div>
+        <p:panel header="Login de usário">
+            <p:accordionPanel activeIndex="-1" id="acordiao" >
+                <p:tab title="Login administrador" >
+                    <h:form id="loginAdm" prependId="false">
+                        <div id="formularioLogin" style="position:relative;margin:0 auto;width:291px;" >
+                            <table  width="200" border="0" cellpadding="1" cellspacing="1" >
+                                <tr>
+                                    <td align="right">Login</td>
+                                    <td><p:inputText id="inputLogin" onfocus="para(0);" value="#{portalGenerico.administrador.login}" required="true" requiredMessage="Preencha o campo Login!" /> </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Senha</td>
+                                    <td><p:inputText id="inputSenha" onfocus="para(1);" value="#{portalGenerico.administrador.senha}" required="true" requiredMessage="Preencha o campo Senha!"  /> </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p:commandButton id="loga"  onclick="verificaCamposLogin();"  action="#{portalGenerico.logarAdministrador()}"  image="login" update="loginAdm" >
+                                            <p:tooltip for="loga" value="Logar " />
+                                            <f:setPropertyActionListener target="#{portalGenerico.usuario}" value="#{portalGenerico.administrador}" />
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </h:form>
+                    <h:form id="opcoesAdmin" prependId="false">
+                        <table>
+                            <tr>
+                                <td><p:commandButton id="esqsenha" action="#{boleanos.ambosTrue(0)}" image="key" update="opcoesAdmin,relembrandoSenha" oncomplete="breuOn();abreJanela0();" >
+                                        <p:tooltip for="esqsenha" value="Esqueci minha senha" />
+                                        <f:setPropertyActionListener target="#{portalGenerico.usuario}" value="#{portalGenerico.administrador}" />
+                                    </p:commandButton>
+                                </td>
+                                <td><p:commandButton id="desbloquearConta" action="#{boleanos.ambosTrue(2)}" image="lock" 
+                                                     update="opcoesAdmin,desbloqueandoConta" oncomplete="breuOn();abreJanela2();" >
+                                        <p:tooltip for="desbloquearConta" value="Desbloquear conta" />
+                                        <f:setPropertyActionListener target="#{portalGenerico.usuario}" value="#{portalGenerico.administrador}" />
+                                    </p:commandButton>
+                                </td>
+                            </tr>
+                        </table>
+                    </h:form>
+                </p:tab>
+                <p:tab title="Login professor">
+                    <h:form id="loginProf" prependId="false">
+                        <div id="formularioLoginProfessor" style="position:relative;margin:0 auto;width:291px;" >
+                            <table width="200" border="0" cellpadding="1" cellspacing="1"  >
+                                <tr>
+                                    <td align="right">Login</td>
+                                    <td><p:inputText id="loginProfessor" onfocus="para(0);" required="true" requiredMessage="Preencha o campo Login!"
+                                                     value="#{beanProfessor.objProfessor.objProfessorManipulado.login}" /> </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Senha</td>
+                                    <td><p:inputText type="password" id="senhaProfessor" onfocus="para(1);" required="true" requiredMessage="Preencha o campo Senha!"
+                                                     value="#{beanProfessor.objProfessor.objProfessorManipulado.senha}" /> </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p:commandButton  id="logaprof" image="login" onclick="verificaCamposLoginProfessor();" 
+                                                          action="#{beanProfessor.logarProfessor()}" oncomplete="resultadoTentativaLoginProfessor(args);" update="loginProf" >
+                                            <p:tooltip for="logaprof" value="Logar como professor" />
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </h:form>
+                    <h:form id="opcoesProf" prependId="false">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p:commandButton  action="#{boleanos.ambosTrue(0)}" image="key" 
+                                                      update="opcoesAdmin,relembrandoSenha" oncomplete="breuOn();abreJanela0();" >
+                                        <f:setPropertyActionListener target="#{portalGenerico.usuario}" value="#{portalGenerico.professor}" />
+                                    </p:commandButton>
+                                </td>
+                                <td>
+                                    <p:commandButton  action="#{boleanos.ambosTrue(1)}" image="lock" 
+                                                      update="opcoesAdmin,desbloqueandoConta" oncomplete="abreJanela3();" >
+                                        <f:setPropertyActionListener target="#{portalGenerico.usuario}" value="#{portalGenerico.professor}" />
+                                    </p:commandButton>
+                                </td>
+                                <td>
+                                    <p:commandButton value="1º acesso" action="#{boleanos.ambosTrue(4)}" image="lock" 
+                                                     update="primeiroAcessoProfessor" oncomplete="breuOn();abreJanela4();" >
+                                        <f:setPropertyActionListener target="#{portalGenerico.usuario}" value="#{portalGenerico.professor}" />
+                                    </p:commandButton>
+                                </td>
+                            </tr>
+                        </table>
+                    </h:form>
+                </p:tab>
+            </p:accordionPanel>
+        </p:panel>
+        <!--LEMBRAR SENHA-->
+        <h:form id="relembrandoSenha" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Relembrar senha" id="janela0" styleClass="janelas" >
+                        <div id="breuJanela0" class="breu" ></div>
+                        <table  border="0" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td class="alingRight" >Seu email ou login </td>
+                                <td><p:inputText value="#{portalGenerico.emailOuLogin}" /> </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight">Enviar redifiniçãoo de senha para </td>
+                                <td>
+                                    <p:selectOneMenu value="#{portalGenerico.emailPrincipal}"  style="width: 100%;"  >
+                                        <f:selectItem itemLabel="Email principal" itemValue="#{true}" />
+                                        <f:selectItem itemLabel="Email secundário" itemValue="#{false}" />
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight">
+                                    <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(0,boleanos.timeDefault)}" onstart="breuOff();fechaJanela0();"
+                                                     update="relembrandoSenha" />
+                                </td>
+                                <td>
+                                    <p:commandButton value="Redefinir Senha" action="#{portalGenerico.lembrarSenha(boleanos)}"
+                                                     oncomplete="abrejanelaRedefinirSenha(args)" update="confirmarCodigoParaRedefinirSenha" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+
+            </p:outputPanel>
+        </h:form>
+        <!--CONFIRMAR CÓDIGO SECRETO PARA REDEFINIR SENHA-->
+        <h:form id="confirmarCodigoParaRedefinirSenha" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(1)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel1"  >
+                    <p:panel header="Código Secreto" id="janela1" styleClass="janelas" >
+
+                        <table   cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td class="alingRight" >Código secreto</td>
+                                <td><p:inputText value="#{portalGenerico.confirmaCodigoSecreto}" /> </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >Nova senha</td>
+                                <td><p:inputText value="#{portalGenerico.confirmacaoNovaSenha}" /></td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >Confirme nova senha</td>
+                                <td><p:inputText value="#{portalGenerico.novaSenha}"/> </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(1,boleanos.timeDefault)}" onstart="fechaJanela1();breuNaJanelaOff('breuJanela0');"
+                                                     update="confirmarCodigoParaRedefinirSenha"  />
+                                </td>
+                                <td>
+                                    <p:commandButton value="Redefine Senha" action="#{portalGenerico.redefineSenha()}" oncomplete="redefineSenha(args)"  />
+                                </td>
+                            </tr>
+                        </table>
+
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+        <!--DESBLOQUEAR CONTA-->
+        <h:form id="desbloqueandoConta" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verB(2)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel2"  >
+                    <p:panel header="Desbloquear conta" id="janela2" styleClass="janelas" >
+                        <div id="breuJanela2" class="breu" ></div>
+                        <table cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td class="alingRight" >Seu e-mail principal ou login</td>
+                                <td><p:inputText value="#{portalGenerico.emailOuLogin}" /> </td>
+                            </tr>
+                            <td class="alingRight">Enviar redifinição de senha para </td>
+                            <td>
+                                <p:selectOneMenu value="#{portalGenerico.emailPrincipal}"  style="width: 100%;"  >
+                                    <f:selectItem itemLabel="Email principal" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Email secundário" itemValue="#{false}" />
+                                </p:selectOneMenu>
+                            </td>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(2,boleanos.timeDefault)}" onstart="breuOff();fechaJanela2();"
+                                                     update="desbloqueandoConta(args)" />
+                                </td>
+                                <td>
+                                    <p:commandButton value="Requisitar código secreto"
+                                                     action="#{portalGenerico.solicitarCodigoSecretoParaDesbloqueioDeConta(boleanos)}"
+                                                     update="confirmarCodigoParaDesbloqueioConta" oncomplete="desbloquearConta(args);" />
+                                </td>
+                            </tr>
+                        </table>
+
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+        <!--CONFIRMAR CÓDIGO SECRETO PARA DESBLOQUEIO-->
+        <h:form id="confirmarCodigoParaDesbloqueioConta" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verB(3)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel3"  >
+                    <p:panel header="Desbloquear conta" id="janela3" styleClass="janelas" >
+                        <table cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td class="alingRight" >Confirme o código secreto recebido</td>
+                                <td><p:inputText value="#{portalGenerico.confirmaCodigoSecreto}" /> </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" value="!" action="#{boleanos.ambosFalse(3,boleanos.timeDefault)}" onstart="breuNaJanelaOff('breuJanela2');fechaJanela3();" 
+                                                     update="confirmarCodigoParaDesbloqueioConta" />
+                                </td>
+                                <td><p:commandButton value="Desbloquear Conta" action="#{portalGenerico.confirmarCodigoSecretoEDesbloquearConta()}" oncomplete="fechaJanela3();breuNaJanelaOff('breuJanela2');setTimeout('fechaJanela2();breuOff();',tempoDafault);" /> </td>
+                            </tr>
+                        </table>
+
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+        <!--primeiro acesso-->
+        <h:form id="primeiroAcessoProfessor" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verB(4)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel4"  >
+                    <p:panel header="Primeiro acesso" id="janela4" styleClass="janelas" >
+
+                        <table>
+                            <tr>
+                                <td>Seu email</td>
+                                <td><p:inputText value="#{portalGenerico.emailOuLogin}"  /> </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(4,0)}" onstart="breuOff();fechaJanela4();"/>
+                                </td>
+                                <td>
+                                    <p:commandButton value="Enviar instruções por email" action="#{portalGenerico.primeiroAcessoProfessor()}"  oncomplete="primeiroAcesso(args);" />
+                                </td>
+                            </tr>
+                        </table>
+
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl autoUpdate="true" id="messages"  />
+        <!--STATUS AJAX-->
+        <p:ajaxStatus >
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+        <script type="text/javascript"> 
+            function verificaCamposLoginProfessor(){
+                zeraObjetos();
+                addComponenteNaLista('acordiao:loginProfessor');
+                addComponenteNaLista('acordiao:senhaProfessor');
+                confereComponentes();
+                return false;
+            }
+            function verificaCamposLogin(){
+                zeraObjetos();
+                addComponenteNaLista('acordiao:inputLogin');
+                addComponenteNaLista('acordiao:inputSenha');
+                confereComponentes();
+                return false;
+            }
+            
+            function primeiroAcesso(args){
+                if(args.fecha){
+                    breuOff();fechaJanela4();
+                }
+            }
+            
+            function abrejanelaRedefinirSenha(args) {  
+                if(args.redefineSenha) {
+                    breuOnNaJanela('breuJanela0');
+                    abreJanela1();
+                } else {  
+                }  
+            }  
+            function redefineSenha(args){
+                if(args.boleano){
+                    fechaJanela1();breuNaJanelaOff('breuJanela0');setTimeout('fechaJanela0();breuOff();',tempoDafault);
+                }
+            }
+            function desbloquearConta(args) { 
+                if(args.boleano) {
+                    breuOnNaJanela('breuJanela2');
+                    abreJanela3();
+                }  
+            }
+            
+        </script>
+    </ui:define>
+</ui:composition>

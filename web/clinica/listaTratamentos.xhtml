@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3c.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Tratamentos
+    </ui:define>
+
+    <ui:define name="centro">
+
+        <h:form id="formlistaTratamentos">
+
+            <p:dataTable id="tableListaTratamentos" var="p" value="#{beanSessao.sessoes}" paginator="true" rows="10"
+                         paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,30" emptyMessage="Sem Resultados!">
+                <f:facet name="header">
+                    Lista de Tratamentos
+                </f:facet>
+
+                <p:column headerText="ID">
+                    <h:outputText value="#{p.id}"/>
+                </p:column>
+
+                <p:column headerText="PACIENTE">
+                    <h:outputText value="#{p.paciente.nome}"/>
+                </p:column>
+
+                <p:column headerText="PATOLOGIA">
+                    <h:outputText value="#{p.patologia}"/>
+                </p:column>
+
+                <p:column headerText="DIA DO CAD.">
+                    <h:outputText value="#{p.diaCad}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="QTD. SES.">
+                    <h:outputText value="#{p.qtdTratamento}" />
+                </p:column>
+
+                <p:column headerText="OPÇÕES">
+                    <p:commandLink update=":formlistaTratamentos:display" oncomplete="msg.show()" title="Detalhes">
+                        <h:graphicImage library="imagens" name="list2.png" id="btDetalhes"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanSessao.sessao}"/>
+                        <f:setPropertyActionListener value="#{false}" target="#{beanSessao.modoEditar}"/>
+                    </p:commandLink>
+                    <p:commandLink update=":formlistaTratamentos:display" oncomplete="msg.show()" title="Atualizar">
+                        <h:graphicImage library="imagens" name="update16.png" id="btEditar"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanSessao.sessao}"/>
+                        <f:setPropertyActionListener value="#{true}" target="#{beanSessao.modoEditar}"/>
+                    </p:commandLink>
+                    <p:commandLink update=":formlistaTratamentos:display" oncomplete="confirmaDeletar.show()" title="Deletar">
+                        <h:graphicImage library="imagens" name="delete16.png" id="btDeletar"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanSessao.sessao}"/>
+                    </p:commandLink>
+                </p:column>
+
+            </p:dataTable>
+            <p:dialog header="Detalhes da Consulta" widgetVar="msg" resizable="false" id="dlg" width="500" modal="true">
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+
+                    <f:facet name="header">
+                        Detalhe do Tratamento
+                    </f:facet>
+
+                    <h:outputText value="Paciente:" />
+                    <h:outputText value="#{beanSessao.sessao.paciente.nome}"/>
+
+                    <h:outputText value="Telefone:" rendered="#{!beanSessao.modoEditar}"/>
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.sessao.paciente.fone}" rendered="#{!beanSessao.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Celular: " rendered="#{!beanSessao.modoEditar}"/>
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.sessao.paciente.celfone}" rendered="#{!beanSessao.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Dia do Cadastro: " />
+                    <h:outputText value="#{beanSessao.sessao.diaCad}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+
+                    <h:outputText value="Patologia: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.sessao.patologia}" rendered="#{!beanSessao.modoEditar}"/>
+                        <p:inputText id="patologia" value="#{beanSessao.sessao.patologia}" rendered="#{beanSessao.modoEditar}"
+                                     required="true" requiredMessage="Preencha o campo Patologia!"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Qtd. Sessões: " />
+                    <h:outputText value="#{beanSessao.sessao.qtdTratamento}"/>
+
+                    <h:outputText value="Obs.: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.sessao.obs}" rendered="#{!beanSessao.modoEditar}"/>
+                        <p:inputTextarea id="obs" value="#{beanSessao.sessao.obs}" rendered="#{beanSessao.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Status: " />
+                    <h:outputText value="#{beanSessao.sessao.status}"/>
+
+
+
+                    <f:facet name="footer">
+
+                        <h:panelGroup rendered="#{beanSessao.modoEditar}" layout="block">
+
+                            <h:panelGrid columns="2">
+
+                                <p:commandButton value="Salvar" update="formlistaTratamentos" actionListener="#{beanSessao.gravar()}" 
+                                                 oncomplete="onEditComplete(xhr,status,args)" onclick="msg.close()"/>
+                                <p:commandButton value="Cancelar" onclick="msg.close()" type="button" image="../resources/imagens/botaovoltar.png"/>
+
+                            </h:panelGrid>
+
+                        </h:panelGroup>
+
+                    </f:facet>
+
+                </h:panelGrid>
+                <p:commandButton value="Visualizar Sessões" action="#{beanSessao.listarTratamentosParaSessao()}" update="pgTratamentos"/>
+                <h:panelGrid id="pgTratamentos" width="450">
+                    <p:dataTable value="#{beanSessao.viewTratamentos}" var="t" rendered="#{!beanSessao.viewTratamentos.isEmpty()}">
+
+                        <f:facet name="header">
+                            Lista de Sessões
+                        </f:facet>
+
+                        <p:column headerText="No">
+                            <h:outputText value="#{t.numTratamento}"/>
+                        </p:column>
+
+                        <p:column headerText="DIA">
+                            <h:outputText value="#{t.dia}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="DE">
+                            <h:outputText value="#{t.horaInicial}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="ATÉ">
+                            <h:outputText value="#{t.horaFinal}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="BOX">
+                            <h:outputText value="#{t.box}"/>
+                        </p:column>
+
+                        <p:column headerText="STATUS">
+                            <h:outputText value="#{t.status}"/>
+                        </p:column>
+
+                        <p:column headerText="OPÇÕES">
+                            <p:commandLink update=":formlistaTratamentos:display" oncomplete="confirmaDeletarTrats.show()" title="Deletar">
+                                <h:graphicImage library="imagens" name="delete16.png" id="btDeletar"/>
+                                <f:setPropertyActionListener value="#{p}" target="#{beanSessao.sessao}"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:dialog>
+
+            <p:confirmDialog message="Tem certeza que deseja excluir este Tratamento?" width="300" header="Confirmação" severity="alert" widgetVar="confirmaDeletar">
+
+                <p:commandButton value="Sim" update="formlistaTratamentos" actionListener="#{beanSessao.excluir()}" onclick="confirmaDeleta.close()"/>
+                <p:commandButton value="Não" onclick="confirmaDeleta.close()" type="button" />
+
+            </p:confirmDialog>
+
+            <p:confirmDialog message="Tem certeza que deseja excluir este Tratamento?" width="300" header="Confirmação" severity="alert" widgetVar="confirmaDeletarTrats">
+
+                <p:commandButton value="Sim" update="formlistaTratamentos" actionListener="#{beanSessao.excluirTratamento()}" onclick="confirmaDeletaTrats.close()"/>
+                <p:commandButton value="Não" onclick="confirmaDeletaTrats.close()" type="button" />
+
+            </p:confirmDialog>
+        </h:form>
+
+        <h:form id="informacoesDoPaciente" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel0">
+                    <p:panel header="Nova Sessão" id="janela0" styleClass="janelas" >
+                        <p>
+                            <p:fieldset collapsed="true"  toggleable="true" legend='Dados' toggleSpeed="#{boleanos.timeDefault*2}">
+                                
+                                <h:panelGrid columns="2" id="diaSessoes">
+
+                                    <h:outputLabel value="Dia da Consulta:* " for="dia"/>
+                                    <p:calendar navigator="true" id="dia" value="#{beanSessao.tratamento.dia}" 
+                                                locale="br" pattern="dd/MM/yyyy" yearRange="1900:2030" mindate="#{beanConsulta.hoje}"/>
+
+                                    <h:outputLabel value="Hora Inicial:* " for="horaInicial"/>
+                                    <p:calendar id="horaInicial" timeOnly="true" locale="br" pattern="HH:mm" minHour="8" timeZone="America/Sao_Paulo"
+                                                maxHour="18" value="#{beanSessao.tratamento.horaInicial}"/>
+
+                                    <h:outputLabel value="Hora Final:* " for="horaFinal"/>
+                                    <p:calendar id="horaFinal" timeOnly="true" locale="br" pattern="HH:mm" minHour="8" timeZone="America/Sao_Paulo"
+                                                maxHour="18" value="#{beanSessao.tratamento.horaFinal}"/>
+
+                                    <h:outputLabel value="Box:* " for="box"/>
+                                    <p:inputText id="box" value="#{beanSessao.tratamento.box}"/>
+
+                                    <h:outputLabel value="Observações: " for="obs"/>
+                                    <p:inputTextarea id="obs" value="#{beanSessao.tratamento.obs}"/>
+
+                                </h:panelGrid>
+                                <p:commandButton action="#{beanSessao.adicionaTratamento}" value="Adicionar Sessão" update="formlistaTratamentos" oncomplete=""/>
+                                <p:commandButton image="update" update="cadastroDePaciente" oncomplete="fechaJanelas(args)" rendered="#{beanPaciente.modoEditar}" action="#{beanSessao.gravarTratamento()}"/>
+                                <p:ajaxStatus>
+                                        <f:facet name="start">
+                                            <div class="loading"/> 
+                                        </f:facet>
+                                        <f:facet name="complete">
+                                            <div class="complete"/> 
+                                        </f:facet>
+                                        <f:facet name="error">
+                                            <div class="erro2"/>
+                                        </f:facet>
+                                    </p:ajaxStatus>
+                            </p:fieldset>
+                        </p>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

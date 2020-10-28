@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Gráfico Entrada
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="grafEntrada" prependId="false">
+            <div style="position: absolute; margin-left: 385px; margin-top: 7px;  " >
+                <p:commandLink action="#{boleanos.ambosTrue(4)}" rendered="#{listaDeGraficosEntradaSalvos.confereSeABSGrafEntradaSalvoJahTahSalvo()}" oncomplete="breuOn();abreJanela4();iniciaAlinhamentoBurro();" update="configGrafManipulado" >
+                    <h:graphicImage id="manipulandoGrafico"  library="imagens"  name="gear.png"/>
+                    <p:tooltip for="manipulandoGrafico" value='vc está manipulando "#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvo.nome}"' showEffect="fade" hideEffect="fade" />  
+                </p:commandLink>
+            </div>
+            <p:wizard id="teste" showNavBar="false" step="#{grafEntrada.stepWizr}" >
+                <!--ARQUIVADOS-->
+                <p:tab title="Consultas salvas" id="arquivados"  >
+                    <p:panel header="Consultas Salvas">
+                        <table>
+                            <tr>
+                                <td>Nome</td>
+                                <td><p:autoComplete maxResults="10" value="#{listaDeGraficosEntradaSalvos.nome}"
+                                                    completeMethod="#{listaDeGraficosEntradaSalvos.autoComplete}"   /></td>
+                            </tr>
+                            <tr>
+                                <td>Tipo</td>
+                                <td><p:selectOneRadio value="#{listaDeGraficosEntradaSalvos.exibePorTipo}" layout="pageDirection"   >  
+                                        <f:selectItem itemLabel="Pré Determinado" itemValue="1" />   
+                                        <f:selectItem itemLabel="Custom" itemValue="2" />  
+                                        <f:selectItem itemLabel="Ambos" itemValue="3" />  
+                                    </p:selectOneRadio> </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><p:commandButton value="Buscar" actionListener="#{listaDeGraficosEntradaSalvos.filtra(true)}" update="graficoSaida" /> </td>
+                            </tr>
+                        </table>
+                        <p:dataTable   id="listaDeGraficosSalvos" paginator="true" rows="3" emptyMessage="Sem resultados"
+                                       paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                       rowsPerPageTemplate="3,5,10,15,30"  var="grafico" value="#{listaDeGraficosEntradaSalvos.graficosEntradaSalvosManipulados}" >
+
+                            <f:facet name="header">  
+                                Gráficos salvos
+                            </f:facet>  
+                            <p:column>  
+                                <div class="espacamento">
+                                    <br></br>
+                                    <p:fieldset collapsed="true"  toggleable="true" legend=' "#{grafico.nome}" - #{utilData.dataFormal2(grafico.dataModificado.time)} - id: #{grafico.id} '
+                                                toggleSpeed="#{boleanos.timeDefault*2}">
+                                        <br></br>
+                                        <p:dataTable var="exibindoGrafico" value="#{utilLista.recebeObjetoRetornaLista(grafico)}">
+
+                                            <p:column  >
+                                                <f:facet name="header" >  
+                                                    <div class="cabecaTablea">Periodo</div>
+                                                </f:facet>
+                                                <div class="espacamento" >
+                                                    De: #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaLong(grafico.de.time, grafico.agrupamento)}
+                                                    <br> 
+                                                        Até: #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaLong(grafico.ate.time, grafico.agrupamento)}
+                                                    </br>
+                                                </div>
+                                            </p:column  >
+
+
+                                            <p:column  >
+                                                <f:facet name="header" >  
+                                                    <div class="cabecaTablea">Agrupamento</div>
+                                                </f:facet>
+                                                <div class="espacamento" >
+                                                    #{grafico.agrupamento}
+                                                </div>
+                                            </p:column  >
+
+
+                                            <p:column  >
+                                                <f:facet name="header" >  
+                                                    <div class="cabecaTablea">Produtos</div>
+                                                </f:facet>
+                                                <div class="espacamento" >
+                                                    <p:accordionPanel activeIndex="-1" style="width: 100%; " >
+                                                        <p:tab title="Ver produtos"  >
+                                                            <p:dataTable var="q" value="#{listaDeGraficosEntradaSalvos.listaProdutosDeGraficoSalvo(grafico)}"  style="width:100%; text-align: center" >
+                                                                <p:column style="border: 0px;"  >
+                                                                    <h:outputText value="#{q.toString()}" />
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </p:tab>
+                                                    </p:accordionPanel>
+                                                </div>
+                                            </p:column  >
+
+
+                                        </p:dataTable>
+                                        <br></br>
+                                        <p:commandLink update="deletaGraf" action="#{boleanos.ambosTrue(3)}" oncomplete="breuOn();abreJanela3();" style="float: right; margin-left: 10px;"  >
+                                            <p:tooltip for="imagemDeltarGrafico" value="Deleta gráfico" />
+                                            <h:graphicImage id="imagemDeltarGrafico" library="imagens" name="delete.png" styleClass="imagens"  />
+                                            <f:setPropertyActionListener value="#{grafico}" target="#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvoPraSerDeletado}" />
+                                        </p:commandLink>
+                                        <p:commandLink  update="grafEntrada" style="float: right; " action="#{grafEntrada.carregaGrafico(listaDeGraficosEntradaSalvos.listaProdutosDeGraficoSalvo(grafico), grafico)}" >
+                                            <p:tooltip for="imagemVisualizarGrafico" value="Visualizar gráfico" />
+                                            <h:graphicImage id="imagemVisualizarGrafico" library="imagens" name="chart32.png" styleClass="imagens"  />
+                                            <f:setPropertyActionListener value="#{listaDeGraficosEntradaSalvos.listaProdutosDeGraficoSalvo(grafico)}" target="#{listaDeProdutos.produtosManipulados}"/>
+                                            <f:setPropertyActionListener value="#{grafico}" target="#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvo2}" />
+                                        </p:commandLink>
+                                    </p:fieldset>
+                                    <br></br>
+                                </div>
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:separator style="width: 100%; height: 5px;"/>
+                        <div class="wizard">
+                            <div class="wizardNext">
+                                <p:commandButton image="avancar" title="Avançar" action="#{grafEntrada.navegaNoWizard(0)}" update="grafEntrada" />
+                            </div>
+                        </div> 
+                    </p:panel>
+                </p:tab>
+                <!--DATA-->
+                <p:tab title="Data" id="data" >
+                    <p:panel header="Defina o intervalo de tempo">
+                        <p:accordionPanel activeIndex="#{grafEntrada.tipoDeConsulta}" >
+                            <p:tab title="Consulta Pré-Determinada" >
+                                <table style="margin: 0 auto;"  >
+                                    <tr>
+                                        <td class="alingRight" >De</td>
+                                        <td><p:calendar converter="converteDataDiaMesAno" pattern="dd/MM/yyyy"  value="#{listaDeGraficosEntradaSalvos.grafEntradaPreDet.de}"  /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="alingRight" >Até</td>
+                                        <td><p:calendar converter="converteDataDiaMesAno" pattern="dd/MM/yyyy"  value="#{listaDeGraficosEntradaSalvos.grafEntradaPreDet.ate}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="alingRight" ><h:outputText value="Agrupar a pesquisa por"/></td>
+                                        <td>
+                                            <p:selectOneMenu value="#{listaDeGraficosEntradaSalvos.grafEntradaPreDet.agrupamento}"  style="width: 250px;"  >
+                                                <f:selectItems value="#{agrupamento.agrupamentoPredeterminado()}" var="pt" itemValue="#{pt}" itemLabel="#{pt}" />
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:tab>
+                            <p:tab title="Consulta Customizável" >
+                                <table style="margin: 0 auto;">
+                                    <tr>
+                                        <td class="alingRight" >De</td>
+                                        <td><p:calendar converter="converteDataDiaMesAno"  pattern="dd/MM/yyyy" value="#{listaDeGraficosEntradaSalvos.grafEntradaCustom.de}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="alingRight" >Até</td>
+                                        <td><p:calendar converter="converteDataDiaMesAno"  pattern="dd/MM/yyyy" value="#{listaDeGraficosEntradaSalvos.grafEntradaCustom.ate}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="alingRight" ><h:outputText value="Agrupar a pesquisa por "/></td>
+                                        <td>
+                                            <p:selectOneMenu value="#{listaDeGraficosEntradaSalvos.grafEntradaCustom.agrupamento}"  style="width: 250px;"  >
+                                                <f:selectItems value="#{agrupamento.agrupamentoCustom()}" var="pt" itemValue="#{pt}" itemLabel="#{pt}" />
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:tab>
+                        </p:accordionPanel>
+                        <p:separator style="width: 100%; height: 5px;"/>
+                        <div class="wizard">
+                            <div class="wizardNext">
+                                <p:commandButton image="avancar" title="Avançar" action="#{grafEntrada.confereData(listaDeGraficosEntradaSalvos)}" update="grafEntrada" />
+                            </div>
+                            <div class="wizardBack">
+                                <p:commandButton image="voltar" title="Voltar" action="#{grafEntrada.navegaNoWizard(1)}"  update="grafEntrada" />
+                            </div> 
+                        </div> 
+                    </p:panel>
+                </p:tab>
+                <!--PRODUTOS-->
+                <p:tab title="Produtos" id="produtos" >
+                    <p:panel header="Defina os rodutos">
+                        <table>
+                            <tr>
+                                <td>Produto</td>
+                                <td>
+                                    <p:selectOneMenu value="#{listaDeProdutos.indexDoProduto}" style="min-width: 230px;" >
+                                        <f:selectItems value="#{listaDeProdutos.produtos}" var="p"
+                                                       itemLabel="#{p.toString()}" itemValue="#{listaDeProdutos.produtos.indexOf(p)}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><p:commandButton value="Adicionar" action="#{listaDeProdutos.desce()}" update="grafEntrada" >
+                                    </p:commandButton> </td>
+                            </tr>
+                        </table>
+                        <p:dataTable var="p" value="#{listaDeProdutos.produtosManipulados}" 
+                                     paginator="true" rows="10" emptyMessage="Sem resultados"
+                                     paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,30"  >
+                            <f:facet name="header" >
+                                Lista de produtos
+                            </f:facet>
+
+
+
+                            <p:column  >
+                                <f:facet name="header" >  
+                                    <div class="cabecaTablea">
+                                        Produto
+                                    </div>
+                                </f:facet>
+                                <div class="espacamento" >
+                                    <h:outputText value="#{p.toString()}" />
+                                </div>
+                            </p:column  >
+
+
+
+                            <p:column  >
+                                <f:facet name="header" >  
+                                    <div class="cabecaTablea"  >
+                                        Remover
+                                    </div>
+                                </f:facet>
+                                <div class="espacamento" style="text-align: center"  >
+                                    <p:commandLink action="#{boleanos.ambosTrue(0)}" oncomplete="breuOn();abreJanela0();" update="removeProduto" title="Remover produto"  >
+                                        <h:graphicImage library="imagens" name="delete.png" />
+                                        <f:setPropertyActionListener value="#{listaDeProdutos.produtosManipulados.indexOf(p)}" target="#{listaDeProdutos.indexDoProdutoManipulado}" />
+                                    </p:commandLink>
+                                </div>
+                            </p:column  >
+
+
+                        </p:dataTable>
+                        <p:separator style="width: 100%; height: 5px;"/>
+                        <div class="wizard">
+                            <div class="wizardNext">
+                                <p:commandButton image="avancar" title="Avançar" action="#{grafEntrada.confereProdutos(listaDeProdutos,listaDeGraficosEntradaSalvos)}" update="grafEntrada" />
+                            </div>  
+                            <div class="wizardBack">
+                                <p:commandButton image="voltar" title="Voltar" action="#{grafEntrada.navegaNoWizard(3)}" update="grafEntrada" />
+                            </div> 
+                        </div>
+                    </p:panel>
+                </p:tab>
+                <!--GRÁFICO-->
+                <p:tab title="Grafico" id="grafico" >
+                    <p:panel header="Defina os rodutos">
+
+                        <p:commandButton image="salvar" value="Salvar consulta" rendered="#{!listaDeGraficosEntradaSalvos.confereSeABSGrafEntradaSalvoJahTahSalvo()}" actionListener="#{boleanos.ambosTrue(1)}" oncomplete="breuOn();abreJanela1();" update="salvarGraf" />
+                        <p:commandButton image="salvar" value="Salvar consulta"  action="#{boleanos.ambosTrue(4)}" rendered="#{listaDeGraficosEntradaSalvos.confereSeABSGrafEntradaSalvoJahTahSalvo()}" oncomplete="breuOn();abreJanela4();iniciaAlinhamentoBurro();" update="configGrafManipulado" />
+
+                        <p:fieldset legend="Todos os pontos"  collapsed="true" toggleable="true" toggleSpeed="1000"  >
+                            <div style="position: absolute; width: 210px; height: 20px;  background-color: #FFF; padding-right: -15px;" />
+                            <object type="application/x-shockwave-flash" lang="PT" class="FusionCharts" data="aplicativo/#{grafEntrada.tipoGrafico}.swf" width="100%" height="400" id="chart2c" style="visibility: visible; ">
+                                <param name="scaleMode" value="noScale"/>
+                                <param name="scale" value="noScale"/>
+                                <param name="wMode" value="transparent"/>
+                                <param name="allowScriptAccess" value="always"/>
+                                <param name="quality" value="best"/>
+                                <param name="flashvars" value="dataURL=xml/#{grafEntrada.geradorXml.codigoSecreto}grafico.xml"/>
+                            </object>
+                            <p:fieldset legend="Dados " collapsed="true" toggleable="true" toggleSpeed="1000"  >
+                                <p:dataTable  var="ds" value="#{grafEntrada.geradorXml.listDataSetEntrada}" 
+                                              paginator="true" rows="10" emptyMessage="Sem resultados"
+                                              paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                              rowsPerPageTemplate="5,10,15,30" >  
+                                    <f:facet name="header">
+                                        Lista de produtos
+                                    </f:facet>
+                                    <p:columnGroup type="header">  
+                                        <p:row>  
+                                            <p:column headerText="Periodo" styleClass="cabecaTablea" /> 
+                                            <p:column headerText="Quantidade" styleClass="cabecaTablea"  /> 
+                                        </p:row>  
+                                    </p:columnGroup>  
+                                    <p:subTable var="v" value="#{ds.valores}"  >  
+                                        <f:facet name="header" >  
+                                            <div class="cabecaSubTabela" > #{ds.nome}    </div>  
+                                        </f:facet> 
+                                        <p:column styleClass="cabecaTablea" >  
+                                            #{grafEntrada.geradorXml.verData(grafEntrada.tipoDeConsulta)}
+                                        </p:column>  
+                                        <p:column styleClass="cabecaTablea" >  
+                                            #{v}  
+                                        </p:column>  
+                                    </p:subTable>
+                                </p:dataTable>
+                            </p:fieldset>
+                        </p:fieldset>
+                        <p:separator style="width: 100%; height: 5px;"/>
+                        <div class="wizard">
+                            <div class="wizardBack">
+                                <p:commandButton image="voltar" title="Voltar" action="#{grafEntrada.navegaNoWizard(5)}"  update="grafEntrada" />
+                            </div> 
+                        </div> 
+                    </p:panel>
+                </p:tab>
+            </p:wizard>
+
+            <!--ALERTAS FLUTUANTES-->
+            <p:growl id="messages" autoUpdate="true" />
+
+            <!--STATUS AJAX-->
+            <p:ajaxStatus>
+                <f:facet name="start">
+                    <div class="loading"/> 
+                </f:facet>
+                <f:facet name="complete">
+                    <div class="complete"/> 
+                </f:facet>
+                <f:facet name="error">
+                    <div class="erro2"/>
+                </f:facet>
+                <f:facet name="onsuccess">
+                </f:facet>
+                <f:facet name="onselectStart">
+                    <div class="erro2"/>
+                </f:facet>
+                <f:facet name="onselectComplete">
+                    <div class="erro2"/>
+                </f:facet>
+            </p:ajaxStatus>
+        </h:form>
+
+
+        <!--REMOVER PRODUTO-->
+        <h:form id="removeProduto" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel0">
+                    <p:panel header="Confirme" id="janela0" styleClass="janelas" >
+                        <p>
+                            Remover da lista "#{listaDeProdutos.produtoManipuladoIndexado.nome}" ?</p>
+                        <p:commandButton image="voltar2" style="margin-right: 10px;"  action="#{boleanos.ambosFalse(0, boleanos.timeDefault)}" onstart="fechaJanela0();breuOff();"
+                                         update="removeProduto"  />
+                        <p:commandButton image="deletar" action="#{listaDeProdutos.sobeManipulado()}" actionListener="#{boleanos.ambosFalse(0, boleanos.timeDefault)}"
+                                         update="removeProduto,grafEntrada" onstart="fechaJanela0();breuOff();"  />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <!--SALVAR GRÁFICO -->
+        <h:form id="salvarGraf" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(1)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel1">
+                    <p:panel header="Confirme" id="janela1" styleClass="janelas" >
+                        <div id="breuJanela1" class="breu" ></div>
+                        <table>
+                            <tr>
+                                <td class="alingRight" >Nome</td>
+                                <td><p:inputText value="#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvo.nome}" /> </td>
+                            </tr>
+                            <tr>
+                                <td><p:commandButton image="voltar2" action="#{boleanos.ambosFalse(1, boleanos.timeDefault)}"  onstart="fechaJanela1();breuOff();"   /> </td>
+                                <td>
+                                    <p:commandButton image="salvar" action="#{grafEntrada.primeiroPassoParaSalvarConsultaComoNova(listaDeGraficosEntradaSalvos,listaDeProdutos,boleanos)}"
+                                                     oncomplete="salvandoNovoGrafico(args);" update="confirmaSalvarGraficoComNomeRepetido,grafEntrada"  />
+                                </td>
+                            </tr>
+                        </table>                      
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <!--CONFIRMAR SE SALVA O GRAFICO COM NOME JÁ EXISTENTE -->
+        <h:form id="confirmaSalvarGraficoComNomeRepetido" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(2)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel2">
+                    <p:panel header="Nome repetido" id="janela2" styleClass="janelas" >
+                        <div id="breuJanela2" class="breu" ></div>
+                        <p>Já exsite um gráfico salvo com este nome!<br></br>
+                            Você pode voltar e escolher um novo nome, ou atualizar o gráfico "#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.nome}" </p>
+                        Novo nome: <p:inputText value="#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvo.nome}" /> <br></br>
+                        <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(2, 0)}" oncomplete="fechaJanela2();breuNaJanelaOff('breuJanela1');" />
+                        <p:commandButton image="diferenca" action="#{boleanos.ambosTrue(5)}" oncomplete=" breuOnNaJanela('breuJanela2');abreJanela5();" update="diferenca" />
+                        <p:commandButton image="salvar" action="#{grafEntrada.tentaSalvarGrafico(listaDeGraficosEntradaSalvos, listaDeProdutos)}" oncomplete="salvandoGraficoNaJanelaDeNomeRepetido(args);"  />
+                        <p:commandButton image="update" action="#{grafEntrada.atualizaGraficoManipulado(listaDeGraficosEntradaSalvos, listaDeProdutos)}" 
+                                         oncomplete="atualizaGraficoJanelaDeNomeRepetido(args)" update="grafEntrada"/>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <!--DELETAR GRAFICO -->
+        <h:form id="deletaGraf" prependId="false">
+            <p:outputPanel rendered="#{boleanos.verA(3)}" styleClass="outputpanel" >
+                <div class="janelaRolavel" id="janelaRolavel3">
+                    <p:panel header="Deletar gráfico" id="janela3" styleClass="janelas" >
+                        <p>
+                            Deseja deletar o gráfico "#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvoPraSerDeletado.nome}"
+                        </p>
+                        <p:commandButton image="voltar2" actionListener="#{boleanos.mudaA(3, boleanos.timeDefault)}" onstart="fechaJanela3();breuOff();"
+                                         update="deletarGrafico"  />
+                        <p:commandButton image="deletar" action="#{listaDeGraficosEntradaSalvos.deletaGrafico()}" actionListener="#{boleanos.mudaA(3, boleanos.timeDefault)}"
+                                         onstart="fechaJanela3();breuOff();" update="grafEntrada" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <!--GRAFICO MANIPULADO-->
+        <h:form id="configGrafManipulado" prependId="false"  >
+            <p:outputPanel rendered="#{boleanos.verA(4)}" styleClass="outputpanel"   >
+                <div class="janelaRolavel" id="janelaRolavel4">
+                    <p:panel header="Gráfico manipulado" id="janela4" styleClass="janelas" >
+                        <p><p:dataTable style="text-align: center" var="a" value="#{utilLista.recebeObjetoRetornaLista(boleanos.meVeUmFalse())}">  
+                                <f:facet name="header">
+                                    #{listaDeGraficosEntradaSalvos.absGrafEntradaSalvo.nome}
+                                </f:facet> 
+
+                                <p:column  >
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">
+                                            Salvo
+                                        </div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        <p>
+                                            De #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaDe(listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.de.time,listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.agrupamento)}<br></br>
+                                            Até #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaAte(listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.ate.time,listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.agrupamento)}<br></br>
+                                            Agrupamento #{listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.agrupamento}</p>
+                                        <p:accordionPanel activeIndex="-1" >
+                                            <p:tab title="Produtos" id="idDaTabProdutos">
+                                                <p:dataTable var="xProduto" value="#{listaDeGraficosEntradaSalvos.listaProdutosDeGraficoSalvo(listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado)}">  
+                                                    <p:column>
+                                                        #{xProduto.toString()}
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                        <br></br>
+                                    </div>
+                                </p:column  >
+
+                                <p:column  >
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">
+                                            Atual
+                                        </div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        <p>
+                                            #{listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).agrupamento}
+                                            De #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaDe(listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).de.time,listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).agrupamento)}<br></br>
+                                            Até #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaAte(listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).ate.time,listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).agrupamento)}<br></br>
+                                            Agrupamento #{listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).agrupamento}</p>
+                                        <p:accordionPanel activeIndex="-1" >
+                                            <p:tab title="Produtos" >
+                                                <p:dataTable var="xProdutoManipulado" value="#{listaDeProdutos.produtosManipulados}">  
+                                                    <p:column>
+                                                        #{xProdutoManipulado.toString()}
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                        <br></br>
+                                    </div>
+                                </p:column  >
+
+
+                            </p:dataTable></p>
+                        Novo nome: <p:inputText value="#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvo.nome}" /> <br></br>
+                        <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(4, boleanos.timeDefault)}" onstart="fechaJanela4();breuOff();" update="configGrafManipulado" />
+                        <p:commandButton image="salvar" oncomplete="salvaGraficoComoNovoNaJanelaSessao(args)" action="#{grafEntrada.tentaSalvarGrafico(listaDeGraficosEntradaSalvos,listaDeProdutos)}" update="grafEntrada"/>
+                        <p:commandButton image="update" value="!" action="#{grafEntrada.atualizaGraficoManipulado(listaDeGraficosEntradaSalvos, listaDeProdutos)}" actionListener="#{boleanos.ambosFalse(4, boleanos.timeDefault)}" onstart="fechaJanela4();breuOff();" update="grafEntrada" />
+                        <p:commandButton image="clear" actionListener="#{boleanos.ambosFalse(4, boleanos.timeDefault)}" action="#{listaDeGraficosEntradaSalvos.limpaSessaoGraficoSalvoManipulado()}"
+                                         onstart="fechaJanela4();breuOff();" update="grafEntrada" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <!--DIFERENÇA ENTRE OS GRÁFICOS-->
+        <h:form id="diferenca" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(5)}" styleClass="outputpanel"   >
+                <div class="janelaRolavel" id="janelaRolavel5">
+                    <p:panel header="diferença entre os gráficos" id="janela5" styleClass="janelas" >
+                        <p>
+                            <p:dataTable style="text-align: center" var="a" value="#{utilLista.recebeObjetoRetornaLista(boleanos.meVeUmFalse())}">  
+                                <f:facet name="header">
+                                    #{listaDeGraficosEntradaSalvos.absGrafEntradaSalvo.nome}
+                                </f:facet> 
+
+
+                                <p:column  >
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">
+                                            Salvo
+                                        </div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        <p>
+                                            De #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaDe(listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.de.time,listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.agrupamento)}<br></br>
+                                            Até #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaAte(listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.ate.time,listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.agrupamento)}<br></br>
+                                            Agrupamento #{listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado.agrupamento}</p>
+                                        <p:accordionPanel activeIndex="-1" >
+                                            <p:tab title="Produtos" id="idDaTabProdutos">
+                                                <p:dataTable var="xProduto" value="#{listaDeGraficosEntradaSalvos.listaProdutosDeGraficoSalvo(listaDeGraficosEntradaSalvos.absGrafEntradaSalvoManipulado)}">  
+                                                    <p:column>
+                                                        #{xProduto.toString()}
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                        <br></br>
+                                    </div>
+                                </p:column  >
+
+
+                                <p:column  >
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">
+                                            Atual
+                                        </div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        <p>
+                                            #{listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).agrupamento}
+                                            De #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaDe(listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).de.time,listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).agrupamento)}<br></br>
+                                            Até #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminadaAte(listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).ate.time,listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).agrupamento)}<br></br>
+                                            Agrupamento #{listaDeGraficosEntradaSalvos.graficoManipulado(grafEntrada.tipoDeConsulta).agrupamento}</p>
+                                        <p:accordionPanel activeIndex="-1" >
+                                            <p:tab title="Produtos" >
+                                                <p:dataTable var="xProdutoManipulado" value="#{listaDeProdutos.produtosManipulados}">  
+                                                    <p:column>
+                                                        #{xProdutoManipulado.toString()}
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:accordionPanel>
+                                        <br></br>
+                                    </div>
+                                </p:column  >
+
+                            </p:dataTable>
+                        </p>
+                        Novo nome: <p:inputText value="#{listaDeGraficosEntradaSalvos.absGrafEntradaSalvo.nome}" /> <br></br>
+                        <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(5, 0)}" oncomplete="fechaJanela5();breuNaJanelaOff('breuJanela2');" />
+                        <p:commandButton image="salvar" action="#{grafEntrada.tentaSalvarGrafico(listaDeGraficosEntradaSalvos, listaDeProdutos)}"
+                                         oncomplete="salvandoNovoGraficoNaJanelaDeDiferenca(args);"  />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <script type="text/javascript" >
+            function salvandoNovoGrafico(args){
+                if(args.salva){
+                    fechaJanela1();breuOff();
+                }else{
+                    breuOnNaJanela('breuJanela1');abreJanela2();
+                }
+            }
+            function salvandoNovoGraficoNaJanelaDeDiferenca(args){
+                if(args.salva){
+                    fechaJanela5();
+                    breuNaJanelaOff('breuJanela2');
+                    setTimeout("breuNaJanelaOff('breuJanela2');", tempoDafault);
+                    setTimeout("fechaJanela2();breuNaJanelaOff('breuJanela1');", tempoDafault*1.2);
+                    setTimeout("fechaJanela1();breuOff();", tempoDafault*2.4);
+                }else{
+                    
+                }
+            }
+            function salvandoGraficoNaJanelaDeNomeRepetido(args){
+                if(args.salva){
+                    fechaJanela2();breuNaJanelaOff('breuJanela1');
+                    setTimeout("fechaJanela1();breuOff();", tempoDafault);
+                }else{
+                }
+            }
+            function salvaGraficoComoNovoNaJanelaSessao(args){
+                if(args.salva){
+                    fechaJanela4();breuOff();
+                }else{
+                }
+            }
+            function atualizaGraficoJanelaDeNomeRepetido(){
+                fechaJanela2();breuNaJanelaOff('breuJanela1');
+                setTimeout("fechaJanela1();breuOff();", tempoDafault);
+            }
+            
+        </script>
+    </ui:define>
+</ui:composition>

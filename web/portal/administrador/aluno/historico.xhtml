@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Histórico dos alunos
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="historicoDosAlunos" prependId="false">
+            <p:panel header="Listagem de todos os alunos" >
+                <p><p:accordionPanel activeIndex="-1">
+                        <p:tab title="Filtro"  >
+                            <table>
+                                <tr>
+                                    <td style="text-align: right">Nome</td>
+                                    <td>
+                                        <p:autoComplete maxResults="5" value="#{listaDeAlunos.nomeAluno}"
+                                                        completeMethod="#{listaDeAlunos.autoCompleta}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right">Turmas</td>
+                                    <td>
+                                        <p:selectManyMenu value="#{listaDeTurmas.indexTurmasSelecionadas}" style="height: 200px; width: 230px;" >
+                                            <f:selectItem itemValue="qualquer" itemLabel="Qualquer" />
+                                            <f:selectItems value="#{listaDeTurmas.turmas}" var="xTurma" itemLabel="#{xTurma.codigoTurma}" itemValue="#{utilString.longToString(xTurma.id)}" />
+                                        </p:selectManyMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right">Ponto</td>
+                                    <td>
+                                        <p:selectManyMenu value="#{listaDePontos.indexDosPontosSelecione}" style="height: 200px; width: 230px;" >
+                                            <f:selectItem itemValue="qualquer" itemLabel="Qualquer" />
+                                            <f:selectItems value="#{listaDePontos.pontos}" var="xPonto" itemLabel="#{xPonto.nome}" itemValue="#{utilString.longToString(xPonto.id)}" />
+                                        </p:selectManyMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right">Pontos anteriores </td>
+                                    <td>
+                                        <p:selectManyMenu value="#{listaDePontos.indexDosPontosSelecioneII}" style="height: 200px; width: 230px;" >
+                                            <f:selectItem itemValue="qualquer" itemLabel="Qualquer" />
+                                            <f:selectItems value="#{listaDePontos.pontos}" var="xPonto" itemLabel="#{xPonto.nome}" itemValue="#{utilString.longToString(xPonto.id)}" />
+                                        </p:selectManyMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Critério de pontos anteriores </td>
+                                    <td><p:selectOneRadio value="#{listaDePontos.criterioPontosAnteriores}" layout="pageDirection"   >  
+                                            <f:selectItem itemLabel="Tenha passado por todos os selecionados" itemValue="0" />   
+                                            <f:selectItem itemLabel="Tenha passado pelo ao menos um dos selecionados" itemValue="1" />  
+                                        </p:selectOneRadio> </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p:commandButton value="Filtrar" update="historicoDosAlunos" action="#{listaDeAlunos.filtraAlunos(listaDePontos, listaDeTurmas)}"  />
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:tab>
+                    </p:accordionPanel></p>
+                <p:dataTable var="xAluno" value="#{listaDeAlunos.alunosManipulados}" paginator="true" rows="10" emptyMessage="Sem resultados"
+                                     paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="3,5,10,15,30" >
+                    <f:facet name="header">  
+                        Alunos
+                    </f:facet>
+                    <p:column>
+                        <div class="espacamento" >
+                            <p>
+                                <p:fieldset collapsed="true"  toggleable="true" legend=" #{utilString.trataNomeUsuarioII(xAluno,120)}" >
+                                    <p>Turma atual: #{listaDeAlunos.turmaAtualDoAluno(xAluno) == null ? '-': listaDeAlunos.turmaAtualDoAluno(xAluno).codigoTurma}<br/>
+                                        Ponto atual: #{listaDeAlunos.pontoAtualDoAluno(xAluno)  == null ? '-':listaDeAlunos.pontoAtualDoAluno(xAluno).nome}<br/>
+                                        Email: #{xAluno.emailPrincipal}<br/>
+                                        Nota no ponto atual: #{listaDeAlunos.cpAlunoPonto(xAluno).nota == -1  || listaDeAlunos.cpAlunoPonto(xAluno).nota == null ? '-' : listaDeAlunos.cpAlunoPonto(xAluno).nota } </p>
+                                    <p:dataTable var="xTurmaAluno" value="#{listaDeAlunos.turmasAnteriores(xAluno)}" emptyMessage="Sem turmas Anteriores" >
+                                        <f:facet name="header" >  
+                                            Turma Anteriores
+                                        </f:facet>
+                                        <p:column style="text-align: center">
+                                            <f:facet name="header" >  
+                                                <div class="cabecaTablea">Cod. Turma</div>
+                                            </f:facet>
+                                            <div class="espacamento" >
+                                                #{xTurmaAluno.turma.codigoTurma}
+                                            </div>
+                                        </p:column>
+                                        <p:column style="text-align: center">
+                                            <f:facet name="header" >  
+                                                <div class="cabecaTablea">Data Entreda</div>
+                                            </f:facet>
+                                            <div class="espacamento" >
+                                                #{xTurmaAluno.dataEntrou}
+                                            </div>
+                                        </p:column>
+                                        <p:column style="text-align: center">
+                                            <f:facet name="header" >  
+                                                <div class="cabecaTablea">Data Saída</div>
+                                            </f:facet>
+                                            <div class="espacamento" >
+                                                #{xTurmaAluno.turma.dataTermino}
+                                            </div>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <br/>
+                                    <p:dataTable var="xPontoAluno" value="#{listaDeAlunos.pontosAteriores(xAluno)}" emptyMessage="Sem pontos Anteriores" >
+                                        <f:facet name="header" >  
+                                            Pontos Anteriores
+                                        </f:facet>
+                                        <p:column style="text-align: center">
+                                            <f:facet name="header" >  
+                                                <div class="cabecaTablea">Ponto</div>
+                                            </f:facet>
+                                            <div class="espacamento" >
+                                                #{xPontoAluno.ponto.nome}
+                                            </div>
+                                        </p:column>
+                                        <p:column style="text-align: center">
+                                            <f:facet name="header" >  
+                                                <div class="cabecaTablea">Nota</div>
+                                            </f:facet>
+                                            <div class="espacamento" >
+                                                #{(xPontoAluno.nota == -1) ? '-' : xPontoAluno.nota }
+                                            </div>
+                                        </p:column>
+                                        <p:column style="text-align: center">
+                                            <f:facet name="header" >  
+                                                <div class="cabecaTablea">Data Entrada</div>
+                                            </f:facet>
+                                            <div class="espacamento" >
+                                                #{xPontoAluno.dataEntrou}
+                                            </div>
+                                        </p:column>
+                                        <p:column style="text-align: center">
+                                            <f:facet name="header" >  
+                                                <div class="cabecaTablea">Data Saída</div>
+                                            </f:facet>
+                                            <div class="espacamento" >
+                                                #{xPontoAluno.dataSaiu}
+                                            </div>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:fieldset>
+                            </p>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+
+        <h:form id="alteraAluno" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Altera aluno" id="janela0" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td>Aluno</td>
+                                <td><p:inputText value="#{beanAluno.alunoManipulado.nomeCompleto}" style="width: 100%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Turma Atual</td>
+                                <td>
+                                    <p:selectOneMenu value="#{listaTurmas.indexTurmaSelecionada}" style="width: 100%;">
+                                        <f:selectItem itemValue="-1" itemLabel="Sem Turma"/>
+                                        <f:selectItems var="xTurma" value="#{listaTurmas.turmas}" itemValue="#{listaTurmas.turmas.indexOf(xTurma)}" itemLabel='#{xTurma.codigoTurma} - #{utilData.dataFormatadaParaExibicaoSegundoCategoriaPreDeterminada(xTurma.dataTermino, "Semestre")}'/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ponto Atual</td>
+                                <td>
+                                    <p:selectOneMenu value="#{listaDePontos.indexDoPontoSelecione}" style="width: 100%;">
+                                        <f:selectItem itemValue="-1" itemLabel="Sem Ponto"/>
+                                        <f:selectItems var="xPonto" value="#{listaDePontos.pontos}" itemValue="#{listaDePontos.pontos.indexOf(xPonto)}" itemLabel='#{xPonto.nome}'/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                        </table>
+                        <p:commandButton image="voltar2" style="margin-right: 10px;" actionListener="#{boleanos.mudaA(0, boleanos.timeDefault)}"
+                                         onstart="fechaJanela0();breuOff();"  />
+                        <p:commandButton image="update" update="turmas" action="#{admin.atualizaAluno(beanAluno, listaDePontos, listaTurmas)}" onstart="fechaJanela0();breuOff();" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

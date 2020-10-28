@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Alterar turma
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="listaDeTrumas" prependId="false">
+            <p:dataTable var="xTurma" value="#{listaDeTurmas.turmas}" paginator="true" rows="20" emptyMessage="Sem resultados"
+                         paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10,15,30,60" >
+                <f:facet name="header" >  
+                    <div class="cabecaTablea">
+                        Turmas
+                    </div>
+                </f:facet>
+                <p:column>  
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">Código da turma</div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        #{xTurma.codigoTurma}
+                    </div>
+                </p:column>
+                <p:column>  
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">Início</div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        #{utilData.dataFormal2(xTurma.dataInicio.time)}
+                    </div>
+                </p:column>
+                <p:column>  
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">Término</div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        #{utilData.dataFormal2(xTurma.dataTermino.time)}
+                    </div>
+                </p:column>
+                <p:column>  
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">Alterar</div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        <p:commandLink action="#{boleanos.ambosTrue(0)}"  update="alteraTurma" oncomplete="breuOn();abreJanela0();">
+                            <h:graphicImage library="imagens" name="update.png" />
+                            <f:setPropertyActionListener value="#{xTurma}" target="#{listaDeTurmas.turma}"/>
+                        </p:commandLink>
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form id="alteraTurma" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Altera aluno" id="janela0" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td>Código da turma</td>
+                                <td> <p:inputText value="#{listaDeTurmas.turma.codigoTurma}" />  </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >Inicio</td>
+                                <td><p:calendar converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" rendered="true" requiredMessage="#{msg.campoVazio}"  value="#{listaDeTurmas.turma.dataInicio}" /></td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >Inicio</td>
+                                <td><p:calendar converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" rendered="true" requiredMessage="#{msg.campoVazio}"  value="#{listaDeTurmas.turma.dataTermino}" /></td>
+                            </tr>
+                        </table>
+                        <p:commandButton image="voltar2" style="margin-right: 10px;" actionListener="#{boleanos.mudaA(0, boleanos.timeDefault)}"
+                                         onstart="fechaJanela0();breuOff();"  />
+                        <p:commandButton image="update" update="listaDeTrumas" action="#{beanAdmin.alteraTurma(listaDeTurmas)}" onstart="fechaJanela0();breuOff();" />
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+         <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

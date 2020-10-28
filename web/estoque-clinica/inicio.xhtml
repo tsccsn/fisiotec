@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Início
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        #{portalGenerico.mensagemBobagem()}
+        <p:growl autoUpdate="true" id="messages"  />
+        <div style="height: 100%; border-radius: 10px; border: 1px solid #dddddd;padding: 40px;">
+            <div style="width: 100%; text-align: center;font-family: Arial,sans-serif; font-size: 26px; " >
+                Bem vindo administrador(a) #{utilString.nomeFormal(beanAdiminEstoque.administrador)}
+            </div>
+            <div style="width: 100%; text-align: center;font-family: Arial,sans-serif; font-size: 18px; " >
+                <br/>Sinta-se em casa
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

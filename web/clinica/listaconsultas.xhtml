@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3c.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Lista Consultas
+    </ui:define>
+
+    <ui:define name="centro">
+
+        <p:growl id="growlConsultas" showDetail="true"/>
+
+        <h:form id="formListarConsultas">
+
+
+            <h:outputLabel value="Selecione a data no calendário para listar os agendamentos."/>
+            <p:calendar locale="pt_BR" value="#{beanConsulta.diaConsulta}" pattern="dd/MM/yyyy" showButtonPanel="false" navigator="true"/>
+            <p:commandButton value="Pesquisar" update="formListarConsultas" action="#{beanConsulta.listarPorDia()}"/>
+
+
+            <p:dataTable id="listconsultas" var="p" value="#{beanConsulta.consultas}" paginator="true" rows="10" widgetVar="listcons"
+                         paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,30" emptyMessage="Sem sessões nesta data">
+                <f:facet name="header">
+                    Lista de Consultas
+                </f:facet>
+
+                <p:column headerText="PACIENTE">
+                    <h:outputText value="#{p.paciente.nome}" />
+                </p:column>
+
+                <p:column headerText="DATA">
+                    <h:outputText value="#{p.dia}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="DE">
+                    <h:outputText value="#{p.horaInicial}">
+                        <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="ATÉ">
+                    <h:outputText value="#{p.horaFinal}">
+                        <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="BOX">
+                    <h:outputText value="#{p.box}" />
+                </p:column>
+
+                <p:column headerText="OPÇÕES">
+
+                    <p:commandLink update=":formListarConsultas:display" oncomplete="confirmInConsulta.show()" title="Iniciar Consulta" rendered="#{p.status eq 'Aberto'}">
+                        <h:graphicImage library="imagens" name="stethoscope.png" id="btConsultar"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanConsulta.consulta}" />
+                    </p:commandLink>
+                    <p:commandLink update=":formListarConsultas:display" oncomplete="msg.show()" title="Finalizar Consulta" rendered="#{p.status eq 'Tratamento'}">
+                        <h:graphicImage library="imagens" name="fimConsulta.png" id="btFinConsulta"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanConsulta.consulta}" />
+                        <f:setPropertyActionListener value="#{true}" target="#{beanConsulta.modoFimConsulta}" />
+                        <f:setPropertyActionListener value="#{false}" target="#{beanConsulta.modoEditar}" />
+                    </p:commandLink>
+                    <p:commandLink update=":formListarConsultas:display" oncomplete="msg.show()" title="Detalhes">
+                        <h:graphicImage library="imagens" name="list2.png" id="btDetalhes"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanConsulta.consulta}" />
+                        <f:setPropertyActionListener value="#{false}" target="#{beanConsulta.modoFimConsulta}" />
+                        <f:setPropertyActionListener value="#{false}" target="#{beanConsulta.modoEditar}" />
+                    </p:commandLink>
+                    <p:commandLink update=":formListarConsultas:display" oncomplete="msg.show()" title="Atualizar">
+                        <h:graphicImage library="imagens" name="update16.png" id="btEditar"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanConsulta.consulta}" />
+                        <f:setPropertyActionListener value="#{false}" target="#{beanConsulta.modoFimConsulta}" />
+                        <f:setPropertyActionListener value="#{true}" target="#{beanConsulta.modoEditar}" />
+                    </p:commandLink>
+                    <p:commandLink update=":formListarConsultas:display" oncomplete="confirmaDeletar.show()" title="Deletar">
+                        <h:graphicImage library="imagens" name="delete16.png" id="btDeletar"/>
+                        <f:setPropertyActionListener value="#{p}" target="#{beanConsulta.consulta}" />
+                    </p:commandLink>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:confirmDialog message="Deseja imprimir a ficha de avaliação?" width="300" header="Confirmação" severity="alert" widgetVar="confirmInConsulta">
+
+                <p:commandButton value="Sim" update="formListarConsultas" actionListener="#{beanConsulta.iniciarConsulta()}" action="imprimirFicha" ajax="false" />
+                <p:commandButton value="Não" update="formListarConsultas" actionListener="#{beanConsulta.iniciarConsulta()}" onclick="confirmInConsulta.close()"/>
+
+            </p:confirmDialog>
+
+            <p:dialog header="Detalhes da Consulta" widgetVar="msg" resizable="false" id="dlg" width="500" height="500" modal="true">
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+
+                    <f:facet name="header">
+                        Detalhe da Consulta
+                    </f:facet>
+
+                    <h:outputText value="Paciente:" />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanConsulta.consulta.paciente.nome}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Telefone:" rendered="#{!beanConsulta.modoEditar}"/>
+                    <h:panelGroup>
+                        <h:outputText value="#{beanConsulta.consulta.paciente.fone}" rendered="#{!beanConsulta.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Celular: " rendered="#{!beanConsulta.modoEditar}"/>
+                    <h:panelGroup>
+                        <h:outputText value="#{beanConsulta.consulta.paciente.celfone}" rendered="#{!beanConsulta.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Data: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanConsulta.consulta.dia}" rendered="#{!beanConsulta.modoEditar}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                        <p:calendar navigator="true" id="datanasc" value="#{beanConsulta.consulta.dia}" rendered="#{beanConsulta.modoEditar}"
+                                    locale="br" effect="explode"  pattern="dd/MM/yyyy" mindate="today"
+                                    required="true" requiredMessage="Preencha o campo Dia da Consulta!"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Horário: " />
+                    <h:panelGroup>
+
+                        <h:outputText value="#{beanConsulta.consulta.horaInicial}" rendered="#{!beanConsulta.modoEditar}">
+                            <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                        </h:outputText>
+                        <p:calendar timeOnly="true" locale="br" pattern="HH:mm" minHour="8" maxHour="18" value="#{beanConsulta.consulta.horaInicial}"
+                                    timeZone="America/Sao_Paulo" rendered="#{beanConsulta.modoEditar}" required="true" requiredMessage="Preencha o campo Hora Inicial!"/>
+
+                        <h:outputText value=" - " rendered="#{!beanConsulta.modoEditar}"/>
+
+                        <h:outputText value="#{beanConsulta.consulta.horaFinal}" rendered="#{!beanConsulta.modoEditar}">
+                            <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                        </h:outputText>
+                        <p:calendar timeOnly="true" locale="br" pattern="HH:mm" minHour="8" maxHour="18" value="#{beanConsulta.consulta.horaFinal}"
+                                    timeZone="America/Sao_Paulo" rendered="#{beanConsulta.modoEditar}" required="true" requiredMessage="Preencha o campo Hora Final!"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Box: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanConsulta.consulta.box}"  rendered="#{!beanConsulta.modoEditar}"/>
+                        <p:inputText id="box" value="#{beanConsulta.consulta.box}" rendered="#{beanConsulta.modoEditar}"
+                                     required="true" requiredMessage="Preencha o campo Box!"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Obs.: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanConsulta.consulta.obs}" rendered="#{!beanConsulta.modoEditar}"/>
+                        <p:inputTextarea id="obs" value="#{beanConsulta.consulta.obs}" rendered="#{beanConsulta.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Status: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanConsulta.consulta.status}" rendered="#{!beanConsulta.modoEditar}"/>
+                        <p:inputText id="status" value="#{beanConsulta.consulta.status}" rendered="#{beanConsulta.modoEditar}"
+                                     required="true" requiredMessage="Preencha o campo Status!"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{beanConsulta.modoEditar}" layout="block">
+                        <p:commandButton value="Salvar" update="formListarConsultas" actionListener="#{beanConsulta.gravar()}" 
+                                         oncomplete="onEditComplete(xhr,status,args)" onclick="msg.close()"/>
+
+                        <p:commandButton value="Cancelar" onclick="msg.close()" type="button" image="../resources/imagens/botaovoltar.png"/>
+
+                    </h:panelGroup>
+
+                    <f:facet name="footer">
+
+                        <h:panelGroup rendered="#{beanConsulta.modoFimConsulta}" layout="block">
+                            <p:commandButton value="Salvar" update="formListarConsultas" actionListener="#{beanConsulta.finalizarConsulta()}" 
+                                             onclick="msg.close()"/>
+
+                            <p:commandButton value="Cancelar" onclick="msg.close()" type="button" image="../resources/imagens/botaovoltar.png"/>
+
+                        </h:panelGroup>
+                    </f:facet>
+
+                    <h:outputText value="Selecione o Tipo de Afastamento: " rendered="#{beanConsulta.modoFimConsulta}"/>
+                    <p:selectOneMenu value="#{beanConsulta.consulta.status}" style="width: 400px" rendered="#{beanConsulta.modoFimConsulta}">
+                        <f:selectItem itemLabel="Selecione "/>
+                        <f:selectItem itemValue="Finalizado" itemLabel="Alta"/>
+                        <f:selectItem itemValue="Desistencia" itemLabel="Desistência"/>
+                        <f:selectItem itemValue="transferencia" itemLabel="Transferência"/>
+                        <f:selectItem itemValue="Faalecimento" itemLabel="Falecimento"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+
+            </p:dialog>
+
+            <p:confirmDialog message="Tem certeza que deseja excluir esta consulta?" width="300" header="Confirmação" severity="alert" widgetVar="confirmaDeletar">
+
+                <p:commandButton value="Sim" update="formListarConsultas" actionListener="#{beanConsulta.excluir()}" onclick="confirmaDeleta.close()"/>
+                <p:commandButton value="Não" onclick="confirmaDeleta.close()" type="button" />
+
+            </p:confirmDialog>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

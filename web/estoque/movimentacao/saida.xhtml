@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Saída de produtos
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="saida" prependId="false" > 
+            <p:panel header="Registro de saída de produtos">
+                <p>
+                    <table>
+                        <tr>
+                            <td>Ponto de estagio</td>
+                            <td>
+                                <p:selectOneMenu value="#{listaDePontos.indexDoPonto}" style="width: 100%;"  >
+                                    <f:selectItems var="p" value="#{listaDePontos.pontos}" itemLabel="#{p.nome}" itemValue="#{listaDePontos.pontos.indexOf(p)}" />
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Produto</td>
+                            <td>
+                                <p:selectOneMenu value="#{listaDeProdutos.indexDoProduto}" style="width: 100%"  >
+                                    <f:selectItems var="p" value="#{listaDeProdutos.produtos}" itemLabel="#{p.toString()}" itemValue="#{listaDeProdutos.produtos.indexOf(p)}"/>
+                                </p:selectOneMenu> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Quantidade</td>
+                            <td>
+                                <p:inputText id="quantidade" value="#{beanSaida.quantidade}" onkeypress="return apenasNumerosInteiros('quantidade');" validatorMessage="#{msg.numeroMenorQUm}" >
+                                    <f:validateDoubleRange minimum="1"  />
+                                </p:inputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><p:commandButton value="Adicionar" action="#{beanSaida.addProduto(listaDeProdutos,boleanos)}" oncomplete="addProduto(args);" update="saida,addNivelCritico" /></td>
+                        </tr>
+                    </table>
+                </p>
+                <p>
+                    <p:dataTable var="ps" value="#{beanSaida.listaSaidaProduto}" emptyMessage="Sem produtos"
+                                 paginator="true" rows="3" 
+                                 paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="3,5,10,15,30" rowStyleClass="#{beanSaida.confereNivelCritico(ps) ? 'nivelCritico' : null }">
+                        <f:facet name="header">
+                            Produtos Saindo
+                        </f:facet>
+
+                        <p:column style="text-align: center;" >
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    Produto
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <h:outputText value="#{ps.produto.toString()}" />
+                            </div>
+                        </p:column  >
+
+                        <p:column style="text-align: center">
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    <h:outputText value="Saindo" />
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <h:outputText value="#{ps.quantidade}" />
+                            </div>
+                        </p:column  >
+
+                        <p:column style="text-align: center">
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    <h:outputText value="Sobrará em estoque" />
+                                </div>
+                            </f:facet>
+                            <div class="espacamento">
+                                #{ps.produto.quantidadeEmStoque - ps.quantidade}
+                            </div>
+                        </p:column  >
+
+                        <p:column style="text-align: center">
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    <h:outputText value="Qtd. crítica" />
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <h:outputText value="#{ps.produto.quantidadeMinimaEmStoque}" />
+                            </div>
+                        </p:column>
+
+                        <p:column style="text-align: center">
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    <h:outputText value="Alterar Quanidade" />
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <p:commandLink  action="#{boleanos.ambosTrue(0)}" oncomplete="breuOn();abreJanela0();" title="Opções" update="alteraQuantidade" >
+                                    <h:graphicImage library="imagens" name="gear.png" />
+                                    <f:setPropertyActionListener value="#{beanSaida.listaSaidaProduto.indexOf(ps)}" target="#{beanSaida.indexSaidaProduto}" />
+                                    <f:setPropertyActionListener value="#{ps.quantidade}" target="#{beanSaida.novaQuantidade}" />
+                                </p:commandLink>
+                            </div>
+                        </p:column  >
+
+                        <p:column style="text-align: center">
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    <h:outputText value="Remover" />
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <p:commandLink  action="#{boleanos.ambosTrue(1)}"  oncomplete="breuOn();abreJanela1();" title="Opções" update="removeProduto" >
+                                    <h:graphicImage library="imagens" name="delete.png" />
+                                    <f:setPropertyActionListener value="#{beanSaida.listaSaidaProduto.indexOf(ps)}" target="#{beanSaida.indexSaidaProduto}" />
+                                    <f:setPropertyActionListener value="#{ps.produto}" target="#{listaDeProdutos.produtoManipulado}" />
+                                </p:commandLink>
+                            </div>
+                        </p:column  >
+                    </p:dataTable>
+                </p>
+                <p:commandButton value="Registrar saida de produtos" update="saida" action="#{beanSaida.registraSaida(listaDePontos.pontoIndexado,listaDeProdutos)}"   />
+            </p:panel>
+            <p:growl id="messages" autoUpdate="true"  />
+        </h:form>
+
+
+
+
+        <!--SEGUNDA ALTERAR QUANTIDADE DE SAIDA-->
+        <h:form id="alteraQuantidade" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Configurando registro de saida" id="janela0" styleClass="janelas" >
+                        <div id="breuJanela0" class="breu" ></div>
+                        <table>
+                            <tr>
+                                <td class="alingRight" >Quantidade </td>
+                                <td> <p:inputText  id="quantidade2" value="#{beanSaida.novaQuantidade}" onkeypress="return apenasNumerosInteiros('quantidade2');" /> </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(0, 0)}" onstart="fechaJanela0();breuOff();" update="saida" /></td>
+                                <td>
+                                    <p:commandButton value="Atualizar" action="#{beanSaida.novaQuantidade(boleanos)}" oncomplete="atualizarQuantidadeProduto(args)" update="saida,upNivelCritico" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+
+        <h:form id="removeProduto" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(1)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel1"  >
+                    <p:panel header="Remover registro?" id="janela1" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td class="alingRight" colspan="2" >Deseja remover o produto : "#{beanSaida.listaSaidaProduto.get(beanSaida.indexSaidaProduto).produto.toString()}" deste registro de saída? </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" onstart="fechaJanela1();breuOff();" update="saida" /></td>
+                                <td>
+                                    <p:commandButton value="Confirmar" action="#{beanSaida.remove()}" actionListener="#{listaDeProdutos.sobe(listaDeProdutos.produtoManipulado)}" onstart="fechaJanela1();breuOff();" update="saida" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+
+
+        <h:form id="addNivelCritico" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(2)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel2"  >
+                    <p:panel header="Baixa quantidade em estoque" id="janela2" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td class="alingRight" colspan="2" >
+                                    Pareceque q o produto vai ficar abaixo no nível de alerta, deseja proseeguir?
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" actionListener="#{boleanos.ambosFalse(2, 0)}" onstart="fechaJanela2();breuOff();" /></td>
+                                <td>
+                                    <p:commandButton value="Confirmar" update="saida" onstart="fechaJanela2();breuOff();" actionListener="#{boleanos.ambosFalse(2, boleanos.timeDefault)}" action="#{beanSaida.addProdutoMesmoEleFicandoEmNivelCritico(listaDeProdutos)}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <h:form id="upNivelCritico" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(3)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel3"  >
+                    <p:panel header="Baixa quantidade em estoque2" id="janela3" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td class="alingRight" colspan="2" >
+                                    Pareceque q o produto vai ficar abaixo no nível de alerta, deseja proseeguir?
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" actionListener="#{boleanos.ambosFalse(3, 0)}" onstart="fechaJanela3();breuNaJanelaOff('breuJanela0');" /></td>
+                                <td>
+                                    <p:commandButton value="Confirmar" update="saida" action="#{beanSaida.setaNovaQuantidadeMesmoEmNivelCritico(boleanos)}"
+                                                     onstart="
+                                                     fechaJanela3();
+                                                     breuNaJanelaOff('breuJanela0');
+                                                     setTimeout('fechaJanela0();breuOff();',tempoDafault*1.2);"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <p:growl id="mensagens"/>
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+        
+        <script type="text/javascript" >
+            function addProduto(args){
+                if(args.abre){
+                    breuOn();abreJanela2();
+                } 
+            }
+            function atualizarQuantidadeProduto(args){
+                if(args.abre){
+                    breuOnNaJanela('breuJanela0');abreJanela3();
+                } 
+                if(args.fecha){
+                    fechaJanela0();breuOff();
+                } 
+            }
+        </script>
+    </ui:define>
+
+</ui:composition>

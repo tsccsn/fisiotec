@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        titulo
+    </ui:define>
+
+    <ui:define name="imports">
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form>  
+
+            <p:growl id="messages" showDetail="true" />  
+
+            <p:schedule value="#{scheduleController.eventModel}" slotMinutes="10" axisFormat="H:m" allDaySlot="false" minTime="8" maxTime="16" widgetVar="myschedule">  
+
+                <p:ajax event="dateSelect" listener="#{scheduleController.onDateSelect}" update="novoEvento" oncomplete="novaConsulta.show()" />  
+                <p:ajax event="eventSelect" listener="#{scheduleController.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
+                <p:ajax event="eventMove" listener="#{scheduleController.onEventMove}" update="messages" />  
+                <p:ajax event="eventResize" listener="#{scheduleController.onEventResize}" update="messages" />  
+
+            </p:schedule>  
+
+            <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">  
+                <h:panelGrid id="eventDetails" columns="2">  
+                    <h:outputLabel for="title" value="Title:" />  
+                    <p:inputText id="title" value="#{scheduleController.event.title}" required="true"/>  
+
+                    <h:outputLabel for="from" value="From:" />  
+                    <p:calendar id="from"   pattern="dd/MM/yyyy HH:mm" value="#{scheduleController.event.startDate}" />
+                    
+
+                    <h:outputLabel for="to" value="To:" />  
+                    <p:calendar id="to"   pattern="dd/MM/yyyy HH:mm" value="#{scheduleController.event.endDate}" />
+
+                    <h:outputLabel for="allDay" value="All Day:" />  
+                    <h:selectBooleanCheckbox id="allDay" value="#{scheduleController.event.allDay}" />  
+
+                    <p:commandButton type="reset" value="Reset" />  
+                    <p:commandButton value="Save" actionListener="#{scheduleController.addEvent}" oncomplete="myschedule.update();eventDialog.hide();"/>  
+                </h:panelGrid>  
+            </p:dialog>  
+            
+            <p:dialog widgetVar="novaConsulta" header="Event Details" showEffect="clip" hideEffect="clip">  
+                <h:panelGrid id="novoEvento" columns="2">  
+                    <h:outputLabel for="title" value="Title:" />  
+                    <p:inputText id="titulo" value="#{scheduleController.event.title}" required="true"/>  
+
+                    <h:outputLabel for="de" value="From:" />  
+                    <p:calendar id="de"   pattern="dd/MM/yyyy" value="#{scheduleController.event.startDate}" />
+                    
+
+                    <h:outputLabel for="ate" value="To:" />  
+                    <p:calendar id="ate"   converter="converteDataDiaMesAno" pattern="dd/MM/yyyy"  value="#{scheduleController.termino}" />
+
+                    <p:commandButton type="reset" value="Reset" />  
+                    <p:commandButton value="Save" actionListener="#{scheduleController.addEvent}" oncomplete="myschedule.update();novaConsulta.hide();"/>  
+                </h:panelGrid>  
+            </p:dialog>  
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

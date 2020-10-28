@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="titulo">
+        Entrada de produtos
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+        <div id="breu" class="breu" ></div>
+        <h:form id="cadprodutos" prependId="false">
+            <p:panel header="Selecione os produtos que estão entrando" >
+                <h:panelGrid >
+                    <h:outputText value="Produto "/>
+                    <p:selectOneMenu value="#{listaDeProdutos.indexDoProduto}" style="width: 100%;" >
+                        <f:selectItems var="p" value="#{listaDeProdutos.produtos}" itemLabel="#{p.toString()}"
+                                       itemValue="#{listaDeProdutos.produtos.indexOf(p)}" />
+                    </p:selectOneMenu>
+                    <h:outputText value="Quantidade "/>
+                    <p:inputText id="quantidade" value="#{prodsEntrando.quantidade}" validatorMessage="#{msg.numeroMenorQUm}" onkeypress="return apenasNumerosInteiros('quantidade')" >
+                        <f:validateDoubleRange minimum="1" />
+                    </p:inputText>
+                    <p:commandButton value="Adicionar!" update="cadprodutos" action="#{prodsEntrando.addProdutoNaLista(listaDeProdutos)}" />
+                </h:panelGrid>
+
+                <p:dataTable var="xProduto" value="#{listaDeProdutos.produtosManipulados}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15,30">
+                    <f:facet name="header">
+                        Lista de produtos
+                    </f:facet>
+
+                    <p:column  >
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Produto
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xProduto.toString()}
+                        </div>
+                    </p:column  >
+
+                    <p:column style="text-align: center;" >
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Entrando
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{prodsEntrando.produtosEntrando.get(xProduto.id).quantidade}
+                        </div>
+                    </p:column  >
+
+                    <p:column style="text-align: center;"  >
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Alterar Quanidade
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            <p:commandLink  action="#{boleanos.ambosTrue(0)}" oncomplete="breuOn();abreJanela0();" title="Opções" update="alteraQuantidade" >
+                                <h:graphicImage library="imagens" name="gear.png" />
+                                <f:setPropertyActionListener value="#{xProduto}" target="#{listaDeProdutos.produtoManipulado}" />
+                                <f:setPropertyActionListener value="#{prodsEntrando.produtosEntrando.get(xProduto.id).quantidade}" target="#{prodsEntrando.novaQuantidade}" />
+                            </p:commandLink>
+                        </div>
+                    </p:column  >
+
+                    <p:column style="text-align: center;"  >
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Remover
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            <p:commandLink  action="#{boleanos.ambosTrue(1)}" oncomplete="breuOn();abreJanela1();" title="Opções" update="removeProduto" >
+                                <h:graphicImage library="imagens" name="delete.png" />
+                                <f:setPropertyActionListener value="#{listaDeProdutos.produtosManipulados.indexOf(xProduto)}" target="#{listaDeProdutos.indexDoProdutoManipulado}" />
+                            </p:commandLink>
+                        </div>
+                    </p:column  >
+
+
+                    <p:dataTable var="p" value="#{listaDeProdutos.produtosManipulados}"
+                                 paginator="true" rows="10"
+                                 paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15,30">
+                        <f:facet name="header">
+                            Lista de produtos
+                        </f:facet>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Produto" />
+                            </f:facet>
+                            <h:outputText value="#{p.toString()}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Entrando" />
+                            </f:facet>
+                            <h:outputText value="#{p.quantidadeEmStoque}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </p:dataTable>
+                <br/>
+                <p:commandButton value="Registrar Entrada" action="#{prodsEntrando.registraEntradaDosProdutos(listaDeProdutos)}" update="cadprodutos"/>
+            </p:panel>
+            <p:growl id="messages" autoUpdate="true" />
+        </h:form>
+
+
+
+
+        <h:form id="removeProduto" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(1)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel1"  >
+                    <p:panel header="Remover registro?" id="janela1" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td class="alingRight" colspan="2" >Deseja remover o produto : "#{listaDeProdutos.produtoIndexado}" deste registro de entrada? </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(1, 0)}"  onstart="fechaJanela1();breuOff();" update="cadprodutos" /></td>
+                                <td>
+                                    <p:commandButton value="Confirmar" action="#{prodsEntrando.removeProduto(listaDeProdutos)}" actionListener="#{boleanos.ambosFalse(1, 0)}" onstart="fechaJanela1();breuOff();" update="cadprodutos" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+
+        <h:form id="alteraQuantidade" prependId="false" >
+            <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                <div class="janelaRolavel" id="janelaRolavel0"  >
+                    <p:panel header="Configurando registro de entrada" id="janela0" styleClass="janelas" >
+                        <table>
+                            <tr>
+                                <td class="alingRight" >Quantidade </td>
+                                <td> <p:inputText  id="quantidade2" value="#{prodsEntrando.novaQuantidade}" onkeypress="return apenasNumerosInteiros('quantidade2');" /> </td>
+                            </tr>
+                            <tr>
+                                <td class="alingRight" >
+                                    <p:commandButton image="voltar2" action="#{boleanos.ambosFalse(0, 0)}" onstart="fechaJanela0();breuOff();" update="cadprodutos" /></td>
+                                <td>
+                                    <p:commandButton value="Atualizar" action="#{prodsEntrando.novaQuantidade(listaDeProdutos.produtoManipulado)}" onstart="fechaJanela0();breuOff();" update="cadprodutos" />
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

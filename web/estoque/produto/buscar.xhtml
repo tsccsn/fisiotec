@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/opacidade.js"></script>
+    </ui:define>
+    <ui:define name="titulo">
+        Buscar produtos
+    </ui:define>
+
+    <ui:define name="centro">
+        <p:panel id="pesquise" header="Pesquise"  >
+            <p:accordionPanel id="accordionPanel" dynamic="true" cache="true" >
+                <p:tab id="simples" title="Simples">
+                    <h:form id="pesquisaSimples" prependId="false">
+                        <table>
+                            <tr>
+                                <td align="right">
+                                    <h:outputText value="Nome "  />
+                                </td>
+                                <td>
+                                    <p:autoComplete maxResults="10" value="#{listaDeProdutos.produtoManipulado.nome}"
+                                                    completeMethod="#{listaDeProdutos.autoComplete}" required="true" requiredMessage="#{msg.campoVazio}"  />
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td><p:commandButton id="pesquisar" image="buscar" action="#{prod.pesquisaSimples(listaDeProdutos)}" update="resultado,pesquisaSimples">
+                                                </p:commandButton></td>
+                                            <td><p:ajaxStatus >
+                                                    <f:facet name="start">
+                                                        <div class="loading"/> 
+                                                    </f:facet>
+                                                    <f:facet name="complete">
+                                                        <div class="complete"/> 
+                                                    </f:facet>
+                                                    <f:facet name="error">
+                                                        <div class="erro2"/>
+                                                    </f:facet>
+                                                </p:ajaxStatus></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </h:form>
+                </p:tab>
+
+                <p:tab id="completa" title="Completa" prependId="false" >
+                    <h:form id="pesquisaCompleta" prependId="false">
+                        <table border="1" style="border-collapse: collapse; border: 1px; border-color: #dddddd"
+                               cellspacing="5" cellpadding="5">
+                            <tr>
+                                <td align="right"><h:outputText value="Nome " /></td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <p:selectOneMenu value="#{prod.posTiposDeBuscarPorNome}" style="width: 230px;">
+                                                    <f:selectItems value="#{prod.tiposDeBuscarPorNome}"	var="tipo"
+                                                                   itemValue="#{prod.tiposDeBuscarPorNome.indexOf(tipo)}" itemLabel="#{tipo.toString()}" />
+                                                </p:selectOneMenu>
+                                            </td>
+                                            <td>
+                                                <p:inputText required="false"
+                                                             value="#{listaDeProdutos.produtoManipulado.nome}" style="width: 223px;"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right"><h:outputText value="Unidade " /></td>
+                                <td>
+                                    <p:selectManyMenu value="#{listaDeUnidades.indexSListaUnidade}" style="height: 100px; width: 230px;" >
+                                        <f:selectItem itemValue="qualquer" itemLabel="Qualquer" />
+                                        <f:selectItems value="#{listaDeUnidades.unidades}" var="uni" itemLabel="#{uni.nome}" itemValue="#{listaDeUnidades.unidades.indexOf(uni)}" />
+                                    </p:selectManyMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right"><h:outputText value="Medida " /></td>
+                                <td>
+                                    <table border="0">
+                                        <tr>
+                                            <td align="right"><h:outputText value="Maior que  " /></td>
+                                            <td><p:inputText id="medidaMaiorQ" required="true" requiredMessage="#{msg.buscaNumeroNull}"
+                                                             onkeypress="return apenasNumeros('accordionPanel:medidaMaiorQ');"
+                                                             value="#{prod.medidaMaior}" style="width: 223px;">
+                                                </p:inputText></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" colspan="2"><p:selectOneMenu
+                                                    value="#{prod.operadorLogicoDaMedida}"
+                                                    style="width: 60px;">
+                                                    <f:selectItem itemLabel="E" itemValue="e" />
+                                                    <f:selectItem itemLabel="Ou" itemValue="ou" />
+                                                </p:selectOneMenu></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right"><h:outputText value="Menor que " /></td>
+                                            <td><p:inputText id="medidaMenorQ" required="true" requiredMessage="#{msg.buscaNumeroNull}"
+                                                             onkeypress="return apenasNumeros('accordionPanel:medidaMenorQ');"
+                                                             value="#{prod.medidaMenor}" style="width: 223px;">
+                                                </p:inputText></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right"><h:outputText value="Quantidade" /></td>
+                                <td>
+                                    <table border="0">
+                                        <tr>
+                                            <td align="right"><h:outputText value="Maior que  " /></td>
+                                            <td><p:inputText id="quantidadeMaiorQ" required="true"
+                                                             requiredMessage="#{msg.buscaNumeroNull}"
+                                                             onkeypress="return apenasNumeros('accordionPanel:quantidadeMaiorQ');"
+                                                             value="#{prod.quantidadeMaior}" style="width: 223px;">
+                                                </p:inputText></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" colspan="2"><p:selectOneMenu
+                                                    value="#{prod.operadorLogicoDaQuantidade}"
+                                                    style="width: 60px;">
+                                                    <f:selectItem itemLabel="E" itemValue="e" />
+                                                    <f:selectItem itemLabel="Ou" itemValue="ou" />
+                                                </p:selectOneMenu></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right"><h:outputText value="Menor que " /></td>
+                                            <td><p:inputText id="quantidadeMenorQ" required="true"
+                                                             requiredMessage="#{msg.buscaNumeroNull}"
+                                                             onkeypress="return apenasNumeros('accordionPanel:quantidadeMenorQ');"
+                                                             value="#{prod.quantidadeMenor}" style="width: 223px;">
+                                                </p:inputText></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td ></td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td><p:commandButton image="buscar" 
+                                                                 action="#{prod.pesquisaAvancada(listaDeProdutos,listaDeUnidades)}" update="pesquisaCompleta,resultado">
+                                                </p:commandButton></td>
+                                            <td><p:ajaxStatus >
+                                                    <f:facet name="start">
+                                                        <div class="loading"/> 
+                                                    </f:facet>
+                                                    <f:facet name="complete">
+                                                        <div class="complete"/> 
+                                                    </f:facet>
+                                                    <f:facet name="error">
+                                                        <div class="erro2"/>
+                                                    </f:facet>
+                                                </p:ajaxStatus></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </h:form>
+                </p:tab>
+
+            </p:accordionPanel>
+
+            <!-- EXIBINDO RESULTADOS -->
+            <p>
+                <h:form id="resultado" prependId="false">
+                    <p:dataTable  var="p" value="#{listaDeProdutos.produtosManipulados}"
+                                  paginator="true" rows="10" emptyMessage="Sem resultados"
+                                  paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                  rowsPerPageTemplate="5,10,15,30" >
+                        <f:facet name="header">
+                            Lista de produtos
+                        </f:facet>
+                        <p:column>
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    Produto
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                #{p.toString()}
+                            </div>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    Quantidade crítica
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                #{p.quantidadeMinimaEmStoque}
+                            </div>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    Quantidade em estoque
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                #{p.quantidadeEmStoque}
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p>
+        </p:panel>
+
+        <div style="height: 10px;" />
+
+
+        <p:growl id="messages" autoUpdate="true" />
+    </ui:define>
+
+</ui:composition>

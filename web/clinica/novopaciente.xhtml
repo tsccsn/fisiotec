@@ -1,0 +1,300 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Novo Paciente
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="../resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+
+        <p:growl id="growlNewPacientes" showDetail="false"/>
+
+        <h:form id="cadastroDePaciente" prependId="false">
+
+
+            <p:panel header="Novo Paciente">
+                <p>
+                    <p:fieldset collapsed="false"  toggleable="true" legend='Dados' toggleSpeed="#{boleanos.timeDefault*2}">
+                        <table>
+                            <tr>
+                                <td align="right" >
+                                    Nome
+                                </td>
+                                <td>
+                                    <p:inputText id="nome" value="#{beanPaciente.paciente.nome}"
+                                                 required="true" requiredMessage="Preencha o campo Nome!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" >
+                                    Sexo
+                                </td>
+                                <td>
+                                    <p:selectOneMenu id="sexo" value="#{beanPaciente.paciente.sexo}" style="width: 100%" required="true" requiredMessage="Preencha o campo Sexo!">
+                                        <f:selectItem itemLabel="Selecione" itemValue=""/>
+                                        <f:selectItem itemLabel="Masculino" itemValue="Masculino"/>
+                                        <f:selectItem itemLabel="Feminino" itemValue="Feminino"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" >
+                                    Data de Nasc
+                                </td>
+                                <td>
+                                    <p:calendar navigator="true" id="dataNasc" value="#{beanPaciente.paciente.dataNasc}" pattern="dd/MM/yyyy" yearRange="1900:today" maxdate="#{utilData.hoje()}"
+                                                required="true" requiredMessage="Preencha o campo Data de Nascimento!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" >
+                                    Naturalidade
+                                </td>
+                                <td>
+                                    <p:inputText id="naturalidade" value="#{beanPaciente.paciente.naturalidade}" required="true" requiredMessage="Preencha o campo Naturalidade!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" >
+                                    Pai
+                                </td>
+                                <td>
+                                    <p:inputText id="pai" value="#{beanPaciente.paciente.pai}" required="true" requiredMessage="Preencha o campo Pai!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" >
+                                    Mãe
+                                </td>
+                                <td>
+                                    <p:inputText id="mae" value="#{beanPaciente.paciente.mae}" required="true" requiredMessage="Preencha o campo Mãe!"/>
+                                </td>
+                            </tr>
+							<tr>
+                                <td align="right" >
+                                    Profissão
+                                </td>
+                                <td>
+                                    <p:inputText id="profissao" value="#{beanPaciente.paciente.profissao}" required="true" requiredMessage="Preencha o campo Profissão!"/>
+                                </td>
+                            </tr>
+							<tr>
+                                <td align="right" >
+                                    Renda Mensal
+                                </td>
+                                <td>
+                                    <p:inputText id="rendaMensal" value="#{beanPaciente.paciente.rendaMensal}" required="true" requiredMessage="Preencha o campo Renda Mensal!"/>
+                                </td>
+                            </tr>
+							<tr>
+                                <td align="right" >
+                                    Escolaridade
+                                </td>
+                                <td>
+                                    <p:selectOneMenu id="escolaridade" value="#{beanPaciente.paciente.escolaridade}" required="true" requiredMessage="Preencha o campo Escolaridade!">
+                                        <f:selectItem itemValue="Educação Infantil" itemLabel="Educação Infantil"/>
+                                        <f:selectItem itemValue="Ensino Fundamental Incompleto" itemLabel="Ensino Fundamental Incompleto"/>
+                                        <f:selectItem itemValue="Ensino Fundamental Completo" itemLabel="Ensino Fundamental Completo"/>
+                                        <f:selectItem itemValue="Ensino Médio Incompleto" itemLabel="Ensino Médio Incompleto"/>
+                                        <f:selectItem itemValue="Ensino Médio Completo" itemLabel="Ensino Médio Completo"/>
+										<f:selectItem itemValue="Ensino Superior Incompleto" itemLabel="Ensino Superior Incompleto"/>
+                                        <f:selectItem itemValue="Ensino Superior Completo" itemLabel="Ensino Superior Completo"/>
+										<f:selectItem itemValue="Pós-graduado" itemLabel="Pós-Graduado"/>
+										<f:selectItem itemValue="Mestrado" itemLabel="Mestrado"/>
+										<f:selectItem itemValue="Doutorado" itemLabel="Doutorado"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" >
+                                    Raça
+                                </td>
+                                <td>
+                                    <p:selectOneMenu id="raca" value="#{beanPaciente.paciente.raca}" required="true" requiredMessage="Preencha o campo Raça!">
+                                        <f:selectItem itemValue="Amarela" itemLabel="Amarela"/>
+                                        <f:selectItem itemValue="Branca" itemLabel="Branca"/>
+                                        <f:selectItem itemValue="Indígena" itemLabel="Indígena"/>
+                                        <f:selectItem itemValue="Parda" itemLabel="Parda"/>
+                                        <f:selectItem itemValue="Preta" itemLabel="Preta"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:fieldset>
+                </p>
+                <p>
+                    <p:fieldset collapsed="false"  toggleable="true" legend='Dados do Responsável' toggleSpeed="#{boleanos.timeDefault*2}">
+                        <table>
+							<tr>
+                                <td align="right" >
+                                    Nome
+                                </td>
+                                <td>
+                                    <p:inputText id="nomeResp" value="#{beanPaciente.paciente.nomeResp}"/>
+                                </td>
+                            </tr>
+							<tr>
+                                <td align="right" >
+                                    Telefone
+                                </td>
+                                <td>
+                                    <p:inputMask id="foneResp" mask="(99) 9999-9999" value="#{beanPaciente.paciente.foneResp}"/>
+                                </td>
+                            </tr>
+						</table>
+                    </p:fieldset>
+                </p>		
+                <p>
+                    <p:fieldset collapsed="false"  toggleable="true" legend='Documentos' toggleSpeed="#{boleanos.timeDefault*2}">
+                        <table>
+                            <tr>
+                                <td>RG</td>
+                                <td><p:inputText id="rg" value="#{beanPaciente.paciente.rg}"
+                                                 required="true" requiredMessage="Preencha o campo RG!"/></td>
+                            </tr>
+                            <tr>
+                                <td>CPF</td>
+                                <td> <p:inputMask id="cpf" mask="99999999999" validator="#{beanPaciente.validateCPF}" value="#{beanPaciente.paciente.cpf}"
+                                                  required="true" requiredMessage="Preencha o campo CPF!">
+                                    </p:inputMask>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:fieldset>
+                </p>
+                <p>
+                    <p:fieldset collapsed="false"  toggleable="true" legend='Endereço' toggleSpeed="#{boleanos.timeDefault*2}">
+                        <table>
+                            <tr>
+                                <td align="right">
+                                    Logradouro
+                                </td>
+                                <td>
+                                    <p:inputText id="logradouro" value="#{beanPaciente.paciente.logradouro}" required="true" requiredMessage="Preencha o campo Logradouro!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Número
+                                </td>
+                                <td>
+                                    <p:inputText id="numero" value="#{beanPaciente.paciente.num}" onkeypress="return apenasNumeros('numero');"
+                                                 required="true" requiredMessage="Preencha o campo Número!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Bairro
+                                </td>
+                                <td>
+                                    <p:inputText id="bairro" value="#{beanPaciente.paciente.bairro}"
+                                                 required="true" requiredMessage="Preencha o campo Bairro!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Complemento
+
+                                </td>
+                                <td>
+                                    <p:inputText id="complemento" value="#{beanPaciente.paciente.complemento}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Cidade
+                                </td>
+                                <td>
+                                    <p:inputText id="cidade" value="#{beanPaciente.paciente.cidade}"
+                                                 required="true" requiredMessage="Preencha o campo Cidade!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Telefone
+                                </td>
+                                <td>
+                                    <p:inputMask id="fone" mask="(99) 9999-9999" value="#{beanPaciente.paciente.fone}"
+                                                 required="true" requiredMessage="Preencha o campo Telefone!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Estado
+                                </td>
+                                <td>
+                                    <p:inputText id="estado" value="#{beanPaciente.paciente.estado}"
+                                                 required="true" requiredMessage="Preencha o campo Estado!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Cep
+                                </td>
+                                <td>
+                                    <p:inputMask id="cep" mask="99.999-999" value="#{beanPaciente.paciente.cep}"
+                                                 required="true" requiredMessage="Preencha o campo Cep!"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:fieldset>
+                </p>
+                <p>
+                    <p:fieldset collapsed="false"  toggleable="true" legend='Contato' toggleSpeed="#{boleanos.timeDefault*2}">
+                        <table>
+                            <tr>
+                                <td>
+                                    Celular
+                                </td>
+                                <td>
+                                    <p:inputMask id="celfone" mask="(99) 9999-9999" value="#{beanPaciente.paciente.celfone}"
+                                                 required="true" requiredMessage="Preencha o campo Celular!"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    E-mail
+                                </td>
+                                <td>
+                                    <p:inputText id="email" value="#{beanPaciente.paciente.email}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:fieldset>
+                </p>
+
+
+                <table>
+                    <tr>
+                        <td><p:commandButton value="Salvar" update="cadastroDePaciente,growlNewPacientes" action="#{beanPaciente.gravar()}"/></td>
+                        <td><p:ajaxStatus>
+                                <f:facet name="start">
+                                    <div class="loading"/> 
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <div class="complete"/> 
+                                </f:facet>
+                                <f:facet name="error">
+                                    <div class="erro2"/>
+                                </f:facet>
+                            </p:ajaxStatus></td>
+                    </tr>
+                </table>
+
+
+            </p:panel>
+        </h:form>
+
+
+
+    </ui:define>
+
+</ui:composition>

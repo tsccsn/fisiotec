@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet library="css" name="style.css"/>
+        <link rel="shortcut icon" href="#{ender.localResources}imagens/stethoscope.png" type="image/x-icon"/>
+        <title><ui:insert name="titulo"/></title>
+        <ui:insert name="imports"/>
+    </h:head>
+    <h:body id="tudo" >
+        <f:event type="javax.faces.event.PreRenderViewEvent" listener="#{applicationScopeBean.preRenderView}"/>
+        <div class="bordaExterna">
+            <div id="todoConteudo" class="todoConteudo">
+                <div class="logo">
+                </div>
+                <div class="menu">
+                    <h:form id="menubar" prependId="false"  >
+                        <p:menubar> 
+                            <p:menuitem value="Incio" icon="home" url="#{ender.local}index.xhtml"  />  
+                            <!-- menu estoque que mostra pra quem não está logado -->
+                            <p:submenu label="Estoque" icon="estoque" rendered="#{beanAdiminEstoque.usuario.id ==  0}">
+                                <p:menuitem value="Login" icon="login" url="#{ender.local}estoque/login.xhtml"  /> 
+                            </p:submenu>  
+
+                            <!-- menu estoque para quem tá logado-->
+                            <p:submenu label="Estoque" icon="estoque" rendered="#{beanAdiminEstoque.usuario.id > 0}">
+                                <p:submenu label="Produtos" icon="injection">
+                                    <p:menuitem value="Novo" icon="add" url="#{ender.local}estoque/produto/novo.xhtml"  />  
+                                    <p:menuitem value="Listar" icon="list" url="#{ender.local}estoque/produto/listar.xhtml"  />  
+                                    <p:menuitem value="Buscar" icon="buscar" url="#{ender.local}estoque/produto/buscar.xhtml"  />  
+                                    <p:menuitem value="Atualizar" icon="update" url="#{ender.local}estoque/produto/atualizar.xhtml"  />  
+                                    <p:menuitem value="Remover" icon="delete" url="#{ender.local}estoque/produto/remover.xhtml"  />  
+                                </p:submenu>  
+                                <p:submenu label="Movimetação" icon="movimentacao">
+                                    <p:submenu label="Nova" icon="add">
+                                        <p:menuitem value="Saida" icon="estoquesaida" url="#{ender.local}estoque/movimentacao/saida.xhtml"  /> 
+                                        <p:menuitem value="Entrada" icon="estoqueentrada" url="#{ender.local}estoque/movimentacao/entrada.xhtml"  /> 
+                                    </p:submenu>
+                                    <p:submenu label="Graficos" icon="chart">
+                                        <p:menuitem value="Saida" icon="chart-down" url="#{ender.local}estoque/grafico/saida.xhtml"  /> 
+                                        <p:menuitem value="Entrada" icon="chart-up" url="#{ender.local}estoque/grafico/entrada.xhtml"  /> 
+                                        <p:menuitem value="Entrada/Saida" icon="chart-line" url="#{ender.local}estoque/grafico/entradaesaida.xhtml"  /> 
+                                    </p:submenu>
+                                    <p:submenu label="Registros" icon="registro">
+                                        <p:menuitem value="Saida" icon="listasaida" url="#{ender.local}estoque/registros/saida.xhtml"  /> 
+                                        <p:menuitem value="Entrada" icon="listaentrada" url="#{ender.local}estoque/registros/entrada.xhtml"  /> 
+                                    </p:submenu>
+                                </p:submenu> 
+                                <p:submenu label="Unidades" icon="regua">
+                                    <p:menuitem value="Nova" icon="add" url="#{ender.local}estoque/unidade/nova.xhtml"  />  
+                                    <p:menuitem value="Listar" icon="list" url="#{ender.local}estoque/unidade/listar.xhtml"  />  
+                                    <p:menuitem value="Atualizar" icon="update" url="#{ender.local}estoque/unidade/atualizar.xhtml"  />  
+                                </p:submenu> 
+                                <p:menuitem value="Avisos" icon="avisos" url="#{ender.local}estoque/avisos.xhtml"  /> 
+                                <p:submenu label="Usuários" icon="usuario" >
+                                    <p:menuitem value="Novo" icon="add" url="#{ender.local}estoque/administracao/usuario/novo.xhtml"  /> 
+                                    <p:menuitem value="Atualizar" icon="update" url="#{ender.local}estoque/administracao/usuario/listar.xhtml"  /> 
+                                </p:submenu> 
+                                <p:separator/>
+                                <p:menuitem value="Minha conta" icon="minhaconta" url="#{ender.local}estoque/minhaconta.xhtml"  /> 
+                                <p:menuitem value="LogOut" icon="logout" action="#{beanAdiminEstoque.logoff()}"  /> 
+                            </p:submenu>  
+
+                            <!-- menu estoque que mostra pra quem não está logado -->
+                            <p:submenu label="Clínica" icon="hospital" rendered="#{beanAdiminEstoque.usuario.id ==  0}">
+                                <p:menuitem value="Login" icon="login" url="#{ender.local}estoque/login.xhtml"  /> 
+                            </p:submenu>  
+
+                            <p:submenu label="Clínica" icon="hospital" rendered="#{beanAdiminEstoque.usuario.id > 0}">
+                                <p:submenu label="Paciente" icon="paciente" >
+                                    <p:menuitem value="Novo" url="#{ender.local}clinica/novopaciente.xhtml" icon="add" />
+                                    <p:menuitem value="Listar" url="#{ender.local}clinica/listapacientes.xhtml" icon="list" />
+                                    <p:submenu label="Exames" icon="raiox" >
+                                        <p:menuitem value="Anexar novo" icon="clip" url="#{ender.local}clinica/anexarExame.xhtml"  />
+                                        <p:menuitem value="Listar" icon="list" url="#{ender.local}clinica/listaexames.xhtml"  />
+                                    </p:submenu>  
+                                </p:submenu>
+                                <p:submenu label="Consultas" icon="stethoscope" >
+                                    <p:menuitem value="Nova" icon="add" url="#{ender.local}clinica/novaconsulta.xhtml" />
+                                    <p:menuitem value="Listar" icon="list" url="#{ender.local}clinica/listaconsultas.xhtml" />
+                                </p:submenu>
+                                <p:submenu label="Tratamento" icon="pill">
+                                    <p:menuitem value="Novo" icon="add" url="#{ender.local}clinica/novasessao.xhtml" />
+                                    <p:menuitem value="Listar" icon="list" url="#{ender.local}clinica/listaTratamentos.xhtml" />
+                                </p:submenu>
+                                <p:submenu label="Sessões" icon="enfermeira" >
+                                    <p:menuitem value="Listar" icon="list" url="#{ender.local}clinica/listarsessoes.xhtml" />
+                                </p:submenu>
+                                <p:submenu label="Relatórios" icon="list"  >
+                                    <p:menuitem value="Paciente" icon="paciente" url="#{ender.local}clinica/relatorioPacientes.xhtml" />
+                                    <p:menuitem value="Consulta" icon="stethoscope" url="#{ender.local}clinica/consultasAntigas.xhtml" />
+                                    <p:menuitem value="Sessão" icon="enfermeira" url="#{ender.local}clinica/sessoesAntigas.xhtml" />
+                                </p:submenu>
+                                <p:menuitem value="Imprimir Ficha" url="#{ender.local}clinica/imprimirFicha.xhtml" icon="print" style="width: 150px;" />
+                                <p:separator/>
+                                <p:menuitem value="Minha conta" icon="minhaconta" url="#{ender.local}estoque/minhaconta.xhtml"  /> 
+                                <p:menuitem value="LogOut" icon="logout" action="#{beanAdiminEstoque.logoff()}"  /> 
+                            </p:submenu>
+
+                            <p:submenu label="Portal" icon="portal" rendered="#{portalGenerico.usuario.id == 0}" >
+                                <p:menuitem value="Login" icon="login" url="#{ender.local}portal/login.xhtml"   />  
+                            </p:submenu>  
+
+                            <p:submenu label="Portal" icon="portal" rendered="#{portalGenerico.administrador.id > 0}">
+                                <p:submenu label="Aluno" icon="estudante">
+                                    <p:menuitem value="Novo" icon="add" url="#{ender.local}portal/administrador/aluno/novo.xhtml"  />  
+                                    <p:menuitem value="Listar" icon="list" url="#{ender.local}portal/administrador/aluno/listar.xhtml"  />  
+                                    <p:menuitem value="Atualizar" icon="update" url="#{ender.local}portal/administrador/aluno/alterar.xhtml"  /> 
+                                    <p:menuitem value="Remover" icon="delete" url="#{ender.local}portal/administrador/aluno/remover.xhtml"  /> 
+                                    <p:menuitem value="Histórico" icon="livro" url="#{ender.local}portal/administrador/aluno/historico.xhtml"  /> 
+                                </p:submenu>  
+                                <p:submenu label="Turma" icon="alunos">
+                                    <p:menuitem value="Nova" icon="add" url="#{ender.local}portal/administrador/turma/nova.xhtml"  />  
+                                    <p:menuitem value="Listar" icon="list" url="#{ender.local}portal/administrador/turma/listar.xhtml"  />  
+                                    <p:menuitem value="Atualizar" icon="update" url="#{ender.local}portal/administrador/turma/alterar.xhtml"  /> 
+                                    <p:menuitem value="Remover" icon="delete" url="#{ender.local}portal/administrador/turma/remover.xhtml"  /> 
+                                </p:submenu>  
+                                <p:submenu label="Professor" icon="professor">
+                                    <p:menuitem value="Novo" icon="add" url="#{enderlocal}portal/administrador/professor/novo.xhtml"  />  
+                                    <p:menuitem value="Listar" icon="list" url="#{ender.local}portal/administrador/professor/listar.xhtml"  />  
+                                    <p:menuitem value="Atualizar" icon="update" url="#{ender.local}portal/administrador/professor/alterar.xhtml"  /> 
+                                    <p:menuitem value="Remover" icon="delete" url="#{ender.local}portal/administrador/professor/remover.xhtml"  /> 
+                                    <p:menuitem value="Histórico" icon="livro" url="#{ender.local}portal/administrador/professor/historico.xhtml"  /> 
+                                    <p:menuitem value="Alertas" icon="avisos" url="#{ender.local}portal/administrador/professor/alertas.xhtml"  /> 
+                                </p:submenu>  
+                                <p:submenu label="P. Estágio" icon="hospital">
+                                    <p:menuitem value="Novo" icon="add" url="#{ender.local}portal/ponto/novo.xhtml"  />  
+                                    <p:menuitem value="Ativar" icon="ativar" url="#{ender.local}portal/ponto/ativar.xhtml"  /> 
+                                    <p:menuitem value="Desativar" icon="nao" url="#{ender.local}portal/ponto/desativar.xhtml"  /> 
+                                </p:submenu>  
+                                <p:separator />  
+                                <p:menuitem value="Minha Conta" icon="minhaconta" url="#{ender.local}portal/administrador/minhaconta.xhtml"  /> 
+                                <p:menuitem value="Logout" icon="logout" action="#{portalGenerico.logoff()}" actionListener="#{msgAdmin.logout()}"  /> 
+                            </p:submenu>
+
+                            <p:submenu label="Portal" icon="portal" rendered="#{portalGenerico.professor.id > 0}" >
+                                <p:menuitem value="Lançar notas" icon="notas" url="#{ender.local}portal/professor/notas.xhtml"  />  
+                                <p:separator />  
+                                <p:menuitem value="Minha Conta" icon="minhaconta" url="#{ender.local}portal/professor/minhaconta.xhtml"  /> 
+                                <p:menuitem value="Logout" icon="logout" action="#{portalGenerico.logoff()}"  /> 
+                            </p:submenu> 
+                        </p:menubar>
+
+
+                    </h:form>
+                    <ui:insert name="centro"/>
+                </div>
+                <div class="rodape">
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>

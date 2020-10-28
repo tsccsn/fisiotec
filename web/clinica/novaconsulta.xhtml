@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Nova Consulta
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="cadastroDeConsulta">
+
+            <p:growl id="growlNewConsulta" showDetail="false" />
+
+            <p:panel header="Nova Consulta">
+                <h:panelGrid columns="2" id="cadConsultas">
+
+                    <h:outputLabel value="Paciente:* " for="paciente"/>
+                    <p:autoComplete id="paciente" value="#{beanConsulta.consulta.paciente}" completeMethod="#{beanPaciente.completa}" 
+                                    var="p" itemLabel="#{p.nome}" itemValue="#{p}" dropdown="true" forceSelection="true" converter="pacienteConverter"/>
+
+                    <h:outputLabel value="Dia da Consulta:* " for="diaConsulta"/>
+                    <p:calendar navigator="true" id="diaConsulta" value="#{beanConsulta.consulta.dia}"
+                                locale="br" pattern="dd/MM/yyyy" yearRange="1900:2030" mindate="#{beanConsulta.hoje}"
+                                required="true" requiredMessage="Preencha o campo Dia da Consulta!"/>
+
+                    <h:outputLabel value="Hora Inicial:* " for="horaInicial"/>
+                    <p:calendar id="horaInicial" timeOnly="true" locale="br" pattern="HH:mm" timeZone="America/Sao_Paulo"
+                                minHour="8" maxHour="18" value="#{beanConsulta.consulta.horaInicial}"
+                                required="true" requiredMessage="Preencha o campo Hora Inicial!"/>
+
+                    <h:outputLabel value="Hora Final:* " for="horaFinal"/>
+                    <p:calendar id="horaFinal" timeOnly="true" locale="br" pattern="HH:mm" timeZone="America/Sao_Paulo"
+                                minHour="8" maxHour="18" value="#{beanConsulta.consulta.horaFinal}"
+                                required="true" requiredMessage="Preencha o campo Hora Final!"/>
+
+                    <h:outputLabel value="Box:* " for="box"/>
+                    <p:inputText id="box" value="#{beanConsulta.consulta.box}"
+                                 required="true" requiredMessage="Preencha o campo Box!">
+                        <f:convertNumber integerOnly="true"/>
+                    </p:inputText>
+
+                    <h:outputLabel value="Observações: " for="obs"/>
+                    <p:inputTextarea id="obs" value="#{beanConsulta.consulta.obs}"/>
+
+                </h:panelGrid>
+
+
+                <p:commandButton value="Agendar" update="cadastroDeConsulta" action="#{beanConsulta.verificarValores()}"/>
+
+                <h:outputText style="font-size: small" value="obs.: Os campos marcados com * são obrigatórios"/>
+                    
+                <p:ajaxStatus >  
+                    <f:facet name="start">  
+                        <h:graphicImage library="imagens" name="vazio.gif" id="ok" />
+                    </f:facet>  
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+
+
+            </p:panel>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

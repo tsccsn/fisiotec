@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Listar Produtos
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/opacidade.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <p:panel header="Produtos">
+            <p:dataTable var="p" value="#{listaDeProdutos.produtos}" paginator="true" rows="10" emptyMessage="Sem Produtos"
+                         paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,30">
+                <f:facet name="header">
+                    Lista de produtos
+                </f:facet>
+                <p:column  >
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">
+                            Produto
+                        </div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        #{p.toString()}
+                    </div>
+                </p:column  >
+
+                <p:column  style="text-align: center;">
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">
+                            No estoque
+                        </div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        #{p.quantidadeEmStoque}
+                    </div>
+                </p:column>
+
+                <p:column  style="text-align: center;">
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">
+                            Nível mínimo
+                        </div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        #{p.quantidadeMinimaEmStoque}
+                    </div>
+                </p:column  >
+            </p:dataTable>
+        </p:panel>
+        <!--STATUS AJAX-->
+        <p:ajaxStatus >
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

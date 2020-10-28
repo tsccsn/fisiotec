@@ -1,0 +1,259 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns="http://www.w3.org/1999/xhtml"
+                template="./../Template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="titulo">
+        Adiministrador estoque
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../resources/scripts/script.js"></script>
+    </ui:define>
+
+    <ui:define name="centro">
+        <p:panel header="Dados cadastrais">
+            <div id="breu" class="breu" ></div>
+            <h:form id="meusDados">
+                <table style="margin: 0 auto;">
+                    <tr style="vertical-align: middle" >
+                        <td style="text-align: right" >Nome</td>
+                        <td> </td>
+                        <td>#{beanAdiminEstoque.administrador.nomeCompleto}
+                            <p:commandLink action="#{boleanos.ambosTrue(0)}" update="alterarNome" oncomplete="breuOn();abreJanela0();">
+                                <h:graphicImage library="imagens" name="update16.png"/>
+                            </p:commandLink>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right">Email principal</td>
+                        <td> </td>
+                        <td>#{beanAdiminEstoque.administrador.emailPrincipal} 
+                            <p:commandLink action="#{boleanos.ambosTrue(1)}" update="emailPrincipal" oncomplete="breuOn();abreJanela1();">
+                                <h:graphicImage library="imagens" name="update16.png"/>
+                            </p:commandLink>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right">Email secundário</td>
+                        <td> </td>
+                        <td>#{beanAdiminEstoque.administrador.emailSecundario}
+                            <p:commandLink action="#{boleanos.ambosTrue(2)}" update="emailSecundario" oncomplete="breuOn();abreJanela2();">
+                                <h:graphicImage library="imagens" name="update16.png"/>
+                            </p:commandLink>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right">Login</td>
+                        <td> </td>
+                        <td>#{beanAdiminEstoque.administrador.login}
+                            <p:commandLink action="#{boleanos.ambosTrue(3)}" update="login" oncomplete="breuOn();abreJanela3();">
+                                <h:graphicImage library="imagens" name="update16.png"/>
+                            </p:commandLink>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right">Senha</td>
+                        <td> </td>
+                        <td>#{utilString.ocultaSenha(beanAdiminEstoque.administrador)}
+                            <p:commandLink action="#{boleanos.ambosTrue(4)}" update="senha" oncomplete="breuOn();abreJanela4();">
+                                <h:graphicImage library="imagens" name="update16.png"/>
+                            </p:commandLink>
+                        </td>
+                    </tr>
+                </table>
+                <p><p:accordionPanel activeIndex="-1">
+                        <p:tab title="Registros de login"  >
+                            <p:dataTable var="xRegistro" value="#{beanAdiminEstoque.ultimosLogins(beanAdiminEstoque.administrador)}" >
+                                <p:column style="text-align: center">  
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">
+                                            Data
+                                        </div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        #{utilData.dataFormal2(xRegistro.horaLogado.time)} 
+                                    </div>
+                                </p:column>
+                                <p:column style="text-align: center">  
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">
+                                            Hora login
+                                        </div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        #{utilData.horaMinuto(xRegistro.horaLogado)}
+                                    </div>
+                                </p:column>
+                                <p:column style="text-align: center">  
+                                    <f:facet name="header" >  
+                                        <div class="cabecaTablea">
+                                            Hora logoff
+                                        </div>
+                                    </f:facet>
+                                    <div class="espacamento" >
+                                        #{xRegistro.horaDeslogado!= null ? utilData.horaMinuto(xRegistro.horaDeslogado) : '-'}
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:accordionPanel></p>
+            </h:form>
+            <h:form id="alterarNome" prependId="false" >
+                <p:outputPanel rendered="#{boleanos.verA(0)}" styleClass="outputpanel"  >
+                    <div class="janelaRolavel" id="janelaRolavel0"  >
+                        <p:panel header="Altera Minha Conta" id="janela0" styleClass="janelas" >
+                            <table>
+                                <tr>
+                                    <td>Nome</td>
+                                    <td> </td>
+                                    <td><p:inputText value="#{beanAdiminEstoque.administrador.nomeCompleto}"/> </td>
+                                </tr>
+                            </table>
+                            <p:commandButton image="voltar2" style="margin-right: 10px;" actionListener="#{boleanos.mudaA(0, boleanos.timeDefault)}"
+                                             onstart="fechaJanela0();breuOff();"  />
+                            <p:commandButton image="update" update="meusDados" action="#{beanAdiminEstoque.atualizaAdministrador()}" onstart="fechaJanela0();breuOff();" />
+                        </p:panel>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+            <h:form id="emailPrincipal" prependId="false" >
+                <p:outputPanel rendered="#{boleanos.verA(1)}" styleClass="outputpanel"  >
+                    <div class="janelaRolavel" id="janelaRolavel1"  >
+                        <p:panel header="Altera Minha Conta" id="janela1" styleClass="janelas" >
+                            <table>
+                                <tr>
+                                    <td>Email principal</td>
+                                    <td> </td>
+                                    <td><p:inputText value="#{beanAdiminEstoque.administrador.emailPrincipal}"/> </td>
+                                </tr>
+                            </table>
+                            <p:commandButton image="voltar2" style="margin-right: 10px;" actionListener="#{boleanos.mudaA(1, boleanos.timeDefault)}"
+                                             onstart="fechaJanela1();breuOff();"  />
+                            <p:commandButton image="update" update="meusDados" action="#{beanAdiminEstoque.atualizaAdministrador()}"
+                                             onstart="fechaJanela1();breuOff();" />
+                        </p:panel>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+            <h:form id="emailSecundario" prependId="false" >
+                <p:outputPanel rendered="#{boleanos.verA(2)}" styleClass="outputpanel"  >
+                    <div class="janelaRolavel" id="janelaRolavel2"  >
+                        <p:panel header="Altera Minha Conta" id="janela2" styleClass="janelas" >
+                            <table>
+                                <tr>
+                                    <td>Email secundário</td>
+                                    <td> </td>
+                                    <td><p:inputText value="#{beanAdiminEstoque.administrador.emailSecundario}"/> </td>
+                                </tr>
+                            </table>
+                            <p:commandButton image="voltar2" style="margin-right: 10px;" actionListener="#{boleanos.mudaA(2, boleanos.timeDefault)}"
+                                             onstart="fechaJanela2();breuOff();"  />
+                            <p:commandButton image="update" update="meusDados" action="#{beanAdiminEstoque.atualizaAdministrador()}"
+                                             onstart="fechaJanela2();breuOff();" />
+                        </p:panel>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+            <h:form id="login" prependId="false" >
+                <p:outputPanel rendered="#{boleanos.verA(3)}" styleClass="outputpanel"  >
+                    <div class="janelaRolavel" id="janelaRolavel3"  >
+                        <p:panel header="Altera Minha Conta" id="janela3" styleClass="janelas" >
+                            <table>
+                                <tr>
+                                    <td>Login</td>
+                                    <td> </td>
+                                    <td><p:inputText value="#{beanAdiminEstoque.administrador.login}" validatorMessage="#{msg.validaTamanhoLogin}" >
+                                            <f:validateLength minimum="3"  />
+                                        </p:inputText>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p:commandButton type="reset" image="voltar2" style="margin-right: 10px;" action="#{boleanos.mudaA(3, boleanos.timeDefault)}"
+                                             onclick="fechaJanela3();breuOff();" />
+                            <p:commandButton image="update" update="meusDados" action="#{beanAdiminEstoque.atualizaAdministrador()}"
+                                             oncomplete="atualizaLogin(args)" />
+                        </p:panel>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+            <h:form id="senha" prependId="false" >
+                <p:outputPanel rendered="#{boleanos.verA(4)}" styleClass="outputpanel"  >
+                    <div class="janelaRolavel" id="janelaRolavel4"  >
+                        <p:panel header="Altera Minha Conta" id="janela4" styleClass="janelas" >
+                            <table>
+                                <tr>
+                                    <td>Senha antiga</td>
+                                    <td> </td>
+                                    <td><p:inputText value="#{beanAdiminEstoque.senhaAntiga}" validatorMessage="#{msg.validaTamanhoSenha}" >
+                                            <f:validateLength minimum="3"  />
+                                        </p:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Nova senha</td>
+                                    <td> </td>
+                                    <td><p:inputText value="#{beanAdiminEstoque.novaSenha}" validatorMessage="#{msg.validaTamanhoSenha}">
+                                            <f:validateLength minimum="3"  />
+                                        </p:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Confirme</td>
+                                    <td> </td>
+                                    <td><p:inputText value="#{beanAdiminEstoque.confirmacaoNovaSenha}" validatorMessage="#{msg.validaTamanhoSenha}" >
+                                            <f:validateLength minimum="3"  />
+                                        </p:inputText>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p:commandButton type="reset" image="voltar2" style="margin-right: 10px;" actionListener="#{boleanos.mudaA(4, boleanos.timeDefault)}"
+                                             onclick="fechaJanela4();breuOff();"  />
+                            <p:commandButton image="update" update="meusDados" action="#{beanAdiminEstoque.atualizaSenhaAdministrador()}"
+                                             oncomplete="atualizaSenha(args)" />
+                        </p:panel>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+        </p:panel>
+        <!--ALERTAS FLUTUANTES-->
+        <p:growl id="messages" autoUpdate="true" />
+        <!--STATUS AJAX-->
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+        <script type="text/javascript" >
+            function atualizaLogin(args){
+                if(args.fecha){
+                    fechaJanela3();breuOff();
+                }
+            }
+            function atualizaSenha(args){
+                if(args.fecha){
+                    fechaJanela4();breuOff();
+                }
+            }
+        </script>
+    </ui:define>
+
+</ui:composition>

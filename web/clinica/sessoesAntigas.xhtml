@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Pesquisa de Sessões
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="formSessoesAntigas">
+
+            <h:outputLabel value="Pesquisar por: "/>
+            <h:panelGrid columns="2">
+
+                <h:outputLabel value="Paciente: " for="paciente"/>
+                <p:autoComplete id="paciente" value="#{beanSessao.pesquisaSessao.paciente}" completeMethod="#{beanPaciente.completa}" 
+                                var="p" itemLabel="#{p.nome}" itemValue="#{p}" dropdown="true" forceSelection="true" converter="pacienteConverter"/>
+
+                <h:outputLabel value="Patologia: " for="patologia"/>
+                <p:autoComplete id="patologia" value="#{beanSessao.pesquisaSessao.patologia}" completeMethod="#{beanSessao.patologias}" 
+                                var="p" itemLabel="#{p}" itemValue="#{p}" dropdown="true" forceSelection="true"/>
+
+                <h:outputLabel value="Qtd de Sessões: " for="qtdTrad"/>
+                <p:inputText id="qtdTrad" value="#{beanSessao.pesquisaSessao.qtdTratamento}">
+                    <f:convertNumber integerOnly="true"/>
+                </p:inputText>
+
+                <h:outputLabel value="Dia do Cadastro: " for="diaCad"/>
+                <p:calendar navigator="true" id="diaCad" value="#{beanSessao.pesquisaSessao.diaCad}"
+                            locale="br" pattern="dd/MM/yyyy" yearRange="1900:2030"/>
+
+                <h:outputLabel value="Observações: " for="obs"/>
+                <p:inputTextarea id="obs" value="#{beanSessao.pesquisaSessao.obs}"/>
+
+                <h:outputLabel value="Status: " for="status"/>
+                <p:selectOneMenu id="status" value="#{beanSessao.pesquisaSessao.status}" style="width: 200px">
+                    <f:selectItem itemLabel="Selecione " itemValue=""/>
+                    <f:selectItem itemLabel="Finalizado" itemValue="Finalizado"/>
+                    <f:selectItem itemLabel="Desistiu" itemValue="Desistiu"/>
+                    <f:selectItem itemLabel="Transferido" itemValue="Transferido"/>
+                    <f:selectItem itemLabel="Falecido" itemValue="Falecido"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel value="De: "/>
+                <p:calendar locale="br" value="#{beanSessao.de}" pattern="dd/MM/yyyy" showButtonPanel="false" navigator="true"/>
+                <h:outputLabel value="Até: "/>
+                <p:calendar locale="br" value="#{beanSessao.ate}" pattern="dd/MM/yyyy" showButtonPanel="false" navigator="true"/>
+
+            </h:panelGrid>
+            <p:commandButton value="Pesquisar" update="formSessoesAntigas" action="#{beanSessao.pesquisando()}"/>
+            <p:commandButton value="Visualizar Todos" update="formSessoesAntigas" action="#{beanSessao.listarTodas()}"/>
+
+            <p:dataTable id="tableSessoesAntigas" value="#{beanSessao.sessoes}" var="s" paginator="true" rows="10"
+                         paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,30" emptyMessage="Sem Resultados">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="PACIENTE"/>
+                    </f:facet>
+                    <h:outputText value="#{s.paciente.nome}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="DIA CADASTRO"/>
+                    </f:facet>
+                    <h:outputText value="#{s.diaCad}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="QTD."/>
+                    </f:facet>
+                    <h:outputText value="#{s.qtdTratamento}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="PATOLOGIA"/>
+                    </f:facet>
+                    <h:outputText value="#{s.patologia}" />
+                </p:column>
+
+
+                <f:facet name="footer">
+                    Foram encontrados #{beanConsulta.qtdList} resultados.
+                </f:facet>
+            </p:dataTable>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

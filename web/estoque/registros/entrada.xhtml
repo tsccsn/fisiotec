@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Registro de entrada
+    </ui:define>
+
+    <ui:define name="imports">
+    </ui:define>
+
+    <ui:define name="centro">
+        <p:panel header="Registros de entrada">
+            <h:form id="regEntrada" prependId="false">
+                <table >
+                    <tr>
+                        <td class="alingRight"  >De</td>
+                        <td><p:calendar value="#{beanCPEntrada.de}"  converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" /></td>
+                    </tr>
+                    <tr>
+                        <td class="alingRight" >Até</td>
+                        <td><p:calendar value="#{beanCPEntrada.ate}"  converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><p:commandButton value="Filtrar" action="#{beanCPEntrada.filtrar()}" update="regEntrada" /></td>
+                    </tr>
+                </table>
+                <p:dataTable var="entrada" value="#{beanCPEntrada.registrosCPEntradaManipulado}"
+                             paginator="true" rows="3" emptyMessage="Sem resultados"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="3,5,10,15,30" >
+                    <f:facet name="header">  
+                        Registro de entrada
+                    </f:facet>     
+                    <p:column>  
+                        <br></br>
+                        <p:fieldset collapsed="true" toggleable="true" legend='#{utilData.dataFormal2(entrada.dataEntrada.time)}' >
+                            <br></br>
+
+                            <p:dataTable var="cpSaidaProduto" value="#{beanCPEntrada.cpSaidaProdutoDeSaida(entrada)}">
+                                <p:column headerText="Produtos">
+                                    #{cpSaidaProduto.produto.toString()}
+                                </p:column>
+                                <p:column headerText="Quantidade" style="text-align: center" >
+                                    #{cpSaidaProduto.quantidade}
+                                </p:column>
+                            </p:dataTable>
+                            <br></br>
+                        </p:fieldset>
+                        <br></br>
+                    </p:column> 
+                </p:dataTable>
+                
+                <p:growl id="messages" autoUpdate="true"  />
+                
+                <p:ajaxStatus>
+                    <f:facet name="start">
+                        <div class="loading"/> 
+                    </f:facet>
+                    <f:facet name="complete">
+                        <div class="complete"/> 
+                    </f:facet>
+                    <f:facet name="error">
+                        <div class="erro2"/>
+                    </f:facet>
+                    <f:facet name="onsuccess">
+                    </f:facet>
+                    <f:facet name="onselectStart">
+                        <div class="erro2"/>
+                    </f:facet>
+                    <f:facet name="onselectComplete">
+                        <div class="erro2"/>
+                    </f:facet>
+                </p:ajaxStatus>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

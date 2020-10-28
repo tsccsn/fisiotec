@@ -1,0 +1,167 @@
+﻿<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Novo Tratamento
+    </ui:define>
+
+    <ui:define name="centro">
+
+        <h:form id="cadSessoesTReta" prependId="false">
+
+            <p:growl id="growlNewSessao" autoUpdate="true" />
+            <p:panel header="Novo Tratamento">
+
+                <h:panelGrid columns="2" id="cadNewSessoes">
+
+                    <h:outputLabel value="Paciente:* " for="paciente"/>
+                    <p:autoComplete id="paciente" value="#{beanSessao.sessao.paciente}" completeMethod="#{beanPaciente.completa}" 
+                                    var="p" itemLabel="#{p.nome}" itemValue="#{p}" dropdown="true" forceSelection="true" converter="pacienteConverter"/>
+
+                    <h:outputLabel value="Patologia:* " for="patologia"/>
+                    <p:inputText id="patologia" value="#{beanSessao.sessao.patologia}" required="true" requiredMessage="Preencha o campo Patologia!"/>
+
+                    <h:outputLabel value="Quantidade de Sessões:* "/>
+                    <p:outputLabel value="#{beanSessao.sessao.qtdTratamento}"/>
+
+                    <h:outputLabel value="Observações: " for="obsSessao"/>
+                    <p:inputTextarea id="obsSessao" value="#{beanSessao.sessao.obs}"/>
+
+                </h:panelGrid>
+
+                <p:panel id="teste" header="Cadastrar dia das Sessões">
+
+                    <h:panelGrid columns="2" id="diaSessoes">
+
+                        <h:outputLabel value="Dia da Consulta:* " for="dia"/>
+                        <p:calendar navigator="true" id="dia" value="#{beanSessao.tratamento.dia}" 
+                                    locale="br" pattern="dd/MM/yyyy" yearRange="1900:2030" mindate="#{beanConsulta.hoje}"/>
+
+                        <h:outputLabel value="Hora Inicial:* " for="horaInicial"/>
+                        <p:calendar id="horaInicial" timeOnly="true" locale="br" pattern="HH:mm" minHour="8" timeZone="America/Sao_Paulo"
+                                    maxHour="18" value="#{beanSessao.tratamento.horaInicial}"/>
+
+                        <h:outputLabel value="Hora Final:* " for="horaFinal"/>
+                        <p:calendar id="horaFinal" timeOnly="true" locale="br" pattern="HH:mm" minHour="8" timeZone="America/Sao_Paulo"
+                                    maxHour="18" value="#{beanSessao.tratamento.horaFinal}"/>
+
+                        <h:outputLabel value="Box:* " for="box"/>
+                        <p:inputText id="box" value="#{beanSessao.tratamento.box}"/>
+
+                        <h:outputLabel value="Observações: " for="obs"/>
+                        <p:inputTextarea id="obs" value="#{beanSessao.tratamento.obs}"/>
+
+                    </h:panelGrid>
+
+                    <p:commandButton action="#{beanSessao.adicionaTratamento}" value="Adicionar Sessão" update="teste,growlNewSessao"/>
+
+                    <p:dataTable value="#{beanSessao.sessao.tratamentos}" var="t" >
+
+                        <f:facet name="header">
+                            Lista de Sessões
+                        </f:facet>
+
+                        <p:column  >
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    No
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                #{t.numTratamento}
+                            </div>
+                        </p:column>
+
+                        <p:column  >
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    Dia
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <h:outputText value="#{t.dia}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </div>
+                        </p:column>
+
+
+                        <p:column  >
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    De
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <h:outputText value="#{t.horaInicial}">
+                                    <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                                </h:outputText>
+                            </div>
+                        </p:column>
+
+                        <p:column  >
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    Até
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <h:outputText value="#{t.horaFinal}">
+                                    <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                                </h:outputText>
+                            </div>
+                        </p:column>
+
+                        <p:column  >
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    Box
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                #{t.box}
+                            </div>
+                        </p:column>
+
+                        <p:column style="text-align: center" >
+                            <f:facet name="header" >  
+                                <div class="cabecaTablea">
+                                    Opções
+                                </div>
+                            </f:facet>
+                            <div class="espacamento" >
+                                <table style="text-align: center;">
+                                    <tr>
+                                        <td style="border: 0px;text-align: left ">
+                                            <p:commandLink update=":listaPacientes:display" oncomplete="confirmaDeletar.show()" title="Deletar">
+                                                <h:graphicImage library="imagens" name="delete.png" id="btDeletar"/>
+                                                <f:setPropertyActionListener value="#{p}" target="#{beanPaciente.paciente}" />
+                                            </p:commandLink>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:commandButton value="Gravar" update="cadSessoesTReta" action="#{beanSessao.verificarDados()}" />
+
+                </p:panel>
+
+            </p:panel>
+            <p:confirmDialog message="Tem certeza que deseja excluir este Paciente?" width="300" header="Confirmação" severity="alert" widgetVar="confirmaDeletar">
+                <p:commandButton value="Sim" update="cadSessoesTReta" actionListener="#{beanSessao.removeTratamento()}" onclick="confirmaDeletar.hide()"/>
+                <p:commandButton value="Não" onclick="confirmaDeletar.hide()" type="button" />
+            </p:confirmDialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

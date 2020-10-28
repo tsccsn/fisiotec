@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Registro de saída
+    </ui:define>
+
+    <ui:define name="imports">
+
+    </ui:define>
+
+    <ui:define name="centro">
+
+        <p:panel header="Registros de saida de produtos">
+            <h:form id="registroSaida" prependId="false">
+                <table >
+                    <tr>
+                        <td class="alingRight"  >De</td>
+                        <td><p:calendar showButtonPanel="true" navigator="true" value="#{beanCPSaida.de}"  converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" /></td>
+                    </tr>
+                    <tr>
+                        <td class="alingRight" >Até</td>
+                        <td><p:calendar showButtonPanel="true" navigator="true" value="#{beanCPSaida.ate}"  converter="converteDataDiaMesAno" pattern="dd/MM/yyyy" /></td>
+                    </tr>
+                    <tr>
+                        <td class="alingRight" >Ponto</td>
+                        <td>
+                            <p:selectOneMenu value="#{listaDePontos.indexDoPontoSelecione}" style="width: 100%;" >
+                                <f:selectItem itemLabel="Incluir todos" itemValue="-1" />
+                                <f:selectItems value="#{listaDePontos.pontos}" var="ponto" itemLabel="#{ponto.nome}" itemValue="#{listaDePontos.pontos.indexOf(ponto)}"/>
+                            </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><p:commandButton value="Filtrar" action="#{beanCPSaida.filtrar(listaDePontos.idDoPontoSelecionado)}" update="registroSaida" /></td>
+                    </tr>
+                </table>
+
+
+                <p:dataTable var="saida" value="#{beanCPSaida.registrosCPsaidaManipulado}"
+                             paginator="true" rows="3" emptyMessage="Sem resultados"
+                             paginatorTemplate="  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="3,5,10,15,30" >
+                    <f:facet name="header">  
+                        Registro de Saida
+                    </f:facet>     
+                    <p:column style="" > 
+                        <div class="espacamento"> 
+                            <br></br>
+                            <p:fieldset collapsed="true" toggleable="true" legend='#{utilData.dataFormal2(saida.dataSaida.time)} - Destino "#{saida.destino.nome}"' >
+                                <br></br>
+                                <p:dataTable var="cpSaidaProduto" style="background-image: none!important; color: #00cd27;"  value="#{beanCPSaida.cpSaidaProdutoDeSaida(saida)}">
+                                    <p:column >
+                                        <f:facet name="header">  
+                                            <div class="cabecaTablea" >Produtoss</div>
+                                        </f:facet>
+                                        <div class="espacamento">
+                                            #{cpSaidaProduto.produto.toString()}
+                                        </div>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">  
+                                            <div class="cabecaTablea" >Quantidade</div>
+                                        </f:facet>
+                                        <div class="espacamento">#{cpSaidaProduto.quantidade}</div>
+
+
+                                    </p:column>
+                                </p:dataTable>
+                                <br></br>
+                            </p:fieldset>
+                            <br></br>
+                        </div>
+                    </p:column> 
+                </p:dataTable>
+                <p:growl id="messages" autoUpdate="true"  />
+                <p:ajaxStatus>
+                    <f:facet name="start">
+                        <div class="loading"/> 
+                    </f:facet>
+                    <f:facet name="complete">
+                        <div class="complete"/> 
+                    </f:facet>
+                    <f:facet name="error">
+                        <div class="erro2"/>
+                    </f:facet>
+                    <f:facet name="onsuccess">
+                    </f:facet>
+                    <f:facet name="onselectStart">
+                        <div class="erro2"/>
+                    </f:facet>
+                    <f:facet name="onselectComplete">
+                        <div class="erro2"/>
+                    </f:facet>
+                </p:ajaxStatus>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

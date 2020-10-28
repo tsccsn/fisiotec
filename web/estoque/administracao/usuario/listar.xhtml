@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Lista de unidades
+    </ui:define>
+
+    <ui:define name="centro">
+        <h:form id="listaAdministradoresEstoque" prependId="false" >
+            <p:panel header="Lista de unidades">
+                <p:dataTable var="xAdministrador" value="#{beanAdiminEstoque.administradores}" paginator="true" rows="10" paginatorTemplate="  {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15,30">
+                    <f:facet name="header">
+                        Lista de administradores
+                    </f:facet>
+
+                    <p:column style="text-align: center" >  
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Nome
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{utilString.trataNomeUsuarioII(xAdministrador, 30)}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center" >   
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Privilégio
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            #{xAdministrador.privilegios ? 'Ativa' : 'Bloqueada'}
+                        </div>
+                    </p:column>
+                    <p:column style="text-align: center" >   
+                        <f:facet name="header" >  
+                            <div class="cabecaTablea">
+                                Opções
+                            </div>
+                        </f:facet>
+                        <div class="espacamento" >
+                            <p:commandLink rendered="#{!xAdministrador.contaAtiva}"  update="listaAdministradoresEstoque" action="#{beanAdiminEstoque.desbloqueiaConta()}" >
+                                <h:graphicImage library="imagens" name="desbloquear.png" />
+                                <f:setPropertyActionListener value="#{xAdministrador}" target="#{beanAdiminEstoque.administradorManipulado}" />
+                            </p:commandLink>
+                            #{xAdministrador.contaAtiva ? '-' : '' }
+                        </div>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <p:growl id="messages" autoUpdate="true" />
+        <!--STATUS AJAX-->
+        <p:ajaxStatus >
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

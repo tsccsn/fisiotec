@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../Template.xhtml">
+
+    <ui:define name="titulo">
+        FisioTec - Listar Tratamentos
+    </ui:define>
+
+    <ui:define name="centro">
+
+        <p:growl id="growlSessoes" showDetail="true"/>
+
+        <h:form id="formListarSessoes">
+            <h:outputLabel value="Selecione a data no calendario para listar os agendados."/>
+            <p:calendar locale="br" converter="converteDataDiaMesAno" value="#{beanSessao.dataDeconsulta}" pattern="dd/MM/yyyy" showButtonPanel="false" navigator="true"/>
+            <p:commandButton value="Pesquisar" update="formListarSessoes" action="#{beanSessao.listarPorDia()}"/>
+
+            <p:dataTable id="listSessoes" var="s" value="#{beanSessao.tratamentosManipulados}" paginator="true" rows="10" widgetVar="listsess"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,30" emptyMessage="Sem sessões nesta data" >
+
+                <f:facet name="header">
+                    Lista de Sessões 
+                </f:facet>
+
+                <p:column headerText="PACIENTE">
+                    <h:outputText value="#{s.sessao.paciente.nome}"/>
+                </p:column>
+
+                <p:column headerText="No">
+                    <h:outputText value="#{s.numTratamento}" />
+                </p:column>
+
+                <p:column headerText="DATA">
+                    <h:outputText value="#{s.dia}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="DE">
+                    <h:outputText value="#{s.horaInicial}">
+                        <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="ATÉ">
+                    <h:outputText value="#{s.horaFinal}">
+                        <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="BOX">
+                    <h:outputText value="#{s.box}" />
+                </p:column>
+
+                <p:column headerText="OPÇÕES">
+
+                    <p:commandLink update=":formListarSessoes:display" oncomplete="confirmInSessao.show()" title="Iniciar Sessão" rendered="#{s.status eq 'Em Aberto'}">
+                        <h:graphicImage library="imagens" name="stethoscope.png" id="btConsultar"/>
+                        <f:setPropertyActionListener value="#{s}" target="#{beanSessao.tratamento}" />
+                    </p:commandLink>
+                    <p:commandLink update=":formListarSessoes:display" oncomplete="msg.show()" title="Finalizar Sessão" rendered="#{s.status eq 'Em Tratamento'}">
+                        <h:graphicImage library="imagens" name="fimConsulta.png" id="btFinConsulta"/>
+                        <f:setPropertyActionListener value="#{s}" target="#{beanSessao.tratamento}" />
+                        <f:setPropertyActionListener value="#{false}" target="#{beanSessao.modoEditar}" />
+                        <f:setPropertyActionListener value="#{true}" target="#{beanSessao.modoFimSessao}" />
+                    </p:commandLink>
+                    <p:commandLink update=":formListarSessoes:display" oncomplete="msg.show()" title="Detalhes">
+                        <h:graphicImage library="imagens" name="list2.png" id="btDetalhes"/>
+                        <f:setPropertyActionListener value="#{s}" target="#{beanSessao.tratamento}" />
+                        <f:setPropertyActionListener value="#{false}" target="#{beanSessao.modoEditar}" />
+                        <f:setPropertyActionListener value="#{false}" target="#{beanSessao.modoFimSessao}" />
+                    </p:commandLink>
+                    <p:commandLink update=":formListarSessoes:display" oncomplete="msg.show()" title="Remarcar">
+                        <h:graphicImage library="imagens" name="update16.png" id="btEditar"/>
+                        <f:setPropertyActionListener value="#{s}" target="#{beanSessao.tratamento}" />
+                        <f:setPropertyActionListener value="#{true}" target="#{beanSessao.modoEditar}" />
+                        <f:setPropertyActionListener value="#{false}" target="#{beanSessao.modoFimSessao}" />
+                    </p:commandLink>
+
+                </p:column>
+
+            </p:dataTable>
+
+            <p:confirmDialog message="Você tem certeza que deseja finalizar esta consulta?" width="300" header="Confirmação" severity="alert" widgetVar="confirmFimSessao">
+
+                <p:commandButton value="Sim" update="formListarSessoes" actionListener="#{beanSessao.finalizarTratamento()}" onclick="confirmFimSessao.close()"/>
+                <p:commandButton value="Não" update="formListarSessoes" onclick="confirmFimConsulta.close()"/>
+
+            </p:confirmDialog>        
+
+            <p:confirmDialog message="Você tem certeza que deseja iniciar esta consulta?" width="300" header="Confirmação" severity="alert" widgetVar="confirmInSessao">
+
+                <p:commandButton value="Sim" update="formListarSessoes" actionListener="#{beanSessao.iniciarTratamento()}" onclick="confirmInSessao.close()"/>
+                <p:commandButton value="Não" update="formListarSessoes" onclick="confirmInSessao.close()"/>
+
+            </p:confirmDialog>
+
+            <p:dialog header="Detalhes da Consulta" widgetVar="msg" resizable="false" id="dlg" width="500" modal="true">
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+
+                    <f:facet name="header">
+                        Detalhe da Sessão
+                    </f:facet>
+
+                    <h:outputText value="Paciente:" />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.tratamento.sessao.paciente.nome}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Telefone:" rendered="#{!beanSessao.modoEditar}"/>
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.tratamento.sessao.paciente.fone}" rendered="#{!beanSessao.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Celular: " rendered="#{!beanSessao.modoEditar}"/>
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.tratamento.sessao.paciente.celfone}" rendered="#{!beanSessao.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Data: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.tratamento.dia}" rendered="#{!beanSessao.modoEditar}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                        <p:calendar navigator="true" value="#{beanSessao.tratamento.dia}" rendered="#{beanSessao.modoEditar}"
+                                    locale="br" pattern="dd/MM/yyyy" mindate="today"
+                                    required="true" requiredMessage="Preencha o campo Dia da Consulta!"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Horário: " />
+                    <h:panelGroup>
+
+                        <h:outputText value="#{beanSessao.tratamento.horaInicial}" rendered="#{!beanSessao.modoEditar}">
+                            <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                        </h:outputText>
+                        <p:calendar timeOnly="true" locale="br" pattern="HH:mm" minHour="8" maxHour="18" value="#{beanConsulta.consulta.horaInicial}"
+                                    timeZone="America/Sao_Paulo" rendered="#{beanSessao.modoEditar}" required="true" requiredMessage="Preencha o campo Hora Inicial!"/>
+                        <h:outputText value=" - " rendered="#{!beanSessao.modoEditar}"/>
+                        <h:outputText value="#{beanSessao.tratamento.horaFinal}" rendered="#{!beanSessao.modoEditar}">
+                            <f:convertDateTime pattern="HH:mm"  timeZone="America/Sao_Paulo"/>
+                        </h:outputText>
+                        <p:calendar timeOnly="true" locale="br" pattern="HH:mm" minHour="8" maxHour="18" value="#{beanConsulta.consulta.horaFinal}"
+                                    timeZone="America/Sao_Paulo" rendered="#{beanSessao.modoEditar}" required="true" requiredMessage="Preencha o campo Hora Final!"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Box: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.tratamento.box}"  rendered="#{!beanSessao.modoEditar}"/>
+                        <p:inputText id="box" value="#{beanSessao.tratamento.box}" rendered="#{beanSessao.modoEditar}"
+                                     required="true" requiredMessage="Preencha o campo Box!"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Obs.: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.tratamento.obs}" rendered="#{!beanSessao.modoEditar}"/>
+                        <p:inputTextarea id="obs" value="#{beanSessao.tratamento.obs}" rendered="#{beanSessao.modoEditar}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Status: " />
+                    <h:panelGroup>
+                        <h:outputText value="#{beanSessao.tratamento.status}"/>
+
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{beanSessao.modoEditar}" layout="block">
+                        <p:commandButton value="Salvar" update="formListarSessoes" actionListener="#{beanSessao.gravar()}" onclick="msg.close()"/>
+                        <p:commandButton value="Cancelar" onclick="msg.close()" type="button"/>
+
+                    </h:panelGroup>
+
+                    <f:facet name="footer">
+
+                        <h:panelGroup rendered="#{beanSessao.modoFimSessao}" layout="block">
+                            <p:commandButton value="Salvar" update="formListarSessoes" actionListener="#{beanSessao.finalizarTratamento()}" 
+                                             onclick="msg.close()"/>
+
+                            <p:commandButton value="Cancelar" onclick="msg.close()" type="button" image="../resources/imagens/botaovoltar.png"/>
+
+                        </h:panelGroup>
+
+                    </f:facet>
+
+                    <h:outputText value="Selecione o Tipo de Afastamento: " rendered="#{beanSessao.modoFimSessao}"/>
+                    <p:selectOneMenu value="#{beanSessao.tratamento.status}" style="width: 400px" rendered="#{beanSessao.modoFimSessao}">
+                        <f:selectItem itemLabel="Selecione "/>
+                        <f:selectItem itemValue="Finalizado" itemLabel="Alta"/>
+                        <f:selectItem itemValue="Desistencia" itemLabel="Desistência"/>
+                        <f:selectItem itemValue="transferencia" itemLabel="Transferência"/>
+                        <f:selectItem itemValue="Faalecimento" itemLabel="Falecimento"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

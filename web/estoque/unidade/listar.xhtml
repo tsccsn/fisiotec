@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../Template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">
+        Lista de unidades
+    </ui:define>
+
+    <ui:define name="imports">
+        <script type="text/javascript" src="../../resources/scripts/opacidade.js"/>
+    </ui:define>
+
+    <ui:define name="centro">
+        <p:panel header="Lista de unidades">
+            <p:dataTable var="p" value="#{listaDeUnidades.unidades}"
+                         paginator="true" rows="10"
+                         paginatorTemplate="  {FirstPageLink} {PreviousPageLink} 
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,30">
+                <f:facet name="header">
+                    Lista de unidades
+                </f:facet>
+
+                <p:column style="text-align: center" >  
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">
+                            Unidade
+                        </div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        #{p.nome}
+                    </div>
+                </p:column>
+                <p:column style="text-align: center" >   
+                    <f:facet name="header" >  
+                        <div class="cabecaTablea">
+                            Abreviação
+                        </div>
+                    </f:facet>
+                    <div class="espacamento" >
+                        #{p.abreviacao}
+                    </div>
+                </p:column>
+
+            </p:dataTable>
+        </p:panel>
+        <p:growl id="messages" autoUpdate="true" />
+        <!--STATUS AJAX-->
+        <p:ajaxStatus >
+            <f:facet name="start">
+                <div class="loading"/> 
+            </f:facet>
+            <f:facet name="complete">
+                <div class="complete"/> 
+            </f:facet>
+            <f:facet name="error">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onsuccess">
+            </f:facet>
+            <f:facet name="onselectStart">
+                <div class="erro2"/>
+            </f:facet>
+            <f:facet name="onselectComplete">
+                <div class="erro2"/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    template="./Template.xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="titulo">
+        Inicio
+    </ui:define>
+    <ui:define name="imports">
+        <script type="text/javascript" src="resources/scripts/script.js"></script>
+    </ui:define>
+    <ui:define name="centro">
+        <h:form>
+            <div style="height: 100%; border-radius: 10px; border: 1px solid #dddddd; padding: 40px;">
+                #{beanReport.salvaAutomatico()}
+                <div style="width: 100%; text-align: center;font-family: Arial,sans-serif; font-size: 26px; " >
+                    Opa! algo inesperado aconteceu!
+                </div>
+
+                <div style="width: 100%; text-align: center;font-family: Arial,sans-serif; font-size: 18px;  " >
+                    Não se desespere, não arrebente o computador!<br/>
+                    Me conte sobre o problema acontecido. Farei de tudo pra isso não acontecer mais. Prometo!
+                    <p:inputTextarea required="true" validatorMessage="Ahh! Acho q vc não detalhou o suficiente hein?! Me escreve mais um pouco ai sobre o ocorrido!" requiredMessage="Ahh! Me fala sobre o que aconteu! Quero te ajudar!" value="#{beanReport.report.detalhesDoErro}">
+                        <f:validateLength minimum="20" />
+                    </p:inputTextarea><br/>
+                    <p:commandButton image="bug" id="reportarBug" action="#{beanReport.salvaReport()}" />
+                    <p:tooltip for="reportarBug" value="Reportar o acontecido" />
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

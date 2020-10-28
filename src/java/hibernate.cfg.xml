@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect" >org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/fisiotec</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">Pvyfq@jtbv</property>
+        <property name="hbm2ddl.auto">update</property>
+<!--        <property name="org.hibernate.envers.default_schema">audit</property>-->
+        
+        
+        <mapping class="cp.CPPontoDeEstagio" />
+        <mapping class="cp.CPProfessorPonto" />
+        <mapping class="cp.CPAlunoPonto" />
+        <mapping class="cp.CPReport" />
+        
+        <mapping class="cp.clinica.CPPaciente" />
+        <mapping class="cp.clinica.CPConsulta" />
+        <mapping class="cp.clinica.CPExame" />
+        <mapping class="cp.clinica.CPSessao" />
+        <mapping class="cp.clinica.CPTratamento" />
+        
+        
+        <mapping class="cp.estoque.CPAlertasQuantidadeProduto" />
+        <mapping class="cp.estoque.CPProduto" />
+        <mapping class="cp.estoque.CPUnidadeDeMedida" />
+        <mapping class="cp.estoque.CPAdministradorEstoque" />
+        
+        <mapping class="cp.estoque.entrada.CPEntrada" />
+        <mapping class="cp.estoque.entrada.CPEntradaProduto" />
+        
+        <mapping class="cp.estoque.saida.CPSaida" />
+        <mapping class="cp.estoque.saida.CPSaidaProduto" />
+        
+        
+        <mapping class="cp.estoque.registroLogin.CPRegistroLoginAdministradorEstoque" />
+        
+        <mapping class="cp.grafico.entrada.custom.CPGraficoEntradaCustom" />
+        <mapping class="cp.grafico.entrada.custom.CPGraficoEntradaCustomProdutos" />
+        
+        <mapping class="cp.grafico.entrada.preDeterminado.CPGraficoEntradaPreDeterminado" />
+        <mapping class="cp.grafico.entrada.preDeterminado.CPGraficoEntradaPreDeterminadoProdutos" />
+        
+        <mapping class="cp.grafico.saida.custom.CPGraficoSaidaCustom" />
+        <mapping class="cp.grafico.saida.custom.CPGraficoSaidaCustomPontos" />
+        <mapping class="cp.grafico.saida.custom.CPGraficoSaidaCustomProdutos" />
+        
+        <mapping class="cp.grafico.saida.preDeterminado.CPGraficoSaidaPreDeterminado" />
+        <mapping class="cp.grafico.saida.preDeterminado.CPGraficoSaidaPreDeterminadoPontos" />
+        <mapping class="cp.grafico.saida.preDeterminado.CPGraficoSaidaPreDeterminadoProdutos" />
+        
+        <mapping class="cp.portal.CPTurma" />
+        <mapping class="cp.portal.CPTurmaAlunos" />
+        <mapping class="cp.portal.CPPedidoAlteracaoNota" />
+
+        <mapping class="cp.grafico.entradasaida.custom.CPGraficoEntradaSaidaCustom" />
+        <mapping class="cp.grafico.entradasaida.custom.CPGraficoEntradaSaidaCustomProdutos" />
+        
+        <mapping class="cp.grafico.entradasaida.preDeterminado.CPGraficoEntradaSaidaPreDeterminado" />
+        <mapping class="cp.grafico.entradasaida.preDeterminado.CPGraficoEntradaSaidaPreDeterminadoProdutos" />
+        
+        <mapping class="cp.portal.registroLogin.CPRegistroLoginAdministrador" />
+        <mapping class="cp.portal.registroLogin.CPRegistroLoginAluno" />
+        <mapping class="cp.portal.registroLogin.CPRegistroLoginProfessor" />
+        
+        <mapping class="cp.portal.usuarios.CPAdministrador" />
+        <mapping class="cp.portal.usuarios.CPAluno" />
+        <mapping class="cp.portal.usuarios.CPProfessor" />
+        
+        
+        
+<!--        <listener class="org.hibernate.envers.event.AuditEventListener" type="auto-flush"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="merge"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="create"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="create-onflush"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="delete"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="dirty-check"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="evict"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="flush"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="flush-entity"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="load"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="load-collection"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="lock"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="refresh"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="replicate"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="save-update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="save"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-load"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-insert"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-delete"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-collection-recreate"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-collection-remove"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-collection-update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-load"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-insert"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-delete"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-collection-recreate"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-collection-remove"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-collection-update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-commit-update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-commit-insert"/>-->
+        
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-insert"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-delete"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-collection-update"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="pre-collection-remove"/>
+        <listener class="org.hibernate.envers.event.AuditEventListener" type="post-collection-recreate"/>
+         
+    </session-factory>
+</hibernate-configuration>
