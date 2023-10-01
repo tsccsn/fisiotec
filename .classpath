@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src/Beans"/>
+	<classpathentry kind="src" path="src/ClassesPersistentes"/>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="src/ObjetosPersistentes"/>
+	<classpathentry kind="src" path="src/Utilidades"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
